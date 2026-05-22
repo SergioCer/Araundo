@@ -29,6 +29,23 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
 
+    /* Menù a discesa */
+    .map-overlay2 {
+      position: absolute;
+      top: 60px;      /* spostato sotto title/subtitle */
+      left: 15px;
+      z-index: 999;
+      background: rgba(255,255,255,0.95);
+      padding: 10px 14px;
+      border-radius: 12px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      max-height: 60vh;   /* limita altezza */
+      overflow-y: auto;   /* scroll verticale se tante categorie */
+    }
+
+    
+    
     .title {
       font-weight: 600;
       font-size: 14px;
@@ -84,6 +101,11 @@
   <div class="subtitle">Discover what’s around you</div>
 </div>
 
+<div class="map-overlay2" id="category-menu">
+  <button id="menu-toggle">Filtra per categoria ▼</button>
+  <div id="menu-items" style="display:none; margin-top:6px;"></div>
+</div>
+  
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -141,6 +163,18 @@
   document.body.appendChild(menu);
 }
 
+  const menuItemsDiv = document.getElementById('menu-items');
+  const toggleBtn = document.getElementById('menu-toggle');
+
+  toggleBtn.addEventListener('click', () => {
+    if(menuItemsDiv.style.display === 'none') {
+      menuItemsDiv.style.display = 'block';
+  } else {
+      menuItemsDiv.style.display = 'none';
+  }
+});
+
+  
   // Inizializza il menù Categorie
   document.addEventListener('DOMContentLoaded', async () => {
   await buildCategoryMenu();
