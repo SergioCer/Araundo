@@ -125,13 +125,13 @@
   categories.forEach(cat => {
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    cb.id = cat.mc_slug;
+    cb.id = cat.mc_attiva;
     cb.checked = true;
 
     const label = document.createElement('label');
     label.htmlFor = cat.mc_slug;
     label.style.marginRight = '10px';
-    label.textContent = cat.name;
+    label.textContent = cat.mc_slug;
 
     menu.appendChild(cb);
     menu.appendChild(label);
