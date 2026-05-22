@@ -95,7 +95,7 @@
     const { data, error } = await supabase
       .from('MacroCategorie')
       .select('*')
-      .eq('active', true)
+      .eq('mc_attiva', true)
       .order('mc_descrizione', { ascending: true });
 
     if (error) {
