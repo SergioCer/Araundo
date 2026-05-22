@@ -3,6 +3,7 @@
 <head>
   <title>Aroundo - Territory Map</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
   <style>
@@ -94,11 +95,64 @@
 
 <script>
 
-  // Centro: Sicilia occidentale (coerente con il tuo esempio)
+  // Progetto e chiave Anon di supabase
+const SUPABASE_URL = 'https://ridtujvdsjonbbcrezdb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZHR1anZkc2pvbmJiY3JlemRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MDQyMTAsImV4cCI6MjA5NDk4MDIxMH0.eVNnqEUTmeE8t26jrx0urblPXqiHurF5LFpfyKZFMwg';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  
+  
+  // Coordinate: Sicilia occidentale
   const map = L.map('map', {
     zoomControl: true
   }).setView([38.0, 12.6], 12); /* sopra/sotto destra/sinistra il'12 indica lo zoom della mappa dalla posizione centrale (Trapani 38.0 12.5) */
 
+  // Legge le categorie dal database
+  async function fetchCategories() {
+  const { data, error } = await supabase
+    .from('Macro Categorie')
+    .select('*')
+    .eq('active', true)
+    .order('mc_descrizione', { ascending: true });
+
+  if (error) {
+    console.error("Errore caricamento categorie:", error);
+    return [];
+  }
+  return data;
+}
+
+  // Popola i filtri delle categorie
+  async function buildCategoryMenu() {
+  const categories = await fetchCategories();
+  const menu = document.createElement('div');
+  menu.className = 'map-overlay';
+  menu.innerHTML = `<b>Filtra per categoria</b><br>`;
+
+  categories.forEach(cat => {
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = cat.slug;
+    cb.checked = true;
+
+    const label = document.createElement('label');
+    label.htmlFor = cat.slug;
+    label.style.marginRight = '10px';
+    label.textContent = cat.name;
+
+    menu.appendChild(cb);
+    menu.appendChild(label);
+    menu.appendChild(document.createElement('br'));
+  });
+
+  document.body.appendChild(menu);
+}
+
+  // Inizializza il menù Categorie
+  document.addEventListener('DOMContentLoaded', async () => {
+  await buildCategoryMenu();
+});
+
+  
   // 🌿 Base map più calda (meno grigia)
   L.tileLayer(
     'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
