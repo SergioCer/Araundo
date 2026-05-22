@@ -107,7 +107,7 @@ const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   // Legge le categorie dal database
   async function fetchCategories() {
   const { data, error } = await supabase
-    .from('Macro Categorie')
+    .from('MacroCategorie')
     .select('*')
     .eq('active', true)
     .order('mc_descrizione', { ascending: true });
