@@ -139,22 +139,20 @@
   }).setView([38.0, 12.6], 12); /* sopra/sotto destra/sinistra il'12 indica lo zoom della mappa dalla posizione centrale (Trapani 38.0 12.5) */
 
   // Popola i filtri delle categorie
-  async function buildCategoryMenu() {
+async function buildCategoryMenu() {
   const categories = await fetchCategories();
-  const menu = document.createElement('div');
-  menu.className = 'map-overlay2';
-  menu.innerHTML = `<b>Filtra per categoria</b><br>`;
+  const menuItemsDiv = document.getElementById('menu-items');
 
   categories.forEach(cat => {
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    cb.id = cat.mc_attiva; 
-    cb.checked = true;
+    cb.id = cat.mc_slug;         // ID univoco
+    cb.checked = cat.mc_attiva;  // boolean dal DB
 
     const label = document.createElement('label');
     label.htmlFor = cat.mc_slug;
     label.style.marginRight = '10px';
-    label.textContent = cat.mc_descrizione;
+    label.textContent = cat.mc_descrizione; // testo leggibile
 
     menuItemsDiv.appendChild(cb);
     menuItemsDiv.appendChild(label);
@@ -163,31 +161,13 @@
 
   const toggleBtn = document.getElementById('menu-toggle');
   toggleBtn.addEventListener('click', () => {
-    if(menuItemsDiv.style.display === 'none') {
-      menuItemsDiv.style.display = 'block';
-    } else {
-      menuItemsDiv.style.display = 'none';
-    }
+    menuItemsDiv.style.display = menuItemsDiv.style.display === 'none' ? 'block' : 'none';
   });
-});
+}
 
-  const menuItemsDiv = document.getElementById('menu-items');
-  const toggleBtn = document.getElementById('menu-toggle');
-
-  toggleBtn.addEventListener('click', () => {
-    if(menuItemsDiv.style.display === 'none') {
-      menuItemsDiv.style.display = 'block';
-  } else {
-      menuItemsDiv.style.display = 'none';
-  }
-});
-
-  
-  // Inizializza il menù Categorie
   document.addEventListener('DOMContentLoaded', async () => {
   await buildCategoryMenu();
 });
-
   
   // 🌿 Base map più calda (meno grigia)
   L.tileLayer(
