@@ -129,7 +129,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
-    await fetchCategories();
+    const categories = await fetchCategories();
+    const menuItemsDiv = document.getElementById('menu-items');
   });
   
   // Coordinate: Sicilia occidentale
@@ -147,21 +148,28 @@
   categories.forEach(cat => {
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    cb.id = cat.mc_attiva;
+    cb.id = cat.mc_attiva; 
     cb.checked = true;
 
     const label = document.createElement('label');
     label.htmlFor = cat.mc_slug;
     label.style.marginRight = '10px';
-    label.textContent = cat.mc_slug;
+    label.textContent = cat.mc_descrizione;
 
-    menu.appendChild(cb);
-    menu.appendChild(label);
-    menu.appendChild(document.createElement('br'));
+    menuItemsDiv.appendChild(cb);
+    menuItemsDiv.appendChild(label);
+    menuItemsDiv.appendChild(document.createElement('br'));
   });
 
-  document.body.appendChild(menu);
-}
+  const toggleBtn = document.getElementById('menu-toggle');
+  toggleBtn.addEventListener('click', () => {
+    if(menuItemsDiv.style.display === 'none') {
+      menuItemsDiv.style.display = 'block';
+    } else {
+      menuItemsDiv.style.display = 'none';
+    }
+  });
+});
 
   const menuItemsDiv = document.getElementById('menu-items');
   const toggleBtn = document.getElementById('menu-toggle');
