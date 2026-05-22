@@ -114,6 +114,7 @@
   import { supabase } from './supabase.js';
   let categories = [];
   let icons = {};
+  let events = [];
   
   async function fetchCategories() {
     const { data, error } = await supabase
@@ -121,7 +122,6 @@
       .select('*')
       .eq('mc_attiva', true)
       .order('mc_descrizione', { ascending: true });
-
     if (error) {
       console.error("Errore caricamento categorie:", error);
       return [];
@@ -129,6 +129,18 @@
     console.log(data);
     return data;
   }
+
+async function fetchEvents() {
+  const { data, error } = await supabase
+    .from('Eventi')
+    .select('*');
+  if (error) {
+    console.error("Errore caricamento eventi:", error);
+    return [];
+  }
+  return data;
+}
+  
 
   // Coordinate: Sicilia occidentale
   const map = L.map('map', {
@@ -164,19 +176,18 @@ async function buildCategoryMenu() {
 }
 
   document.addEventListener('DOMContentLoaded', async () => {
-    // 1. prendi categorie
+  // 1. prendi categorie
   categories = await fetchCategories();
-
-  // 2. crea icone
+  // 2. icone categorie
   icons = {};
   categories.forEach(cat => {
     icons[cat.id_macro_categoria] = createIcon(cat.mc_colore);
   });
-
-  // 3. menu UI
+  // 3. eventi (DA DB)
+  events = await fetchEvents();
+  // 4. menu UI
   buildCategoryMenu();
-
-  // 4. map markers
+  // 5. markers della mappa
   renderEvents();
 });
   
@@ -193,13 +204,15 @@ async function buildCategoryMenu() {
  // 🎨 ICON SET PER CATEGORIE
 
 function renderEvents() {
-
   events.forEach(e => {
     L.marker([e.lat, e.lng], {
       icon: icons[e.type]
     })
     .addTo(map)
-    .bindPopup(`<b>${e.name}</b>`);
+    .bindPopup(`
+    <b>${e.ev_titolo}</b><br>
+    ${e.ev_descrizione || ''}
+    `);
   });
 }
   
@@ -218,68 +231,6 @@ function createIcon(color) {
     iconSize: [20, 20]
   });
 }  
-
-// 🎭 CATEGORIE
-// 📍 EVENTI SPAZIATI (mock realistico Sicilia occidentale)
-
-const events = [
-  {
-    name: "Live Jazz Night",
-    lat: 38.0176,
-    lng: 12.5365,
-    type: 1
-  },
-  {
-    name: "Karaoke",
-    lat: 38.0156,
-    lng: 12.5465,
-    type: 1
-  },
-  {
-    name: "Street Food Festival",
-    lat: 37.9676,
-    lng: 12.7481,
-    type: 2
-  },
-  {
-    name: "Sagra della Salsiccia",
-    lat: 37.9176,
-    lng: 12.7281,
-    type: 2
-  },
-  {
-    name: "Museum Exhibition",
-    lat: 37.7933,
-    lng: 12.4389,
-    type: 3
-  },
-  {
-    name: "Beach Yoga Session",
-    lat: 37.9330,
-    lng: 12.4840,
-    type: 4
-  },
-  {
-    name: "Night DJ Set",
-    lat: 37.8030,
-    lng: 12.4470,
-    type: 5
-  },
-  {
-    name: "Kids Playground Event",
-    lat: 37.8900,
-    lng: 12.6500,
-    type: 6
-  },
-  {
-    name: "Outdoor Trekking Group",
-    lat: 38.0500,
-    lng: 12.6200,
-    type: 7
-  }
-];
-
 </script>
-
 </body>
 </html>
