@@ -115,6 +115,7 @@
   let categories = [];
   let icons = {};
   let events = [];
+  let markers = [];
   
   async function fetchCategories() {
     const { data, error } = await supabase
@@ -154,7 +155,7 @@ async function buildCategoryMenu() {
   categories.forEach(cat => {
     const cb = document.createElement('input');
     cb.type = 'checkbox';
-    cb.id = cat.mc_slug;         // ID univoco
+    cb.id = cat.id_macro_categoria;         // ID univoco
     cb.checked = cat.mc_attiva;  // boolean dal DB
 
     const label = document.createElement('label');
@@ -213,6 +214,11 @@ function renderEvents() {
     <b>${e.ev_titolo}</b><br>
     ${e.ev_descrizione || ''}
     `);
+  // 🔥 salva marker + categoria
+    markers.push({
+      marker,
+      category: e.ev_categoria
+    });    
   });
 }
   
@@ -231,6 +237,24 @@ function createIcon(color) {
     iconSize: [20, 20]
   });
 }  
+
+  function filterMarkers() {
+  const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
+  const activeCategories = [];
+  checkboxes.forEach(cb => {
+    if (cb.checked) {
+      activeCategories.push(parseInt(cb.id.replace(/\D/g, '')) || cb.id);
+    }
+  });
+  markers.forEach(obj => {
+    if (activeCategories.includes(obj.category)) {
+      obj.marker.addTo(map);
+    } else {
+      map.removeLayer(obj.marker);
+    }
+  });
+}
+  
 </script>
 </body>
 </html>
