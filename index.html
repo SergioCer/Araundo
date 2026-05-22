@@ -192,7 +192,17 @@ async function buildCategoryMenu() {
 
  // 🎨 ICON SET PER CATEGORIE
 
+function renderEvents() {
 
+  events.forEach(e => {
+    L.marker([e.lat, e.lng], {
+      icon: icons[e.type]
+    })
+    .addTo(map)
+    .bindPopup(`<b>${e.name}</b>`);
+  });
+}
+  
 function createIcon(color) {
   return L.divIcon({
     className: '',
