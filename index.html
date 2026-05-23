@@ -74,24 +74,47 @@
     
     /* marker base animato */
     .pulse {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       position: relative;
-      background: inherit;
+       z-index: 2;
     }
 
-    .pulse::after {
+    /* centro marker */
+    .pulse::before {
       content: "";
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      background: inherit; /* <-- importante */
-      z-index: 1;
-      opacity: 0.6;
-      animation: pulse 1.8s infinite;
+      background: var(--c);
+      z-index: 2;
     }
-
+    .pulse::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: var(--c);
+      z-index: 1;
+      opacity: 0.4;
+      animation: pulse 1.6s infinite ease-out;
+    }
+    /* animazione vera */
+    @keyframes pulse {
+      0% {
+        transform: scale(0.6);
+        opacity: 0.5;
+      }
+      70% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    
     /* Checkbox reale nascosta ma ancora cliccabile tramite label */
     .category-checkbox {
       position: absolute;
@@ -464,14 +487,8 @@ function createIcon(color) {
   return L.divIcon({
     className: '',
     html: `
-      <div 
-      class="pulse"
-      style="
-      background: ${color};
-      box-shadow:0 0 12px ${color};
-      ">
-      </div>
-    `,
+      <div class="pulse" style="--c:${color}"></div>
+      `,
     iconSize: [20, 20]
   });
 }  
