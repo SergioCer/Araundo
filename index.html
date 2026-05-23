@@ -208,7 +208,7 @@
 
   async function fetchEvents() {
     const { data, error } = await supabase
-      .from('Eventi')
+      .from('eventi')
       .select('*');
     if (error) {
       console.error("Errore caricamento eventi:", error);
