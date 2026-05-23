@@ -536,31 +536,12 @@ document.getElementById("next-day").addEventListener("click", () => {
   filterEvents();
 });
 
-// TIME SLIDER
-const startSlider = document.getElementById("time-start");
-const endSlider = document.getElementById("time-end");
-const label = document.getElementById("time-range-label");
-
-function updateTimeLabel() {
-  let s = parseInt(startSlider.value);
-  let e = parseInt(endSlider.value);
-
-  if (s > e) [s, e] = [e, s];
-
-  label.innerText = `${s}:00 - ${e}:00`;
-
-  filterEvents();
-}
-
-startSlider.addEventListener("input", updateTimeLabel);
-endSlider.addEventListener("input", updateTimeLabel);
-
 function filterEvents() {
   // QUI collegherai Supabase / markers Leaflet
   console.log("Filtro attivo:", {
     date: currentDate,
-    timeStart: startSlider.value,
-    timeEnd: endSlider.value
+    timeStart: startHour,
+    timeEnd: endHour
   });
 }  
 
