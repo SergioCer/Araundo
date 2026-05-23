@@ -126,17 +126,19 @@
       border: 2px solid white;
       box-sizing: border-box;
       background: transparent;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
 
     /* Testo leggermente opaco se non selezionato */
     .category-checkbox:not(:checked) + .category-label {
-      opacity: 0.3;
+    opacity: 0.6;
     }
     .category-checkbox:checked + .category-label::before {
+    background: white;
+    }
+    .category-checkbox:not(:checked) + .category-label::before {
     background: transparent;
     }
-    
     #menu-toggle, #select-all-toggle {
       display: inline-block;
       vertical-align: middle;
