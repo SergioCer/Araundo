@@ -198,17 +198,37 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      border: 2px solid #555;
-      background: #fff;
+      border: 2px solid rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.15);
       cursor: pointer;
       vertical-align: middle;
       padding: 0;
       outline: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
-    #select-all-toggle:checked {
-      background: #555; /* invertito per visibilità */
-    }
+/* TUTTO ATTIVO */
+#select-all-toggle:checked {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-color: white;
+}
+/* piccolo punto interno */
+#select-all-toggle:checked::after {
+  content: "";
+  position: absolute;
 
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+  background: white;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
+    
 .top-timebar {
   position: absolute;
   top: 10px;
