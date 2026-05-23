@@ -245,7 +245,7 @@ function createIcon(color) {
   const activeCategories = [];
   checkboxes.forEach(cb => {
     if (cb.checked) {
-      activeCategories.push(parseInt(cb.id.replace(/\D/g, '')) || cb.id);
+      activeCategories.push(parseInt(cb.id));
     }
   });
   markers.forEach(obj => {
@@ -256,6 +256,49 @@ function createIcon(color) {
     }
   });
 }
+
+function buildCategoryMenu() {
+  const menuItemsDiv = document.getElementById('menu-items');
+
+  categories.forEach(cat => {
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = cat.id_macro_categoria;
+    cb.checked = true;
+    const label = document.createElement('label');
+    label.htmlFor = cat.id_macro_categoria;
+    label.style.marginRight = '10px';
+    label.textContent = cat.mc_descrizione;
+    menuItemsDiv.appendChild(cb);
+    menuItemsDiv.appendChild(label);
+    menuItemsDiv.appendChild(document.createElement('br'));
+  });
+
+  // toggle menu
+  document.getElementById('menu-toggle').addEventListener('click', () => {
+    menuItemsDiv.style.display =
+      menuItemsDiv.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // 🔥 FILTRO LIVE
+  menuItemsDiv.addEventListener('change', filterMarkers);
+
+  // 🔥 SELECT ALL
+  document.getElementById('select-all').addEventListener('click', () => {
+    menuItemsDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.checked = true;
+    });
+    filterMarkers();
+  });
+
+  // 🔥 SELECT NONE
+  document.getElementById('select-none').addEventListener('click', () => {
+    menuItemsDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+    });
+    filterMarkers();
+  });
+}  
   
 </script>
 </body>
