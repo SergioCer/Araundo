@@ -125,7 +125,7 @@
       margin-right: 6px;
       border: 2px solid white;
       box-sizing: border-box;
-      background: rgba(255,255,255,0.95);
+      background: var(--cat-color);
       transition: all 0.2s;
     }
 
@@ -356,6 +356,7 @@ function buildCategoryMenu() {
     // Applichiamo il colore dell’evento
     label.style.backgroundColor = cat.mc_colore;
     label.style.borderColor = cat.mc_colore;
+    label.style.setProperty('--cat-color', cat.mc_colore);
     menuItemsDiv.appendChild(cb);
     menuItemsDiv.appendChild(label);
   });
