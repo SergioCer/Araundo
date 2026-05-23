@@ -41,7 +41,9 @@
       border-radius: 14px;
       backdrop-filter: blur(8px);
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      width: 220px;
+      min-width: 140px;
+      width: fit-content;
+      max-width: 240px;
       max-height: 60vh;   /* limita altezza */
       overflow-y: auto;   /* scroll verticale se tante categorie */
     }
@@ -126,6 +128,7 @@
 
     /* Label delle categorie */
     .category-label {
+      white-space: nowrap;
       display: flex;
       align-items: center;      /* icona e testo allineati in alto */
       justify-content: flex-start; /* testo a sinistra */
