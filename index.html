@@ -496,10 +496,38 @@ function renderEvents() {
 
     const marker = L.marker([e.ev_lat, e.ev_lng], {
       icon: icons[e.ev_categoria]
-    }).bindPopup(`
-      <b>${e.ev_titolo}</b><br>
+    })
+.bindPopup(`
+  <div style="min-width:180px">
+
+    <div style="
+      font-weight:700;
+      font-size:14px;
+      margin-bottom:4px;
+    ">
+      ${e.ev_titolo}
+    </div>
+
+    <div style="
+      font-size:12px;
+      color:#3b82f6;
+      margin-bottom:6px;
+      font-weight:600;
+    ">
+      ${formatTime(e.ev_inizio)}
+      ${e.ev_fine ? ' - ' + formatTime(e.ev_fine) : ''}
+    </div>
+
+    <div style="
+      font-size:12px;
+      color:#555;
+      line-height:1.35;
+    ">
       ${e.ev_descrizione || ''}
-    `);
+    </div>
+
+  </div>
+`)
 
     markers.push({
       marker,
@@ -698,6 +726,15 @@ document.getElementById("reset-day").addEventListener("click", () => {
   updateDateUI();
   filterEvents();
 });
+
+function formatTime(dateString) {
+  const d = new Date(dateString);
+
+  return d.toLocaleTimeString('it-IT', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}  
   
 </script>
 </body>
