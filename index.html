@@ -125,16 +125,17 @@
       margin-right: 6px;
       border: 2px solid white;
       box-sizing: border-box;
-      background: var(--cat-color);
+      background: transparent;
       transition: all 0.2s;
     }
 
     /* Testo leggermente opaco se non selezionato */
-    .category-checkbox:not(:checked) + .category-label {
-    opacity: 0.7;
-    }
     .category-checkbox:not(:checked) + .category-label::before {
+    background: currentColor;
+    }
+    .category-checkbox:not(:checked) + .category-label {
     background: transparent;
+    opacity: 0.7;
     }
     
     #menu-toggle, #select-all-toggle {
@@ -355,7 +356,7 @@ function buildCategoryMenu() {
     label.textContent = cat.mc_descrizione;
     // Applichiamo il colore dell’evento
     label.style.backgroundColor = cat.mc_colore;
-    label.style.borderColor = cat.mc_colore;
+    label.style.Color = cat.mc_colore;
     label.style.setProperty('--cat-color', cat.mc_colore);
     menuItemsDiv.appendChild(cb);
     menuItemsDiv.appendChild(label);
