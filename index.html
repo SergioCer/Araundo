@@ -487,24 +487,33 @@ if (navigator.geolocation) {
  // 🎨 ICON SET PER CATEGORIE
 
 function renderEvents() {
+
+  // pulizia markers precedenti
+  markers.forEach(m => map.removeLayer(m.marker));
+  markers = [];
+
   events.forEach(e => {
+
     const marker = L.marker([e.ev_lat, e.ev_lng], {
       icon: icons[e.ev_categoria]
-    })
-    .addTo(map)
-    .bindPopup(`
-    <b>${e.ev_titolo}</b><br>
-    ${e.ev_descrizione || ''}
+    }).bindPopup(`
+      <b>${e.ev_titolo}</b><br>
+      ${e.ev_descrizione || ''}
     `);
-  // 🔥 salva marker + categoria
+
     markers.push({
       marker,
-      category: e.ev_categoria
-    });    
+      category: e.ev_categoria,
+      start: new Date(e.ev_inizio),
+      end: new Date(e.ev_fine),
+      active: e.ev_attivo
+    });
   });
-}
-  
-function createIcon(color) {
+
+  filterEvents();
+}  
+
+  function createIcon(color) {
   return L.divIcon({
     className: '',
     html: `
@@ -603,23 +612,60 @@ function updateDateUI() {
 document.getElementById("prev-day").addEventListener("click", () => {
   currentDate.setDate(currentDate.getDate() - 1);
   updateDateUI();
-  filterEvents();
+
+  const values = slider.noUiSlider.get();
+  filterEvents(
+    Math.round(values[0]),
+    Math.round(values[1])
+  );
 });
 
 document.getElementById("next-day").addEventListener("click", () => {
   currentDate.setDate(currentDate.getDate() + 1);
   updateDateUI();
-  filterEvents();
+
+  const values = slider.noUiSlider.get();
+  filterEvents(
+    Math.round(values[0]),
+    Math.round(values[1])
+  );
 });
 
 function filterEvents(startHour = 0, endHour = 24) {
-  // QUI collegherai Supabase / markers Leaflet
-  console.log("Filtro attivo:", {
-    date: currentDate,
-    timeStart: startHour,
-    timeEnd: endHour
+
+  const selectedDate = new Date(currentDate);
+  selectedDate.setHours(0,0,0,0);
+
+  markers.forEach(obj => {
+
+    // evento attivo?
+    if (!obj.active) {
+      map.removeLayer(obj.marker);
+      return;
+    }
+
+    const evDate = new Date(obj.start);
+    evDate.setHours(0,0,0,0);
+
+    // stessa data?
+    const sameDay =
+      evDate.getTime() === selectedDate.getTime();
+
+    // ora evento
+    const eventHour = obj.start.getHours();
+
+    // compatibilità oraria
+    const inTimeRange =
+      eventHour >= startHour &&
+      eventHour <= endHour;
+
+    if (sameDay && inTimeRange) {
+      obj.marker.addTo(map);
+    } else {
+      map.removeLayer(obj.marker);
+    }
   });
-}  
+}
 
 // init
 updateDateUI();
@@ -637,13 +683,16 @@ noUiSlider.create(slider, {
 });
 
 slider.noUiSlider.on('update', function(values) {
+
   const start = Math.round(values[0]);
   const end = Math.round(values[1]);
 
-  label.innerText = `${start.toString().padStart(2,'0')}:00 - ${end.toString().padStart(2,'0')}:00`;
+  label.innerText =
+    `${start.toString().padStart(2,'0')}:00 - ${end.toString().padStart(2,'0')}:00`;
 
   filterEvents(start, end);
 });
+  
 document.getElementById("reset-day").addEventListener("click", () => {
   currentDate = new Date(); // oggi
   updateDateUI();
