@@ -143,6 +143,11 @@
 .category-checkbox:not(:checked) + .category-label {
   opacity: 0.8;
 }
+#menu-toggle, #select-all-toggle {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
     
   </style>
 </head>
@@ -156,7 +161,7 @@
 
 <div class="map-overlay2" id="category-menu">
   <button id="menu-toggle">Filtra per categorie ▼</button>
-  <input type="checkbox" id="select-all-toggle" title="Seleziona/deseleziona tutte" style="margin-left:8px;";checked>
+  <input type="checkbox" id="select-all-toggle" title="Seleziona/deseleziona tutte" checked>
   <div id="menu-items" style="display:none; margin-top:6px;"></div>
 </div>
   
@@ -319,7 +324,7 @@ function createIcon(color) {
 }
 
 function buildCategoryMenu() {
-  const menuItemsDiv = document.getElementById('menu-items');
+   const menuItemsDiv = document.getElementById('menu-items');
   // checkbox per ogni categoria
   categories.forEach(cat => {
     const cb = document.createElement('input');
@@ -338,6 +343,15 @@ function buildCategoryMenu() {
     menuItemsDiv.appendChild(label);
     menuItemsDiv.appendChild(document.createElement('br')); // forza verticale
   });
+  // toggle menu
+const toggleBtn = document.getElementById('menu-toggle');
+toggleBtn.addEventListener('click', () => {
+  if (menuItemsDiv.style.display === 'none' || menuItemsDiv.style.display === '') {
+    menuItemsDiv.style.display = 'block';
+  } else {
+    menuItemsDiv.style.display = 'none';
+  }
+});
   // FILTRO LIVE
   menuItemsDiv.addEventListener('change', filterMarkers);
   // checkbox minimalista Seleziona/Togli tutto
