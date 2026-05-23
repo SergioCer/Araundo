@@ -204,8 +204,8 @@ const defaultZoom = 12;
 
 const map = L.map('map', {
   zoomControl: true,
-  minZoom: 10, // evita zoom troppo lontano
-  maxZoom: 16
+  minZoom: 10, // evita zoom troppo lontano, 0 = mappa mondiale, 10 = area di circa una regione.
+  maxZoom: 16 // evita zoom troppo vicino, il massimo zoom è 18 - 19
 }).setView([defaultLat, defaultLng], defaultZoom);
 
 // Prova a ottenere la posizione dell'utente
