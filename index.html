@@ -43,8 +43,6 @@
       max-height: 60vh;   /* limita altezza */
       overflow-y: auto;   /* scroll verticale se tante categorie */
     }
-
-    
     
     .title {
       font-weight: 600;
@@ -79,6 +77,49 @@
       opacity: 0.6;
       animation: pulse 1.8s infinite;
     }
+    /* Checkbox rotondi colorati */
+.category-checkbox {
+  display: none; /* Nascondiamo il checkbox reale */
+}
+
+.category-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50px; /* raggio alto per rendere “pill-shaped” */
+  padding: 4px 10px;
+  margin: 2px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 500;
+  user-select: none;
+  transition: opacity 0.2s;
+}
+
+/* Cerchietto prima del testo che simula il checkbox */
+.category-label::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 6px;
+  border: 2px solid white;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+/* Stato selezionato */
+.category-checkbox:checked + .category-label::before {
+  background: white; /* check “visibile” */
+}
+
+/* Esempio: se vuoi, il testo può cambiare leggermente di opacità quando deselezionato */
+.category-checkbox:not(:checked) + .category-label {
+  opacity: 0.7;
+}
     
 @keyframes pulse {
   0% {
@@ -267,21 +308,23 @@ function createIcon(color) {
 
 function buildCategoryMenu() {
   const menuItemsDiv = document.getElementById('menu-items');
-  
   // checkbox per ogni categoria
   categories.forEach(cat => {
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.id = cat.id_macro_categoria;
-    cb.checked = true;
-    const label = document.createElement('label');
-    label.htmlFor = cat.id_macro_categoria;
-    label.style.marginRight = '10px';
-    label.textContent = cat.mc_descrizione;
-    menuItemsDiv.appendChild(cb);
-    menuItemsDiv.appendChild(label);
-    menuItemsDiv.appendChild(document.createElement('br'));
-  });
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.id = `cat-${cat.id_macro_categoria}`;
+  cb.checked = true;
+  cb.className = 'category-checkbox';
+  const label = document.createElement('label');
+  label.htmlFor = `cat-${cat.id_macro_categoria}`;
+  label.className = 'category-label';
+  label.textContent = cat.mc_descrizione;
+  // Applichiamo il colore dell’evento
+  label.style.backgroundColor = cat.mc_colore;
+  label.style.borderColor = cat.mc_colore; // opzionale
+  menuItemsDiv.appendChild(cb);
+  menuItemsDiv.appendChild(label);
+});
 
   // Toggle menu
   const toggleBtn = document.getElementById('menu-toggle');
