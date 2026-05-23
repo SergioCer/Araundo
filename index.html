@@ -135,6 +135,7 @@
 
     /* Testo leggermente opaco se non selezionato */
     .category-checkbox:not(:checked) + .category-label {
+      background: transparent;
       opacity: 0.5;
     }
     #menu-toggle, #select-all-toggle {
@@ -146,8 +147,8 @@
     }
     /* Checkbox rotondo per 'seleziona tutto' */
     #select-all-toggle {
-      appareance; none;
-      -webkit-appareance: none;
+      appearance: none;
+      -webkit-appearance: none;
       width: 16px;
       height: 16px;
       border-radius: 50%;
@@ -155,6 +156,8 @@
       background: #fff;
       cursor: pointer;
       vertical-align: middle;
+      padding: 0;
+      outline: none;
     }
     #select-all-toggle:checked {
       background: #555; /* invertito per visibilità */
