@@ -465,13 +465,20 @@
     return data;
   }
 
+let showPastEvents = false;  
   async function fetchEvents() {
     const now = new Date().toISOString();
+    
     const { data, error } = await supabase
+    let query = supabase      
       .from('eventi')
       .select('*')
-      .eq('ev_attivo', true)
-      .gte('ev_inizio', now);    
+      .eq('ev_attivo', true);
+      
+    if (!showPastEvents) {
+      query = query.gte('ev_inizio', now);
+      }
+    
     if (error) {
       console.error("Errore caricamento eventi:", error);
     return [];
