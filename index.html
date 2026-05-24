@@ -543,74 +543,71 @@ const { data, error } = await query;  //
   }
 
   // Coordinate di default (Sicilia occidentale)
-const defaultLat = 38.0;
-const defaultLng = 12.6;
-const defaultZoom = 12;
+  const defaultLat = 38.0;
+  const defaultLng = 12.6;
+  const defaultZoom = 12;
 
-const map = L.map('map', {
-  zoomControl: true,
-  minZoom: 10, // evita zoom troppo lontano, 0 = mappa mondiale, 10 = area di circa una regione.
-  maxZoom: 16 // evita zoom troppo vicino, il massimo zoom è 18 - 19
-}).setView([defaultLat, defaultLng], defaultZoom);
+  const map = L.map('map', {
+    zoomControl: true,
+    minZoom: 8, // evita zoom troppo lontano, 0 = mappa mondiale, 10 = area di circa una regione.
+    maxZoom: 18 // evita zoom troppo vicino, il massimo zoom è 18 - 19
+    }).setView([defaultLat, defaultLng], defaultZoom);
 
-// Prova a ottenere la posizione dell'utente
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
+  // Prova a ottenere la posizione dell'utente
+    if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
     (pos) => {
       const userLat = pos.coords.latitude;
       const userLng = pos.coords.longitude;
-
       // Calcolo approssimativo dello zoom in base agli eventi vicini
       const nearbyEvents = events.filter(e => {
         const distance = map.distance([userLat, userLng], [e.ev_lat, e.ev_lng]);
         return distance <= 10000; // 10 km
       });
-
       let zoomLevel = 12;
       if (nearbyEvents.length > 100) zoomLevel = 13;
       else if (nearbyEvents.length > 50) zoomLevel = 12;
       else zoomLevel = 11;
-
       map.setView([userLat, userLng], zoomLevel);
-    },
-    (err) => {
-      console.warn("Geolocalizzazione non disponibile, uso coordinate di default");
+      },
+      (err) => {
+        console.warn("Geolocalizzazione non disponibile, uso coordinate di default");
+        map.setView([defaultLat, defaultLng], defaultZoom);
+      }
+    );
+    } else {
+      console.warn("Browser non supporta geolocalizzazione");
       map.setView([defaultLat, defaultLng], defaultZoom);
     }
-  );
-} else {
-  console.warn("Browser non supporta geolocalizzazione");
-  map.setView([defaultLat, defaultLng], defaultZoom);
-}
 
-  document.addEventListener('DOMContentLoaded', async () => {
-  // 1. prendi categorie
-  categories = await fetchCategories();
-  // 2. icone categorie
-  icons = {};
-  categories.forEach(cat => {
-    icons[cat.id_macro_categoria] = createIcon(cat.mc_colore);
-  });
-  // 3. eventi (DA DB)
-  events = await fetchEvents();
-  // 4. menu UI
-  buildCategoryMenu();
-  // 5. markers della mappa
-  renderEvents();
-  // 6. inizializza checkbox select-all
-  document.getElementById('select-all-toggle').checked = true;  
-  });
-  // attiva eventi passati 
-  document
-  .getElementById('togglePast')
-  .addEventListener('change', async (e) => {
-    // stato checkbox
-    showPastEvents = e.target.checked;
-    // ricarica eventi dal DB
-    events = await fetchEvents();
-    // ridisegna marker
-    renderEvents();
-    });
+      document.addEventListener('DOMContentLoaded', async () => {
+      // 1. prendi categorie
+      categories = await fetchCategories();
+      // 2. icone categorie
+      icons = {};
+      categories.forEach(cat => {
+        icons[cat.id_macro_categoria] = createIcon(cat.mc_colore);
+      });
+      // 3. eventi (DA DB)
+      events = await fetchEvents();
+      // 4. menu UI
+      buildCategoryMenu();
+      // 5. markers della mappa
+      renderEvents();
+      // 6. inizializza checkbox select-all
+      document.getElementById('select-all-toggle').checked = true;  
+      });
+      // attiva eventi passati 
+      document
+      .getElementById('togglePast')
+      .addEventListener('change', async (e) => {
+      // stato checkbox
+      showPastEvents = e.target.checked;
+      // ricarica eventi dal DB
+      events = await fetchEvents();
+      // ridisegna marker
+      renderEvents();
+      });
   
   // 🌿 Base map più calda (meno grigia)
   L.tileLayer(
@@ -622,22 +619,21 @@ if (navigator.geolocation) {
     }
   ).addTo(map);
 
- // 🎨 ICON SET PER CATEGORIE
+// 🎨 ICON SET PER CATEGORIE
 
 function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
   markers = [];
   events.forEach(e => {
-    
-const stateData = getEventState(
+  const stateData = getEventState(
   new Date(e.ev_inizio),
   new Date(e.ev_fine)
-);
-const stateClass = stateData.state;
-const intensity = stateData.intensity;
-const marker = L.marker([e.ev_lat, e.ev_lng], {
+  );
+  const stateClass = stateData.state;
+  const intensity = stateData.intensity;
 
+  const marker = L.marker([e.ev_lat, e.ev_lng], {
   icon: createIcon(
   categories.find(c =>
     c.id_macro_categoria === e.ev_categoria
@@ -656,7 +652,6 @@ const marker = L.marker([e.ev_lat, e.ev_lng], {
     ">
       ${e.ev_titolo}
     </div>
-
     <div style="
       font-size:12px;
       color:#3b82f6;
@@ -666,7 +661,6 @@ const marker = L.marker([e.ev_lat, e.ev_lng], {
       ${formatTime(e.ev_inizio)}
       ${e.ev_fine ? ' - ' + formatTime(e.ev_fine) : ''}
     </div>
-
     <div style="
       font-size:12px;
       color:#555;
@@ -674,7 +668,6 @@ const marker = L.marker([e.ev_lat, e.ev_lng], {
     ">
       ${e.ev_descrizione || ''}
     </div>
-
   </div>
 `)
 
@@ -686,18 +679,14 @@ const marker = L.marker([e.ev_lat, e.ev_lng], {
       active: e.ev_attivo
     });
   });
-
   filterEvents();
 }  
 
 function createIcon(color, extraClass = '', intensity = 1) {
-
   const isFinished = extraClass === 'finished';
-
   const size = isFinished
     ? 10
     : Math.max(8, Math.min(30, 10 * intensity));
-
   return L.divIcon({
     className: '',
     html: `
@@ -792,21 +781,17 @@ const monthNames = [
 function updateDateUI() {
   dayText.innerText = currentDate.getDate();
   dateText.innerText =
-    monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
-
-  // QUI poi collegherai filtro eventi Supabase
-  console.log("Data cambiata:", currentDate);
+  monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
 }
 
 document.getElementById("prev-day").addEventListener("click", () => {
   currentDate.setDate(currentDate.getDate() - 1);
   updateDateUI();
   renderEvents();
-  
   const values = slider.noUiSlider.get();
   filterEvents(
-    Math.round(values[0]),
-    Math.round(values[1])
+  Math.round(values[0]),
+  Math.round(values[1])
   );
 });
 
