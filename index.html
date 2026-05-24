@@ -470,7 +470,7 @@
     const { data, error } = await supabase
       .from('eventi')
       .select('*');
-      .eq('ev_attivo', true)
+      .eq('ev_attivo', true);
       .gte('ev_inizio', now);    
     if (error) {
       console.error("Errore caricamento eventi:", error);
