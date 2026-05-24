@@ -570,6 +570,56 @@ label {
   
 // 🎨 ICON SET PER CATEGORIE
 
+document.getElementById("prev-day").addEventListener("click", () => {
+  currentDate.setDate(currentDate.getDate() - 1);
+  updateDateUI();
+  renderEvents();
+  const values = slider.noUiSlider.get();
+  filterEvents(
+  Math.round(values[0]),
+  Math.round(values[1])
+  );
+});
+
+document.getElementById("next-day").addEventListener("click", () => {
+  currentDate.setDate(currentDate.getDate() + 1);
+  updateDateUI();
+  renderEvents();
+  const values = slider.noUiSlider.get();
+  filterEvents(
+    Math.round(values[0]),
+    Math.round(values[1])
+  );
+});
+
+document.getElementById("reset-day").addEventListener("click", () => {
+  currentDate = new Date(); // oggi
+  updateDateUI();
+  filterEvents();
+  renderEvents();
+});
+
+  // init
+  updateDateUI();
+
+  noUiSlider.create(slider, {
+    start: [0, 24],
+    connect: true,
+    step: 1,
+    range: {
+    min: 0,
+    max: 24
+    }
+  });
+
+  slider.noUiSlider.on('update', function(values) {
+  const start = Math.round(values[0]);
+  const end = Math.round(values[1]);
+  label.innerText =
+  `${start.toString().padStart(2,'0')} - ${end.toString().padStart(2,'0')}`;
+  filterEvents(start, end);
+});
+
 function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
@@ -589,84 +639,79 @@ function renderEvents() {
   stateClass,
   intensity
   )
-    })
+  })
   .bindPopup(`
   <div style="min-width:180px">
-    <div style="
-      font-weight:700;
-      font-size:14px;
-      margin-bottom:4px;
-    ">
-      ${e.ev_titolo}
-    </div>
-    <div style="
-      font-size:12px;
-      color:#3b82f6;
-      margin-bottom:6px;
-      font-weight:600;
-    ">
-      ${formatTime(e.ev_inizio)}
-      ${e.ev_fine ? ' - ' + formatTime(e.ev_fine) : ''}
-    </div>
-    <div style="
-      font-size:12px;
-      color:#555;
-      line-height:1.35;
-    ">
-      ${e.ev_descrizione || ''}
-    </div>
-    </div>
-    `)
-    markers.push({
-      marker,
-      category: e.ev_categoria,
-      start: new Date(e.ev_inizio),
-      end: new Date(e.ev_fine),
-      active: e.ev_attivo
-    });
+  <div style="
+  font-weight:700;
+  font-size:14px;
+  margin-bottom:4px;
+  ">
+  ${e.ev_titolo}
+  </div>
+  <div style="
+  font-size:12px;
+  color:#3b82f6;
+  margin-bottom:6px;
+  font-weight:600;
+  ">
+  ${formatTime(e.ev_inizio)}
+  ${e.ev_fine ? ' - ' + formatTime(e.ev_fine) : ''}
+  </div>
+  <div style="
+  font-size:12px;
+  color:#555;
+  line-height:1.35;
+  ">
+  ${e.ev_descrizione || ''}
+  </div>
+  </div>
+  `)
+  markers.push({
+  marker,
+  category: e.ev_categoria,
+  start: new Date(e.ev_inizio),
+  end: new Date(e.ev_fine),
+  active: e.ev_attivo
+  });
   });
   filterEvents();
 }  
-
+  
 function createIcon(color, extraClass = '', intensity = 1) {
   const isFinished = extraClass === 'finished';
   const size = isFinished
-    ? 10
-    : Math.max(8, Math.min(30, 10 * intensity));
+  ? 10
+  : Math.max(8, Math.min(30, 10 * intensity));
   return L.divIcon({
-    className: '',
-    html: `
-      <div class="pulse ${extraClass}"
-        style="
-          --c:${color};
-          width:${size}px;
-          height:${size}px;">
-      </div>
-    `,
-    iconSize: [size, size]
-  });
+  className: '',
+  html: `
+  <div class="pulse ${extraClass}"
+  style="--c:${color};width:${size}px;height:${size}px;">
+  </div>
+   `,
+   iconSize: [size, size]
+   });
 }
-
+  
 function filterMarkers() {
   const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
   const activeCategories = [];
-  
   checkboxes.forEach(cb => {
-    const catId = parseInt(cb.id.replace('cat-', ''));
-    if (cb.checked) {
-      activeCategories.push(catId);
-    }
+  const catId = parseInt(cb.id.replace('cat-', ''));
+  if (cb.checked) {
+  activeCategories.push(catId);
+  }
   });
-  
   markers.forEach(obj => {
-    if (activeCategories.includes(obj.category)) {
-      obj.marker.addTo(map);
-    } else {
-      map.removeLayer(obj.marker);
-    }
+  if (activeCategories.includes(obj.category)) {
+  obj.marker.addTo(map);
+  } else {
+  map.removeLayer(obj.marker);
+  }
   });
 }
-
+  
 function buildCategoryMenu() {
    const menuItemsDiv = document.getElementById('menu-items');
   // checkbox per ogni categoria
@@ -714,93 +759,43 @@ function buildCategoryMenu() {
     }
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
     }
-
+  
 function updateDateUI() {
   dayText.innerText = currentDate.getDate();
   dateText.innerText =
   monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
 }
-
-document.getElementById("prev-day").addEventListener("click", () => {
-  currentDate.setDate(currentDate.getDate() - 1);
-  updateDateUI();
-  renderEvents();
-  const values = slider.noUiSlider.get();
-  filterEvents(
-  Math.round(values[0]),
-  Math.round(values[1])
-  );
-});
-
-document.getElementById("next-day").addEventListener("click", () => {
-  currentDate.setDate(currentDate.getDate() + 1);
-  updateDateUI();
-  renderEvents();
-  const values = slider.noUiSlider.get();
-  filterEvents(
-    Math.round(values[0]),
-    Math.round(values[1])
-  );
-});
-
-document.getElementById("reset-day").addEventListener("click", () => {
-  currentDate = new Date(); // oggi
-  updateDateUI();
-  filterEvents();
-  renderEvents();
-});
-
+  
 function filterEvents(startHour = 0, endHour = 24) {
   const selectedDate = new Date(currentDate);
   selectedDate.setHours(0,0,0,0);
   markers.forEach(obj => {
-    // evento attivo?
-    if (!obj.active) { map.removeLayer(obj.marker); return; }
-    const evDate = new Date(obj.start);
-    evDate.setHours(0,0,0,0);
-    // stessa data?
-    const sameDay =
-      evDate.getTime() === selectedDate.getTime();
-    // ora evento
-    const eventHour = obj.start.getHours();
-    // compatibilità oraria
-    const inTimeRange =
-      eventHour >= startHour &&
-      eventHour <= endHour;
-    if (sameDay && inTimeRange) {
-      obj.marker.addTo(map);
-    } else {
-      map.removeLayer(obj.marker);
+  // evento attivo?
+  if (!obj.active) { map.removeLayer(obj.marker); return; }
+  const evDate = new Date(obj.start);
+  evDate.setHours(0,0,0,0);
+  // stessa data?
+  const sameDay =
+  evDate.getTime() === selectedDate.getTime();
+  // ora evento
+  const eventHour = obj.start.getHours();
+  // compatibilità oraria
+  const inTimeRange =
+  eventHour >= startHour &&
+  eventHour <= endHour;
+  if (sameDay && inTimeRange) {
+   obj.marker.addTo(map);
+  } else {
+    map.removeLayer(obj.marker);
     }
     });
-  }
+  }  
 
-  // init
-  updateDateUI();
-
-  noUiSlider.create(slider, {
-    start: [0, 24],
-    connect: true,
-    step: 1,
-    range: {
-    min: 0,
-    max: 24
-    }
-  });
-
-  slider.noUiSlider.on('update', function(values) {
-  const start = Math.round(values[0]);
-  const end = Math.round(values[1]);
-  label.innerText =
-  `${start.toString().padStart(2,'0')} - ${end.toString().padStart(2,'0')}`;
-  filterEvents(start, end);
-});
-  
-  function formatTime(dateString) {
+function formatTime(dateString) {
   const d = new Date(dateString);
   return d.toLocaleTimeString('it-IT', {
-    hour: '2-digit',
-    minute: '2-digit'
+  hour: '2-digit',
+  minute: '2-digit'
   });
 }  
 
