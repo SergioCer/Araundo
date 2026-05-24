@@ -443,10 +443,22 @@ label {
 
 <script type="module">
   import { supabase } from './supabase.js';
+    
+  // variabili [] Array (lista di valori ordinati)  {} Oggetto (insieme di proprietà)
+  // let colori = ["rosso", "verde", "blu"]; - console.log(colori[0]); // rosso - console.log(colori[1]); // verde
+  // let persona = {nome: "Marco",eta: 30}; - console.log(persona.nome); // Marco - console.log(persona.eta); // 30
   let categories = [];
   let icons = {};
   let events = [];
   let markers = [];
+  let showPastEvents = false; 
+  let currentDate = new Date(); // Data odierna
+
+  // costanti
+  // Coordinate di default (Sicilia occidentale)
+  const defaultLat = 37.55; 
+  const defaultLng = 14.1; 
+  const defaultZoom = 9;
   
   async function fetchCategories() {
     const { data, error } = await supabase
@@ -462,11 +474,8 @@ label {
       return data;
       }
   
-  let showPastEvents = false;  
   async function fetchEvents() {
-  const now = new Date().toISOString();
-    
-  //    const { data, error } = await supabase
+    const now = new Date().toISOString();
     let query = supabase      
       .from('eventi')
       .select('*')
@@ -480,12 +489,13 @@ label {
     return [];
     }
     return data;
-    }
+  }
 
-  // Coordinate di default (Sicilia occidentale)
-  const defaultLat = 37.55; 
-  const defaultLng = 14.1; 
-  const defaultZoom = 9;
+// 🌿 Base Mappa
+  L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+    { attribution: '&copy; OpenStreetMap & CARTO', subdomains: 'abcd', maxZoom: 19 }
+    ).addTo(map);
 
   const map = L.map('map', {
     zoomControl: true,
@@ -493,16 +503,16 @@ label {
     maxZoom: 18 // evita zoom troppo vicino, il massimo zoom è 18 - 19
     }).setView([defaultLat, defaultLng], defaultZoom);
 
-  // Prova a ottenere la posizione dell'utente
+// Prova a ottenere la posizione dell'utente
     if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-    (pos) => {
+      navigator.geolocation.getCurrentPosition(
+      (pos) => {
       const userLat = pos.coords.latitude;
       const userLng = pos.coords.longitude;
       // Calcolo approssimativo dello zoom in base agli eventi vicini
       const nearbyEvents = events.filter(e => {
-        const distance = map.distance([userLat, userLng], [e.ev_lat, e.ev_lng]);
-        return distance <= 10000; // 10 km
+      const distance = map.distance([userLat, userLng], [e.ev_lat, e.ev_lng]);
+      return distance <= 10000; // 10 km
       });
       let zoomLevel = 12;
       if (nearbyEvents.length > 100) zoomLevel = 13;
@@ -511,14 +521,14 @@ label {
       map.setView([userLat, userLng], zoomLevel);
       },
       (err) => {
-        console.warn("Geolocalizzazione non disponibile, uso coordinate di default");
-        map.setView([defaultLat, defaultLng], defaultZoom);
+      console.warn("Geolocalizzazione non disponibile, uso coordinate di default");
+      map.setView([defaultLat, defaultLng], defaultZoom);
       }
-    );
+      );
     } else {
       console.warn("Browser non supporta geolocalizzazione");
       map.setView([defaultLat, defaultLng], defaultZoom);
-    }
+      }
 
       document.addEventListener('DOMContentLoaded', async () => {
       // 1. prendi categorie
@@ -552,16 +562,6 @@ label {
       renderEvents();
       });
   
-  // 🌿 Base map più calda (meno grigia)
-  L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-    {
-      attribution: '&copy; OpenStreetMap & CARTO',
-      subdomains: 'abcd',
-      maxZoom: 19
-    }
-  ).addTo(map);
-
 // 🎨 ICON SET PER CATEGORIE
 
 function renderEvents() {
@@ -575,7 +575,6 @@ function renderEvents() {
   );
   const stateClass = stateData.state;
   const intensity = stateData.intensity;
-
   const marker = L.marker([e.ev_lat, e.ev_lng], {
   icon: createIcon(
   categories.find(c =>
@@ -583,10 +582,9 @@ function renderEvents() {
   )?.mc_colore || '#999',
   stateClass,
   intensity
-)
+  )
     })
-
-.bindPopup(`
+  .bindPopup(`
   <div style="min-width:180px">
     <div style="
       font-weight:700;
@@ -611,9 +609,8 @@ function renderEvents() {
     ">
       ${e.ev_descrizione || ''}
     </div>
-  </div>
-`)
-
+    </div>
+    `)
     markers.push({
       marker,
       category: e.ev_categoria,
@@ -711,8 +708,6 @@ function buildCategoryMenu() {
     }
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
     }
-
-let currentDate = new Date(); // Data odierna
 
 const dayText = document.getElementById("day-text");
 const dateText = document.getElementById("date-text");
