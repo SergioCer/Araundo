@@ -549,7 +549,18 @@ if (navigator.geolocation) {
   renderEvents();
   // 6. inizializza checkbox select-all
   document.getElementById('select-all-toggle').checked = true;  
-});
+  });
+  // attiva eventi passati 
+  document
+  .getElementById('togglePast')
+  .addEventListener('change', async (e) => {
+    // stato checkbox
+    showPastEvents = e.target.checked;
+    // ricarica eventi dal DB
+    events = await fetchEvents();
+    // ridisegna marker
+    renderEvents();
+    });
   
   // 🌿 Base map più calda (meno grigia)
   L.tileLayer(
