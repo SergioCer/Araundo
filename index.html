@@ -861,7 +861,7 @@ slider.noUiSlider.on('update', function(values) {
   const end = Math.round(values[1]);
 
   label.innerText =
-    `${start.toString().padStart(2,'0')}:00 - ${end.toString().padStart(2,'0')}:00`;
+    `${start.toString().padStart(2,'0')} - ${end.toString().padStart(2,'0')}`;
 
   filterEvents(start, end);
 });
