@@ -690,7 +690,16 @@ const marker = L.marker([e.ev_lat, e.ev_lng], {
 }  
 
 function createIcon(color, extraClass = '', intensity = 1) {
-
+  if (extraClass === 'finished') {
+    const fixedSize = 8;
+    return L.divIcon({
+      className: '',
+      html: `
+        <div class="pulse finished" style="--c:${color}; width:6px; height:6px;"></div>
+      `,
+      iconSize: [fixedSize, fixedSize]
+    });
+  }
   const size = Math.max(8, Math.min(30, 10 * intensity));
 
   return L.divIcon({
@@ -921,26 +930,6 @@ function getEventState(startDate, endDate) {
   return { state: '', intensity: 1 };
 }
 
-function createIcon(color, extraClass = '', intensity = 1) {
-  if (extraClass === 'finished') {
-    return L.divIcon({
-      className: '',
-      html: `
-        <div class="pulse finished" style="--c:${color}; width:6px; height:6px;"></div>
-      `,
-      iconSize: [6, 6]
-    });
-  }
-  const size = 10 * intensity;
-  return L.divIcon({
-    className: '',
-    html: `
-      <div class="pulse ${extraClass}" style="--c:${color}; width:${size}px; height:${size}px;"></div>
-    `,
-    iconSize: [size, size]
-  });
-}  
-  
 </script>
 </body>
 </html>
