@@ -685,16 +685,23 @@ const marker = L.marker([e.ev_lat, e.ev_lng], {
   filterEvents();
 }  
 
-function createIcon(color, extraClass = '') {
+function createIcon(color, extraClass = '', intensity = 1) {
+
+  const size = Math.max(8, Math.min(30, 10 * intensity));
+
   return L.divIcon({
     className: '',
     html: `
       <div
         class="pulse ${extraClass}"
-        style="--c:${color}">
+        style="
+          --c:${color};
+          width:${size}px;
+          height:${size}px;
+        ">
       </div>
     `,
-    iconSize: [20, 20]
+    iconSize: [size, size]
   });
 }
 
