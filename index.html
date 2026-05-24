@@ -898,7 +898,7 @@ function getEventState(startDate, endDate) {
   const now = new Date();
   // evento concluso → niente animazione
   if (endDate && now > endDate) {
-    return { state: 'finished', intensity: 0 };
+    return { state: 'finished' };
   }
   const diffMinutes = (startDate - now) / 1000 / 60;
   // LIVE
@@ -921,6 +921,26 @@ function getEventState(startDate, endDate) {
   return { state: '', intensity: 1 };
 }
 
+function createIcon(color, extraClass = '', intensity = 1) {
+  if (extraClass === 'finished') {
+    return L.divIcon({
+      className: '',
+      html: `
+        <div class="pulse finished" style="--c:${color}; width:6px; height:6px;"></div>
+      `,
+      iconSize: [6, 6]
+    });
+  }
+  const size = 10 * intensity;
+  return L.divIcon({
+    className: '',
+    html: `
+      <div class="pulse ${extraClass}" style="--c:${color}; width:${size}px; height:${size}px;"></div>
+    `,
+    iconSize: [size, size]
+  });
+}  
+  
 </script>
 </body>
 </html>
