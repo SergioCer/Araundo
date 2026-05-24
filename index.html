@@ -642,6 +642,7 @@ function renderEvents() {
   intensity
   )
   })
+  /* Questa è la finestra dell'evento quando si fa un click */ 
   .bindPopup(`
   <div style="min-width:180px">
   <div style="
@@ -697,7 +698,8 @@ function createIcon(color, extraClass = '', intensity = 1) {
    iconSize: [size, size]
    });
 }
-  
+
+/* Mostra o nasconde i Marker delle categorie */  
 function filterMarkers() {
   const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
   const activeCategories = [];
@@ -763,11 +765,11 @@ function buildCategoryMenu() {
     }
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
     }
-  
+
+/* Compone la data corrente nel rettangolo inserendo il mese dalla const */  
 function updateDateUI() {
   dayText.innerText = currentDate.getDate();
-  dateText.innerText =
-  monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
+  dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
 }
   
 function filterEvents(startHour = 0, endHour = 24) {
@@ -795,6 +797,7 @@ function filterEvents(startHour = 0, endHour = 24) {
     });
   }  
 
+/* Formatta la data in stile Italiano 00:00 */   
 function formatTime(dateString) {
   const d = new Date(dateString);
   return d.toLocaleTimeString('it-IT', {
