@@ -802,10 +802,10 @@ function getEventState(startDate, endDate) {
   const diffMinutes = (startDate - now) / 1000 / 60;
   // LIVE
   if (diffMinutes <= 0) { return { state: 'live', intensity: 3 }; }
-  if (diffMinutes <= 90) { return { state: 'critical', intensity: 3 }; }
-  if (diffMinutes <= 180) { return { state: 'imminent', intensity: 2.5 }; }
-  if (diffMinutes <= 360) { return { state: 'very-soon', intensity: 2 }; }
-  if (diffMinutes <= 720) { return { state: 'soon', intensity: 1.5 }; }
+  if (diffMinutes <= 90) { return { state: 'critical', intensity: 2.5 }; }
+  if (diffMinutes <= 180) { return { state: 'imminent', intensity: 2 }; }
+  if (diffMinutes <= 360) { return { state: 'very-soon', intensity: 1.5 }; }
+  if (diffMinutes <= 720) { return { state: 'soon', intensity: 1 }; }
   return { state: '', intensity: 1 };
 }
 
