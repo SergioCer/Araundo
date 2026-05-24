@@ -465,7 +465,7 @@ label {
   const slider = document.getElementById('time-range');
   const label = document.getElementById('time-range-label');
 
-  
+  // Preleva le Categorie da supabase
   async function fetchCategories() {
     const { data, error } = await supabase
       .from('macrocategorie')
@@ -479,7 +479,8 @@ label {
       console.log(data);
       return data;
       }
-  
+
+  // Preleva gli Eventi da supabase
   async function fetchEvents() {
     const now = new Date().toISOString();
     let query = supabase      
@@ -600,7 +601,7 @@ document.getElementById("reset-day").addEventListener("click", () => {
 });
 
   // init
-  updateDateUI();
+  // updateDateUI(); disabilitato per provare cosa accade
 
   noUiSlider.create(slider, {
     start: [0, 24],
