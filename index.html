@@ -453,7 +453,7 @@
   
   async function fetchCategories() {
     const { data, error } = await supabase
-      .from('MacroCategorie')
+      .from('macrocategorie')
       .select('*')
       .eq('mc_attiva', true)
       .order('mc_descrizione', { ascending: true });
