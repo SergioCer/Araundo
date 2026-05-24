@@ -459,6 +459,12 @@ label {
   const defaultLat = 37.55; 
   const defaultLng = 14.1; 
   const defaultZoom = 9;
+  const dayText = document.getElementById("day-text");
+  const dateText = document.getElementById("date-text");
+  const monthNames = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+  const slider = document.getElementById('time-range');
+  const label = document.getElementById('time-range-label');
+
   
   async function fetchCategories() {
     const { data, error } = await supabase
@@ -709,14 +715,6 @@ function buildCategoryMenu() {
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
     }
 
-const dayText = document.getElementById("day-text");
-const dateText = document.getElementById("date-text");
-
-const monthNames = [
-  "Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
-  "Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"
-];
-
 function updateDateUI() {
   dayText.innerText = currentDate.getDate();
   dateText.innerText =
@@ -779,8 +777,6 @@ function filterEvents(startHour = 0, endHour = 24) {
 
   // init
   updateDateUI();
-  const slider = document.getElementById('time-range');
-  const label = document.getElementById('time-range-label');
 
   noUiSlider.create(slider, {
     start: [0, 24],
