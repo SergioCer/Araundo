@@ -469,8 +469,8 @@
     const now = new Date().toISOString();
     const { data, error } = await supabase
       .from('eventi')
-      .select('*');
-      .eq('ev_attivo', true);
+      .select('*')
+      .eq('ev_attivo', true)
       .gte('ev_inizio', now);    
     if (error) {
       console.error("Errore caricamento eventi:", error);
