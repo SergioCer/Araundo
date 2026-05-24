@@ -533,10 +533,13 @@ label {
       // 4. menu UI
       buildCategoryMenu();
       // 5. markers della mappa
-      renderEvents();
+      // c'era render evnts
       // 6. inizializza checkbox select-all
-      document.getElementById('select-all-toggle').checked = true;  
+      document.getElementById('select-all-toggle').checked = true;
+      updateDateUI(); // aggiunto 
+      renderEvents();
       });
+      
       // attiva eventi passati 
       document
       .getElementById('togglePast')
