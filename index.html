@@ -847,18 +847,6 @@ function getEventState(startDate) {
   return '';
 }
 
-document
-  .getElementById('togglePast')
-  .addEventListener('change', async (e) => {
-
-    showPastEvents = e.target.checked;
-
-    const events = await fetchEvents();
-
-    console.log(events);
-    // qui aggiorni la UI
-});
-  
 </script>
 </body>
 </html>
