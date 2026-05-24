@@ -627,9 +627,10 @@ function renderEvents() {
   
   events.forEach(e => {
 
-    const stateClass = getEventState(
-    new Date(e.ev_inizio)
-    );
+  const stateClass = getEventState(
+    new Date(e.ev_inizio),
+    new Date(e.ev_fine)
+  );
 
     const marker = L.marker([e.ev_lat, e.ev_lng], {
       icon: createIcon(
@@ -883,6 +884,10 @@ function formatTime(dateString) {
 
 function getEventState(startDate) {
   const now = new Date();
+  // evento già concluso
+  if (endDate && now > endDate) {
+  return ''; // niente animazione
+  }
   const diffMinutes =
     (startDate - now) / 1000 / 60;
   if (diffMinutes <= 0) {
