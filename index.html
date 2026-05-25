@@ -580,7 +580,7 @@ document.getElementById("prev-day").addEventListener("click", () => {
   updateDateUI();
   renderEvents();
   const values = slider.noUiSlider.get();
-  filterEvents(
+  MarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
@@ -591,7 +591,7 @@ document.getElementById("next-day").addEventListener("click", () => {
   updateDateUI();
   renderEvents();
   const values = slider.noUiSlider.get();
-  filterEvents(
+  MarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
@@ -600,7 +600,7 @@ document.getElementById("next-day").addEventListener("click", () => {
 document.getElementById("reset-day").addEventListener("click", () => {
   currentDate = new Date(); // oggi
   updateDateUI();
-  filterEvents();
+  MarkerVisibility();
   renderEvents();
 });
 
@@ -619,10 +619,10 @@ document.getElementById("reset-day").addEventListener("click", () => {
   const end = Math.round(values[1]);
   label.innerText =
   `${start.toString().padStart(2,'0')} - ${end.toString().padStart(2,'0')}`;
-  filterEvents(start, end);
+  MarkerVisibility(start, end);
 });
 
-  // Calcola stato temporale, crea Marker Leaflet, crea popup HTML, salva metadati in markers, richiama (filterevents)
+  // Calcola stato temporale, crea Marker Leaflet, crea popup HTML, salva metadati in markers, richiama (MarkerVisibility)
 function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
@@ -676,11 +676,12 @@ function renderEvents() {
   marker,
   category: e.ev_categoria,
   start: new Date(e.ev_inizio),
-  end: new Date(e.ev_fine),
+  end: e.ev_fine ? new Date(e.ev_fine) : null // se data non presente corregge eventuali errori
+  const endDate = e.ev_fine ? new Date(e.ev_fine) : null; // verificare se è corretto in questa posizione
   active: e.ev_attivo
   });
   });
-  filterEvents();
+  MarkerVisibility();
 }  
 
   // Crea icone L.divIcon() con colore, classe CSS, dimensione variabile, intensità animazione
@@ -702,21 +703,49 @@ function createIcon(color, extraClass = '', intensity = 1) {
 }
 
 /* Mostra o nasconde i Marker delle categorie */  
-function filterMarkers() {
-  const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
+function MarkerVisibility() {
+ function updateMarkerVisibility(startHour = 0, endHour = 24) {
+  const selectedDate = new Date(currentDate);
+  selectedDate.setHours(0,0,0,0);
+  const checkboxes = document.querySelectorAll(
+    '#menu-items input[type="checkbox"]'
+  );
   const activeCategories = [];
   checkboxes.forEach(cb => {
-  const catId = parseInt(cb.id.replace('cat-', ''));
-  if (cb.checked) {
-  activeCategories.push(catId);
-  }
+    const catId = parseInt(cb.id.replace('cat-', ''));
+    if (cb.checked) {
+      activeCategories.push(catId);
+    }
   });
   markers.forEach(obj => {
-  if (activeCategories.includes(obj.category)) {
-  obj.marker.addTo(map);
-  } else {
-  map.removeLayer(obj.marker);
-  }
+    if (!obj.active) {
+      map.removeLayer(obj.marker);
+      return;
+    }
+    // filtro categoria
+    const categoryVisible =
+      activeCategories.includes(obj.category);
+    // date multiday
+    const startDate = new Date(obj.start);
+    startDate.setHours(0,0,0,0);
+    const endDate = obj.end
+      ? new Date(obj.end)
+      : new Date(obj.start);
+    endDate.setHours(23,59,59,999);
+    const sameDay =
+      selectedDate >= startDate &&
+      selectedDate <= endDate;
+    // filtro orario
+    const eventHour = obj.start.getHours();
+    const inTimeRange =
+      eventHour >= startHour &&
+      eventHour <= endHour;
+    // decisione finale unica
+    if (categoryVisible && sameDay && inTimeRange) {
+      obj.marker.addTo(map);
+    } else {
+      map.removeLayer(obj.marker);
+    }
   });
 }
 
@@ -751,14 +780,14 @@ function buildCategoryMenu() {
     }
     });
     // FILTRO LIVE
-    menuItemsDiv.addEventListener('change', filterMarkers);
+    menuItemsDiv.addEventListener('change', MarkerVisibility);
     // checkbox minimalista Seleziona/Togli tutto
     const selectAllToggle = document.getElementById('select-all-toggle');
     selectAllToggle.checked = true;
     selectAllToggle.addEventListener('change', () => {
     const checkboxes = menuItemsDiv.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = selectAllToggle.checked);
-    filterMarkers();
+    MarkerVisibility();
     });
     // aggiorna lo stato del checkbox
     function updateSelectAllToggle() {
@@ -777,7 +806,7 @@ function updateDateUI() {
 
 /* Seleziona, orario, stato attivo *** Problema Eventi MultiGiorno non funzionano *** */
 function filterEvents(startHour = 0, endHour = 24) {
-  const startDate = new Date(obj.start);
+  const startDate = new Date(obj.start);  // quì sembra che ci sia un errore sui filtri
   startDate.setHours(0,0,0,0);
   const endDate = obj.end ? new Date(obj.end) : new Date(obj.start);
   endDate.setHours(23,59,59,999);
