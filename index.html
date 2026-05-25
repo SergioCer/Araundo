@@ -677,7 +677,6 @@ function renderEvents() {
   category: e.ev_categoria,
   start: new Date(e.ev_inizio),
   end: e.ev_fine ? new Date(e.ev_fine) : null // se data non presente corregge eventuali errori
-  const endDate = e.ev_fine ? new Date(e.ev_fine) : null; // verificare se è corretto in questa posizione
   active: e.ev_attivo
   });
   });
@@ -703,8 +702,7 @@ function createIcon(color, extraClass = '', intensity = 1) {
 }
 
 /* Mostra o nasconde i Marker delle categorie */  
-function MarkerVisibility() {
- function updateMarkerVisibility(startHour = 0, endHour = 24) {
+function MarkerVisibility(startHour = 0, endHour = 24) {
   const selectedDate = new Date(currentDate);
   selectedDate.setHours(0,0,0,0);
   const checkboxes = document.querySelectorAll(
@@ -717,6 +715,7 @@ function MarkerVisibility() {
       activeCategories.push(catId);
     }
   });
+  const startDate = new Date(obj.start);
   markers.forEach(obj => {
     if (!obj.active) {
       map.removeLayer(obj.marker);
@@ -726,7 +725,6 @@ function MarkerVisibility() {
     const categoryVisible =
       activeCategories.includes(obj.category);
     // date multiday
-    const startDate = new Date(obj.start);
     startDate.setHours(0,0,0,0);
     const endDate = obj.end
       ? new Date(obj.end)
@@ -803,39 +801,6 @@ function updateDateUI() {
   dayText.innerText = currentDate.getDate();
   dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
 }
-
-/* Seleziona, orario, stato attivo *** Problema Eventi MultiGiorno non funzionano *** */
-function filterEvents(startHour = 0, endHour = 24) {
-  const startDate = new Date(obj.start);  // quì sembra che ci sia un errore sui filtri
-  startDate.setHours(0,0,0,0);
-  const endDate = obj.end ? new Date(obj.end) : new Date(obj.start);
-  endDate.setHours(23,59,59,999);
-  const sameDay =
-  selectedDate >= startDate &&
-  selectedDate <= endDate;
-  const selectedDate = new Date(currentDate);
-  selectedDate.setHours(0,0,0,0);
-  markers.forEach(obj => {
-  // evento attivo?
-  if (!obj.active) { map.removeLayer(obj.marker); return; }
-  const evDate = new Date(obj.start);
-  evDate.setHours(0,0,0,0);
-  // stessa data?
-  const sameDay =
-  evDate.getTime() === selectedDate.getTime();
-  // ora evento
-  const eventHour = obj.start.getHours();
-  // compatibilità oraria
-  const inTimeRange =
-  eventHour >= startHour &&
-  eventHour <= endHour;
-  if (sameDay && inTimeRange) {
-   obj.marker.addTo(map);
-  } else {
-    map.removeLayer(obj.marker);
-    }
-    });
-  }  
 
 /* OK non toccare. Formatta la data in stile Italiano 00:00 */   
 function formatTime(dateString) {
