@@ -439,7 +439,7 @@ label {
   let icons = {};
   let events = [];
   let markers = [];
-  let showPastEvents = false; 
+  let showFinishedEvents = false; 
   let currentDate = new Date(); // Data odierna
   
   // costanti
@@ -475,7 +475,7 @@ label {
       .from('eventi')
       .select('*')
       .eq('ev_attivo', true);
-    if (!showPastEvents) {
+    if (!showFinishedEvents) {
       query = query.gte('ev_inizio', now);
       }
     const { data, error } = await query;  //     
@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.getElementById('togglePast')
   .addEventListener('change', async (e) => {
   // stato checkbox
-  showPastEvents = e.target.checked;
+  showFinishedEvents = e.target.checked;
   // ricarica eventi dal DB
   events = await fetchEvents();
   // ridisegna marker
