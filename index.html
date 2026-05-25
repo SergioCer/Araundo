@@ -738,21 +738,21 @@ function renderEvents() {
 
 function createIcon(color, state, intensity) {
   const isFinished = state === 'finished';
+
   const isDormant =
     state === 'future-deep' || intensity === 0;
   const isCritical = state === 'imminent';
   const size = isFinished
     ? 10
     : Math.max(8, Math.min(32, 10 * intensity));
-    let className = 'pulse';
-if (diffMinutes <= 0) {
-  className += ' live';
-} else if (diffMinutes <= 120) {
-  className += ' critical';
-} else if (diffMinutes <= 360) {
-  className += ' active';
-}
-return L.divIcon({
+
+  let className = 'pulse';
+
+  if (state === 'started') className += ' live';
+  else if (intensity >= 2.5) className += ' critical';
+  else if (intensity >= 1) className += ' active';
+  
+  return L.divIcon({
     className: '',
     html: `
       <div class="pulse ${state}"
