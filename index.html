@@ -465,14 +465,6 @@ label {
   let markers = [];
   let showPastEvents = false; 
   let currentDate = new Date(); // Data odierna
-  let className = 'pulse';
-if (diffMinutes <= 0) {
-  className += ' live';
-} else if (diffMinutes <= 120) {
-  className += ' critical';
-} else if (diffMinutes <= 360) {
-  className += ' active';
-}
   
   // costanti
   // Coordinate di default (Sicilia occidentale)
@@ -752,7 +744,15 @@ function createIcon(color, state, intensity) {
   const size = isFinished
     ? 10
     : Math.max(8, Math.min(32, 10 * intensity));
-  return L.divIcon({
+    let className = 'pulse';
+if (diffMinutes <= 0) {
+  className += ' live';
+} else if (diffMinutes <= 120) {
+  className += ' critical';
+} else if (diffMinutes <= 360) {
+  className += ' active';
+}
+return L.divIcon({
     className: '',
     html: `
       <div class="pulse ${state}"
