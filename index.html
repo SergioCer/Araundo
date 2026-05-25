@@ -319,16 +319,16 @@
   color: #3b82f6;
   }
 
-/* mancherebbe un .pulse.null sopra le 12h */
+/* Pulsazioni ed animazioni Marker */
 .pulse.future-deep { animation: none; }
 .pulse.future-far { animation: hopSlow 3s infinite; }
 .pulse.future-medium { animation: hopMedium 2s infinite; }
 .pulse.future-near { animation: hopFast 1s infinite; }
-.pulse.finished { animation: finished; }    
-.pulse.active { animation: hopMedium 1.5s infinite; }
-.pulse.critical { animation: hopFast 0.6s infinite; }
-.pulse.live::after { animation: pulseLive 0.4s infinite; }
+.pulse.started { animation: hopCrazy 0.4s infinite; }    
 .pulse.started::after { animation: pulseLive 0.3s infinite; }
+.pulse.running { animation: none; }
+.pulse.running::after { animation: pulse 2.5s infinite ease-out; opacity: 0.2; }
+.pulse.finished { animation: finished; }    
 .pulse.finished::after { display: none; animation: none !important; opacity: 0 !important; }
     
 /* SALTI */
@@ -731,9 +731,6 @@ function renderEvents() {
 
 function createIcon(color, state, intensity) {
   const isFinished = state === 'finished';
-  const isDormant =
-    state === 'future-deep' || intensity === 0;
-  const isCritical = state === 'imminent';
   const size = isFinished
     ? 10
     : Math.max(8, Math.min(32, 10 * intensity));
@@ -922,52 +919,26 @@ function formatTime(dateString) {
 
 function getEventState(startDate, endDate) {
   const now = new Date();
-  // evento finito
-  if (endDate && now > endDate) {
-    return { state: 'finished', intensity: 0 };
-  }
   const diffMinutes = (startDate - now) / 1000 / 60;
+  const minutesFromStart =  (now - startDate) / 1000 / 60;
+  // Inizia tra 24h
+  if (diffMinutes > 1440) { return { state: 'future-deep', intensity: 0 }; }
+  // Inizia tra 12h
+  if (diffMinutes > 720) { return { state: 'future-far', intensity: 0.7 }; }
+  // Inizia tra 6h
+  if (diffMinutes > 360) { return { state: 'future-medium', intensity: 1.2 }; }
+  // Inizia tra 2h
+  if (diffMinutes > 120) { return { state: 'future-near', intensity: 2 }; }
   // evento in corso
-  if (diffMinutes <= 0) {
-    return {
-      state: 'started',
-      intensity: 3
-    };
-  }
-  // 🧊 dormiente
-  if (diffMinutes > 1440) {
-    return {
-      state: 'future-deep',
-      intensity: 0
-    };
-  }
-  // 🌫 debole
-  if (diffMinutes > 720) {
-    return {
-      state: 'future-far',
-      intensity: 0.7
-    };
-  }
-  // 🌊 attivo
-  if (diffMinutes > 360) {
-    return {
-      state: 'future-medium',
-      intensity: 1.2
-    };
-  }
-  // ⚡ vicino
-  if (diffMinutes > 120) {
-    return {
-      state: 'future-near',
-      intensity: 2
-    };
-  }
-  // 🔴 critico
-  return {
-    state: 'imminent',
-    intensity: 2.8
-  };
-}
+  if (diffMinutes <= 0) { return { state: 'started', intensity: 3 }; }
+  // evento appena iniziato (< 30 min)
+  if (minutesFromStart >= 0 && minutesFromStart <= 30) { return { state: 'started', intensity: 3 }; }
+  // evento già in corso da molto
+  if (minutesFromStart > 30) { return { state: 'running', intensity: 1 }; }
+  // evento terminato 
+  if (endDate && now > endDate) { return { state: 'finished', intensity: 0 }; }
+    // 🔴 critico Inizia tra meno di 2h
+  return { state: 'imminent', intensity: 2.8 };}
   
 /* DISABILITATA MOMENTANEAMENTE Calcola stato evento, intensità animazione
 function getEventState(startDate, endDate) {
