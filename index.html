@@ -777,11 +777,11 @@ function buildCategoryMenu() {
     menuItemsDiv.style.display = 'none';
     }
     });
-    // FILTRO LIVE
-    menuItemsDiv.addEventListener('change', updateMarkerVisibility);
-    // checkbox minimalista Seleziona/Togli tutto
+    // Checkbox Singola Categoria
+    menuItemsDiv.addEventListener('change', () => updateMarkerVisibility());
     const selectAllToggle = document.getElementById('select-all-toggle');
     selectAllToggle.checked = true;
+    // Checkbox Globale Seleziona/Deseleziona
     selectAllToggle.addEventListener('change', () => {
     const checkboxes = menuItemsDiv.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = selectAllToggle.checked);
