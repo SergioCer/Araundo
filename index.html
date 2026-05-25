@@ -320,21 +320,14 @@
   }
 
 /* mancherebbe un .pulse.null sopra le 12h */
+.pulse.future-deep { animation: none; }
+.pulse.future-far { animation: hopSlow 3s infinite; }
+.pulse.future-medium { animation: hopMedium 2s infinite; }
+.pulse.future-near { animation: hopFast 1s infinite; }
 .pulse.finished { animation: finished; }    
-.pulse {
-  animation: none;
-}
-.pulse.active {
-  animation: hopMedium 1.5s infinite;
-}
-.pulse.critical {
-  animation: hopFast 0.6s infinite;
-}
-    .pulse.live::after {
-  animation: pulseLive 0.4s infinite;
-}
-    
-/* evento started 30' */
+.pulse.active { animation: hopMedium 1.5s infinite; }
+.pulse.critical { animation: hopFast 0.6s infinite; }
+.pulse.live::after { animation: pulseLive 0.4s infinite; }
 .pulse.started::after { animation: pulseLive 0.3s infinite; }
 .pulse.finished::after { display: none; animation: none !important; opacity: 0 !important; }
     
@@ -738,21 +731,13 @@ function renderEvents() {
 
 function createIcon(color, state, intensity) {
   const isFinished = state === 'finished';
-
   const isDormant =
     state === 'future-deep' || intensity === 0;
   const isCritical = state === 'imminent';
   const size = isFinished
     ? 10
     : Math.max(8, Math.min(32, 10 * intensity));
-
-  let className = 'pulse';
-
-  if (state === 'started') className += ' live';
-  else if (intensity >= 2.5) className += ' critical';
-  else if (intensity >= 1) className += ' active';
-  
-  return L.divIcon({
+ return L.divIcon({
     className: '',
     html: `
       <div class="pulse ${state}"
