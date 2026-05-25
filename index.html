@@ -580,7 +580,7 @@ document.getElementById("prev-day").addEventListener("click", () => {
   updateDateUI();
   renderEvents();
   const values = slider.noUiSlider.get();
-  MarkerVisibility(
+  updateMarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
@@ -591,7 +591,7 @@ document.getElementById("next-day").addEventListener("click", () => {
   updateDateUI();
   renderEvents();
   const values = slider.noUiSlider.get();
-  MarkerVisibility(
+  updateMarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
@@ -600,7 +600,7 @@ document.getElementById("next-day").addEventListener("click", () => {
 document.getElementById("reset-day").addEventListener("click", () => {
   currentDate = new Date(); // oggi
   updateDateUI();
-  MarkerVisibility();
+  updateMarkerVisibility();
   renderEvents();
 });
 
@@ -619,10 +619,10 @@ document.getElementById("reset-day").addEventListener("click", () => {
   const end = Math.round(values[1]);
   label.innerText =
   `${start.toString().padStart(2,'0')} - ${end.toString().padStart(2,'0')}`;
-  MarkerVisibility(start, end);
+  updateMarkerVisibility(start, end);
 });
 
-  // Calcola stato temporale, crea Marker Leaflet, crea popup HTML, salva metadati in markers, richiama (MarkerVisibility)
+  // Calcola stato temporale, crea Marker Leaflet, crea popup HTML, salva metadati in markers, richiama (updateMarkerVisibility)
 function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
@@ -676,11 +676,11 @@ function renderEvents() {
   marker,
   category: e.ev_categoria,
   start: new Date(e.ev_inizio),
-  end: e.ev_fine ? new Date(e.ev_fine) : null // se data non presente corregge eventuali errori
+  end: e.ev_fine ? new Date(e.ev_fine) : null, // se data non presente corregge eventuali errori
   active: e.ev_attivo
   });
   });
-  MarkerVisibility();
+  updateMarkerVisibility();
 }  
 
   // Crea icone L.divIcon() con colore, classe CSS, dimensione variabile, intensità animazione
@@ -702,7 +702,7 @@ function createIcon(color, extraClass = '', intensity = 1) {
 }
 
 /* Mostra o nasconde i Marker delle categorie */  
-function MarkerVisibility(startHour = 0, endHour = 24) {
+function updateMarkerVisibility(startHour = 0, endHour = 24) {
   const selectedDate = new Date(currentDate);
   selectedDate.setHours(0,0,0,0);
   const checkboxes = document.querySelectorAll(
@@ -715,7 +715,6 @@ function MarkerVisibility(startHour = 0, endHour = 24) {
       activeCategories.push(catId);
     }
   });
-  const startDate = new Date(obj.start);
   markers.forEach(obj => {
     if (!obj.active) {
       map.removeLayer(obj.marker);
@@ -725,6 +724,7 @@ function MarkerVisibility(startHour = 0, endHour = 24) {
     const categoryVisible =
       activeCategories.includes(obj.category);
     // date multiday
+    const startDate = new Date(obj.start);
     startDate.setHours(0,0,0,0);
     const endDate = obj.end
       ? new Date(obj.end)
@@ -778,14 +778,14 @@ function buildCategoryMenu() {
     }
     });
     // FILTRO LIVE
-    menuItemsDiv.addEventListener('change', MarkerVisibility);
+    menuItemsDiv.addEventListener('change', updateMarkerVisibility);
     // checkbox minimalista Seleziona/Togli tutto
     const selectAllToggle = document.getElementById('select-all-toggle');
     selectAllToggle.checked = true;
     selectAllToggle.addEventListener('change', () => {
     const checkboxes = menuItemsDiv.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = selectAllToggle.checked);
-    MarkerVisibility();
+    updateMarkerVisibility();
     });
     // aggiorna lo stato del checkbox
     function updateSelectAllToggle() {
@@ -821,7 +821,7 @@ function getEventState(startDate, endDate) {
   if (diffMinutes <= 180) { return { state: 'imminent', intensity: 2 }; }
   if (diffMinutes <= 360) { return { state: 'very-soon', intensity: 1.5 }; }
   if (diffMinutes <= 720) { return { state: 'soon', intensity: 1 }; }
-  return { state: '' };
+  return { state: 'future', intensity: 0.5 };
 }
 
 </script>
