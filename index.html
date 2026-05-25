@@ -736,7 +736,7 @@ function buildCategoryMenu() {
     label.textContent = cat.mc_descrizione;
     // Applichiamo il colore dell’evento
     label.style.backgroundColor = cat.mc_colore;
-    label.style.color = cat.mc_colore;
+    label.style.color = '#fff';
     label.style.setProperty('--cat-color', cat.mc_colore);
     menuItemsDiv.appendChild(cb);
     menuItemsDiv.appendChild(label);
@@ -777,6 +777,13 @@ function updateDateUI() {
 
 /* Seleziona, orario, stato attivo *** Problema Eventi MultiGiorno non funzionano *** */
 function filterEvents(startHour = 0, endHour = 24) {
+  const startDate = new Date(obj.start);
+  startDate.setHours(0,0,0,0);
+  const endDate = obj.end ? new Date(obj.end) : new Date(obj.start);
+  endDate.setHours(23,59,59,999);
+  const sameDay =
+  selectedDate >= startDate &&
+  selectedDate <= endDate;
   const selectedDate = new Date(currentDate);
   selectedDate.setHours(0,0,0,0);
   markers.forEach(obj => {
