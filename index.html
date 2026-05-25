@@ -701,7 +701,51 @@ function createIcon(color, extraClass = '', intensity = 1) {
    });
 }
 
-/* Mostra o nasconde i Marker delle categorie */  
+/* NUOVA Mostra o nasconde i Marker delle categorie  */
+function updateMarkerVisibility(startHour = 0, endHour = 24) {
+  const selectedDate = new Date(currentDate);
+  selectedDate.setHours(0,0,0,0);
+  const checkboxes = document.querySelectorAll(
+    '#menu-items input[type="checkbox"]'
+  );
+  const activeCategories = [];
+  checkboxes.forEach(cb => {
+    const catId = parseInt(cb.id.replace('cat-', ''));
+    if (cb.checked) activeCategories.push(catId);
+  });
+  markers.forEach(obj => {
+    if (!obj.active) {
+      map.removeLayer(obj.marker);
+      return;
+    }
+    // categoria
+    const categoryVisible =
+      activeCategories.includes(obj.category);
+    // range date (UI)
+    const startDate = new Date(obj.start);
+    startDate.setHours(0,0,0,0);
+    const endDate = obj.end
+      ? new Date(obj.end)
+      : new Date(obj.start);
+    endDate.setHours(23,59,59,999);
+    const inSelectedDay =
+      selectedDate >= startDate &&
+      selectedDate <= endDate;
+    // orario base (opzionale)
+    const eventHour = obj.start.getHours();
+    const inTimeRange =
+      eventHour >= startHour &&
+      eventHour <= endHour;
+    // SOLO VISIBILITÀ
+    if (categoryVisible && inSelectedDay && inTimeRange) {
+      obj.marker.addTo(map);
+    } else {
+      map.removeLayer(obj.marker);
+    }
+  });
+}
+  
+/* DISABILITATA MOMENTANEAMENTE  Mostra o nasconde i Marker delle categorie 
 function updateMarkerVisibility(startHour = 0, endHour = 24) {
   const selectedDate = new Date(currentDate);
   selectedDate.setHours(0,0,0,0);
@@ -745,7 +789,7 @@ function updateMarkerVisibility(startHour = 0, endHour = 24) {
       map.removeLayer(obj.marker);
     }
   });
-}
+} */
 
 // Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
 function buildCategoryMenu() {
