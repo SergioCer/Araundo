@@ -320,21 +320,21 @@
   }
 
 /* mancherebbe un .pulse.null sopra le 12h */
-.pulse.concluso { animation: concluso; }    
+.pulse.finished { animation: finished; }    
 /* entro 12h */
-.pulse.presto { animation: hopSlow 3s infinite; }
+.pulse.soon { animation: hopSlow 3s infinite; }
 /* entro 6h */
-.pulse.very-prestissimo { animation: hopMedium 1.5s infinite; }
+.pulse.very-soon { animation: hopMedium 1.5s infinite; }
 /* entro 3h */
-.pulse.imminente { animation: hopFast 0.8s infinite; }
+.pulse.imminent { animation: hopFast 0.8s infinite; }
 /* entro 1h 30' */
-.pulse.inizia { animation: hopCrazy 0.4s infinite; }
-/* evento iniziato 30' */
-.pulse.iniziato::after { animation: pulseLive 0.3s infinite; }
+.pulse.starting-soon { animation: hopCrazy 0.4s infinite; }
+/* evento started 30' */
+.pulse.started::after { animation: pulseLive 0.3s infinite; }
 .pulse.finished::after { display: none; animation: none !important; opacity: 0 !important; }
     
 /* SALTI */
-@keyframes concluso {
+@keyframes finished {
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(0px); }
 }
@@ -622,6 +622,7 @@ document.getElementById("reset-day").addEventListener("click", () => {
   filterEvents(start, end);
 });
 
+  // Calcola stato temporale, crea Marker Leaflet, crea popup HTML, salva metadati in markers, richiama (filterevents)
 function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
@@ -633,6 +634,7 @@ function renderEvents() {
   );
   const stateClass = stateData.state;
   const intensity = stateData.intensity;
+    // Crea tutti i Markers
   const marker = L.marker([e.ev_lat, e.ev_lng], {
   icon: createIcon(
   categories.find(c =>
@@ -681,7 +683,7 @@ function renderEvents() {
   filterEvents();
 }  
 
-  // Crea icona con colore, extraclass ed intensità  
+  // Crea icone L.divIcon() con colore, classe CSS, dimensione variabile, intensità animazione
 function createIcon(color, extraClass = '', intensity = 1) {
   const isFinished = extraClass === 'finished';
   // se vero, dimensione 10 altrimenti prosegue
@@ -717,7 +719,8 @@ function filterMarkers() {
   }
   });
 }
-  
+
+// Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
 function buildCategoryMenu() {
    const menuItemsDiv = document.getElementById('menu-items');
   // checkbox per ogni categoria
@@ -733,7 +736,7 @@ function buildCategoryMenu() {
     label.textContent = cat.mc_descrizione;
     // Applichiamo il colore dell’evento
     label.style.backgroundColor = cat.mc_colore;
-    label.style.Color = cat.mc_colore;
+    label.style.color = cat.mc_colore;
     label.style.setProperty('--cat-color', cat.mc_colore);
     menuItemsDiv.appendChild(cb);
     menuItemsDiv.appendChild(label);
@@ -766,12 +769,13 @@ function buildCategoryMenu() {
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
     }
 
-/* Compone la data corrente nel rettangolo inserendo il mese dalla const */  
+/* OK non toccare. Compone la data corrente nel rettangolo inserendo il mese dalla const */  
 function updateDateUI() {
   dayText.innerText = currentDate.getDate();
   dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
 }
-  
+
+/* Seleziona, orario, stato attivo *** Problema Eventi MultiGiorno non funzionano *** */
 function filterEvents(startHour = 0, endHour = 24) {
   const selectedDate = new Date(currentDate);
   selectedDate.setHours(0,0,0,0);
@@ -797,7 +801,7 @@ function filterEvents(startHour = 0, endHour = 24) {
     });
   }  
 
-/* Formatta la data in stile Italiano 00:00 */   
+/* OK non toccare. Formatta la data in stile Italiano 00:00 */   
 function formatTime(dateString) {
   const d = new Date(dateString);
   return d.toLocaleTimeString('it-IT', {
@@ -806,18 +810,17 @@ function formatTime(dateString) {
   });
 }  
 
+/* Calcola stato evento, intensità animazione */   
 function getEventState(startDate, endDate) {
   const now = new Date();
-  // evento concluso → niente animazione
-  if (endDate && now > endDate) { return { state: 'finished' }; }
+  if (endDate && now > endDate) { return { state: 'finished' }, intensity: 0; }
   const diffMinutes = (startDate - now) / 1000 / 60;
-  if (diffMinutes <= 0) { return { state: 'iniziato', intensity: 3 }; }
-  if (diffMinutes <= 90) { return { state: 'inizia', intensity: 2.5 }; }
-  if (diffMinutes <= 180) { return { state: 'imminente', intensity: 2 }; }
-  if (diffMinutes <= 360) { return { state: 'prestissimo', intensity: 1.5 }; }
-  if (diffMinutes <= 720) { return { state: 'presto', intensity: 1 }; }
-  if (diffMinutes > 720) { return { state: 'concluso', intensity: 0 }; }
-  return { state: '', intensity: 0 };  // questa si potrebbe cancellare a mio avviso
+  if (diffMinutes <= 0) { return { state: 'started', intensity: 3 }; }
+  if (diffMinutes <= 90) { return { state: 'starting-soon', intensity: 2.5 }; }
+  if (diffMinutes <= 180) { return { state: 'imminent', intensity: 2 }; }
+  if (diffMinutes <= 360) { return { state: 'very-soon', intensity: 1.5 }; }
+  if (diffMinutes <= 720) { return { state: 'soon', intensity: 1 }; }
+  return { state: 'future', intensity: 0.5 };
 }
 
 </script>
