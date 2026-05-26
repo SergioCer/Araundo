@@ -705,11 +705,11 @@ function updateMarkerVisibility(startHour = 0, endHour = 24) {
     const inSelectedDay =
       selectedDate >= startDate &&
       selectedDate <= endDate;
-    // orario base (opzionale)
-    const eventHour = obj.start.getHours();
+    // orario della timeline
+    const timeline = getTimelineRange();
     const inTimeRange =
-      eventHour >= startHour &&
-      eventHour <= endHour;
+      obj.start >= timeline.start &&
+      obj.start <= timeline.end;
     // SOLO VISIBILITÀ
     if (categoryVisible && inSelectedDay && inTimeRange) {
       obj.marker.addTo(map);
@@ -832,6 +832,27 @@ function setupTimeline() {
       }
     });
     slider.noUiSlider.set([0, 24]);
+  }
+}
+
+// Restituisce gli eventi da (adesso) fino a (domani ore 23:59)
+function getTimelineRange() {
+  const now = new Date();
+  // LIVE MODE
+  if (isLiveMode) {
+    const start = new Date(now);
+    const end = new Date(now);
+    end.setDate(end.getDate() + 1);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  }
+  // CALENDAR MODE
+  else {
+    const start = new Date(currentDate);
+    start.setHours(0,0,0,0);
+    const end = new Date(currentDate);
+    end.setHours(23,59,59,999);
+    return { start, end };
   }
 }
   
