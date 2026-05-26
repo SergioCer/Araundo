@@ -772,6 +772,14 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
     const inTimeRange =
       eventStart.getTime() >= startTime.getTime() &&
       eventStart.getTime() <= endTime.getTime();
+      // se visualizzo eventi conclusi,
+      // mostro anche quelli già terminati
+      if (showPastEvents) {
+      const now = new Date();
+      if (obj.end && obj.end < now) {
+      inTimelineRange = true;
+      }
+      }
     // decisione finale
     if (categoryVisible && inTimeRange) {
       obj.marker.addTo(map);
