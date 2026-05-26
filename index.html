@@ -48,7 +48,7 @@
       overflow-y: auto;   /* scroll verticale se tante categorie */
     }
       /* Menù a discesa */
-      .menu-header {
+    .menu-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -186,8 +186,8 @@
       box-shadow: 0 4px 12px rgba(59,130,246,0.35);
     }
     
-    /* Spwecifiche grafiche checkbox seleziona tutto */
-    #select-all-toggle {
+    /* Checkbox specifiche grafiche */
+    .toggle-checkbox {
       appearance: none;
       -webkit-appearance: none;
       width: 18px;
@@ -201,14 +201,14 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
-    /* TUTTO ATTIVO */
-    #select-all-toggle:checked {
+    /* Checkbox Attiva */
+    .toggle-checkbox:checked {
       background: linear-gradient(90deg, #3b82f6, #60a5fa);
       border-color: white;
     }
     
-    /* piccolo punto interno */
-    #select-all-toggle:checked::after {
+    /* Checkbox Piccolo punto interno */
+    .toggle-checkbox:checked::after {
       content: "";
       position: absolute;
       width: 6px;
@@ -219,40 +219,6 @@
       left: 50%;
       transform: translate(-50%, -50%);
     }
-
-    /* Specifiche grafiche checkbox */
-    #togglePast {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.9);
-      background: rgba(255,255,255,0.15);
-      cursor: pointer;
-      position: relative;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    /* stato ON */
-    #togglePast:checked {
-      background: linear-gradient(90deg, #3b82f6, #60a5fa);
-      border-color: white;
-    }
-    
-    /* pallino interno */
-    #togglePast:checked::after {
-      content: "";
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: white;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }    
     
     /* Rettangolo barra temporale */    
     .top-timebar {
@@ -315,7 +281,7 @@
       margin-bottom: 10px;
       background: #ddd;
       border-radius: 10px;
-    }
+  }
 
   /* linea base */
   #track {
@@ -331,26 +297,20 @@
 
   /* indicatore mezzanotte */
   #midnight {
-  position: absolute;
-  top: -6px;
-  width: 2px;
-  height: 26px;
-  background: #3b82f6;
-  border-radius: 2px;
-  transform: translateX(-50%);
-  z-index: 20;
-  pointer-events: none;
-}
+    position: absolute;
+    top: -6px;
+    width: 2px;
+    height: 26px;
+    background: #3b82f6;
+    border-radius: 2px;
+    transform: translateX(-50%);
+    z-index: 20;
+    pointer-events: none;
+  }
 
   /* SLIDER */
-  #time-range {
-    width: 100%;
-    margin-top: 2px;
-  }    
-      .time-label {
-      font-size: 11px;
-      color: #555;
-    }
+  #time-range { width: 100%; margin-top: 2px; }    
+  .time-label { font-size: 11px; color: #555; }
     
     .noUi-target {
       background: rgba(255,255,255,0.18);
@@ -362,7 +322,7 @@
     .noUi-base { background: transparent; }
     .noUi-connect {
       background: linear-gradient(90deg, #3b82f6, #60a5fa);
-      opacity: 0.85;
+      opacity: 0.85;box-shadow: 0 0 10px rgba(59,130,246,0.35);
     }
 
     .handle-label {
@@ -388,10 +348,9 @@
       cursor: grab;
       }
     
-    .noUi-handle:before,
-    .noUi-handle:after { display: none; }    
+    .noUi-handle::before,
+    .noUi-handle::after { display: none; }    
     .noUi-handle:hover { transform: scale(1.08); transition: transform 0.15s ease; }    
-    .noUi-connect { box-shadow: 0 0 10px rgba(59,130,246,0.35); }
     .noUi-horizontal { height: 6px; }    
 
     .reset-btn {
@@ -433,6 +392,8 @@ label {
 </style>
 </head>
 <body>
+  <input id="select-all-toggle" class="toggle-checkbox">
+  <input id="togglePast" class="toggle-checkbox">
 
 <div class="map-overlay">
   <div class="title">Aroundo</div>
