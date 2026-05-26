@@ -626,8 +626,6 @@ document.getElementById("reset-day").addEventListener("click", () => {
   updateMarkerVisibility(start, end);
 });
   
-  setupTimeline();
-
 function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
