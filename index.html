@@ -767,7 +767,7 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
     // data reale evento
     const eventStart = new Date(obj.start);
     // filtro timeline
-    const inTimeRange =
+    let inTimeRange =
       eventStart.getTime() >= startTime.getTime() &&
       eventStart.getTime() <= endTime.getTime();
       // se visualizzo eventi conclusi,
