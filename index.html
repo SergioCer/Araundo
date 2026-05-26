@@ -572,12 +572,12 @@ document.getElementById("prev-day").addEventListener("click", () => {
   setupTimeline();
   currentDate.setDate(currentDate.getDate() - 1);
   updateDateUI();
-  renderEvents();
   const values = slider.noUiSlider.get();
   updateMarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
+  renderEvents();
 });
 
 document.getElementById("next-day").addEventListener("click", () => {
@@ -585,12 +585,12 @@ document.getElementById("next-day").addEventListener("click", () => {
   setupTimeline();
   currentDate.setDate(currentDate.getDate() + 1);
   updateDateUI();
-  renderEvents();
   const values = slider.noUiSlider.get();
   updateMarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
+  renderEvents();
 });
 
 document.getElementById("reset-day").addEventListener("click", () => {
