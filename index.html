@@ -570,6 +570,7 @@ document.getElementById("prev-day").addEventListener("click", () => {
 
 document.getElementById("next-day").addEventListener("click", () => {
   isLiveMode = false;
+  setupTimeline();
   currentDate.setDate(currentDate.getDate() + 1);
   updateDateUI();
   renderEvents();
@@ -582,6 +583,7 @@ document.getElementById("next-day").addEventListener("click", () => {
 
 document.getElementById("reset-day").addEventListener("click", () => {
   isLiveMode = false;
+  setupTimeline();
   currentDate = new Date(); // oggi
   updateDateUI();
   updateMarkerVisibility();
