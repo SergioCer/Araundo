@@ -732,10 +732,10 @@ function updateMarkerVisibility() {
   // data/ora reale evento
   const eventStart = new Date(obj.start);
   // dentro finestra timeline
-  const inTimelineRange =
-  eventStart >= timeline.start &&
-  eventStart <= timeline.end;
-  // visibilità finale
+const timeline = getTimelineRange();
+const inTimeRange =
+  obj.start.getTime() >= timeline.start.getTime() &&
+  obj.start.getTime() <= timeline.end.getTime();  // visibilità finale
   if (categoryVisible && inTimelineRange) { obj.marker.addTo(map); }
   else { map.removeLayer(obj.marker); }});
 }  
@@ -854,6 +854,30 @@ function buildCategoryMenu() {
     end.setHours(23,59,59,999);
     return { start, end };
     }
+  }
+
+  // Gestione Timelinedinamica 
+  function getTimelineRange() {
+    const now = new Date();
+    const start = new Date(now); 
+    const end = new Date(now);
+    // inizio = ora attuale
+    start.setMinutes(0, 0, 0);
+    // fine = +24h (o +36h se vuoi includere domani pieno)
+    end.setHours(now.getHours() + 24);
+    end.setMinutes(59, 59, 999);
+    return { start, end };
+  }
+  
+  // Calcola la posizione della Mezzanotte
+  function getMidnightPosition() {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24,0,0,0);
+    const timeline = getTimelineRange();
+    const total = timeline.end - timeline.start;
+    const pos = (midnight - timeline.start) / total;
+    return pos; // 0 → 1
   }
   
 </script>
