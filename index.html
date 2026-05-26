@@ -617,6 +617,12 @@ document.getElementById("reset-day").addEventListener("click", () => {
     }
   });
 
+  slider.noUiSlider.on('update', function(values) {
+  const start = Math.round(values[0]);
+  const end = Math.round(values[1]);
+  updateMarkerVisibility(start, end);
+});
+  
   setupTimeline();
 
 function renderEvents() {
@@ -717,30 +723,51 @@ function createIcon(color, state, intensity) {
 
 
 /* NUOVA Mostra o nasconde i Marker delle categorie  */
-function updateMarkerVisibility() {
+function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
+  // checkbox categorie attive
   const checkboxes = document.querySelectorAll(
     '#menu-items input[type="checkbox"]'
   );
   const activeCategories = [];
-  checkboxes.forEach(cb => { const catId = parseInt(cb.id.replace('cat-', ''));
-  if (cb.checked) { activeCategories.push(catId); }});
-  // intervallo reale timeline
+  checkboxes.forEach(cb => {
+    const catId = parseInt(cb.id.replace('cat-', ''));
+    if (cb.checked) {
+      activeCategories.push(catId);
+    }
+  });
+  // base timeline reale
   const timeline = getTimelineRange();
+  // finestra slider relativa alla timeline
+  const startTime = new Date(
+    timeline.start.getTime() + startOffset * 3600000
+  );
+  const endTime = new Date(
+    timeline.start.getTime() + endOffset * 3600000
+  );
+  // loop markers
   markers.forEach(obj => {
-  // marker disattivato
-  if (!obj.active) { map.removeLayer(obj.marker); return; }
-  // filtro categoria
-  const categoryVisible = activeCategories.includes(obj.category);
-  // data/ora reale evento
-  const eventStart = new Date(obj.start);
-  // dentro finestra timeline
-const timeline = getTimelineRange();
-const inTimeRange =
-  obj.start.getTime() >= timeline.start.getTime() &&
-  obj.start.getTime() <= timeline.end.getTime();  // visibilità finale
-  if (categoryVisible && inTimelineRange) { obj.marker.addTo(map); }
-  else { map.removeLayer(obj.marker); }});
-}  
+    // marker disattivato
+    if (!obj.active) {
+      map.removeLayer(obj.marker);
+      return;
+    }
+    // filtro categoria
+    const categoryVisible =
+      activeCategories.includes(obj.category);
+    // data reale evento
+    const eventStart = new Date(obj.start);
+    // filtro timeline
+    const inTimeRange =
+      eventStart.getTime() >= startTime.getTime() &&
+      eventStart.getTime() <= endTime.getTime();
+    // decisione finale
+    if (categoryVisible && inTimeRange) {
+      obj.marker.addTo(map);
+    } else {
+      map.removeLayer(obj.marker);
+    }
+  });
+}
 
 // Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
 function buildCategoryMenu() {
