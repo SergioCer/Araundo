@@ -558,6 +558,7 @@ document.getElementById('togglePast')
 });
   
 document.getElementById("prev-day").addEventListener("click", () => {
+  isLiveMode = false;
   setupTimeline();
   currentDate.setDate(currentDate.getDate() - 1);
   updateDateUI();
@@ -583,7 +584,7 @@ document.getElementById("next-day").addEventListener("click", () => {
 });
 
 document.getElementById("reset-day").addEventListener("click", () => {
-  isLiveMode = false;
+  isLiveMode = true;
   setupTimeline();
   currentDate = new Date(); // oggi
   updateDateUI();
