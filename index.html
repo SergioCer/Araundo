@@ -156,6 +156,20 @@
     .category-checkbox:not(:checked) + .category-label {
       background: transparent;
       opacity: 0.7; }
+    /* Timeline */
+    #timeline {
+      position: relative;
+      height: 6px;
+      background: #ddd;
+      border-radius: 10px;
+    }
+
+    #midnight, #now {
+      position: absolute;
+      top: -4px;
+      width: 2px;
+      height: 14px;
+    }
     
     #menu-toggle, #select-all-toggle {
       display: inline-block;
@@ -425,8 +439,13 @@ label {
   <button class="nav-btn" id="next-day">›</button>
   <!-- SLIDER ORARIO -->
 <div class="time-slider">
-  <div id="time-range"></div>
-  <div class="time-label" id="time-range-label">00 - 24</div>
+<div id="timeline">
+  <div id="track"></div>
+  <div id="midnight"></div>
+  <div id="now"></div>
+</div>  
+    <!--  <div id="time-range"></div>
+          <div class="time-label" id="time-range-label">00 - 24</div> -->
 </div>
 </div>  
   
@@ -856,7 +875,7 @@ function buildCategoryMenu() {
     }
   }
 
-  // Gestione Timelinedinamica 
+  // Gestione Timeline dinamica 
   function getTimelineRange() {
     const now = new Date();
     const start = new Date(now); 
@@ -869,7 +888,7 @@ function buildCategoryMenu() {
     return { start, end };
   }
   
-  // Calcola la posizione della Mezzanotte
+  // Calcola la posizione della Mezzanotte Timeline
   function getMidnightPosition() {
     const now = new Date();
     const midnight = new Date(now);
@@ -878,6 +897,41 @@ function buildCategoryMenu() {
     const total = timeline.end - timeline.start;
     const pos = (midnight - timeline.start) / total;
     return pos; // 0 → 1
+  }
+
+  // calcola il range della Timeline
+  function getTimelineRange() {
+    const now = new Date();
+    const start = new Date(now);      // adesso
+    const end = new Date(now);        // +24h
+    end.setHours(now.getHours() + 24, 0, 0, 0);
+    return { start, end, now };
+  }
+
+  // Trasforma il tempo in una percentuale Timeline
+  function getTimePosition(date) {
+    const { start, end } = getTimelineRange();
+    const total = end - start;
+    const value = date - start;
+    return value / total; // 0 → 1
+  }
+
+  // Posiziona la mezzanotte Timeline
+  function getMidnightPosition() {
+    const { start, end } = getTimelineRange();
+    const midnight = new Date(start);
+    midnight.setHours(24, 0, 0, 0);
+    return (midnight - start) / (end - start);
+  }
+
+  // Aggiorna grafica Timeline
+  function renderTimeline() {
+    const midnightPos = getMidnightPosition();
+    const nowPos = getTimePosition(new Date());
+    document.getElementById("midnight").style.left =
+    (midnightPos * 100) + "%";
+    document.getElementById("now").style.left =
+    (nowPos * 100) + "%";
   }
   
 </script>
