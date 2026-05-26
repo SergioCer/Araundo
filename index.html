@@ -823,20 +823,6 @@ function buildCategoryMenu() {
     // 🔴 critico Inizia tra meno di 2h
     return { state: 'imminent', intensity: 2.8 };}
 
-  // Separe la modalità Live dalla modalità Calendario
-  function setupTimeline() {const now = new Date();
-    // MODALITÀ LIVE
-    if (isLiveMode) {
-    const currentHour = now.getHours();
-    slider.noUiSlider.updateOptions({
-    range: { min: currentHour, max: 48 }});
-    slider.noUiSlider.set([ currentHour, 48 ]);}
-    // MODALITÀ CALENDARIO
-    else { slider.noUiSlider.updateOptions({ range: { min: 0, max: 24 }});
-    slider.noUiSlider.set([0, 24]);
-    }
-  }
-
   // Restituisce gli eventi da (adesso) fino a (domani ore 23:59)
   function getTimelineRange() {
     const now = new Date();
