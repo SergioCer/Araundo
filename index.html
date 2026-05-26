@@ -393,10 +393,8 @@ label {
 <div class="map-overlay2" id="category-menu">
   <div class="menu-header">
     <button id="menu-toggle">Filtra categorie ▼</button>
-  <input type="checkbox" id="select-all-toggle" title="Tutte le categorie" checked> Tutte
-    <label>
-    <input type="checkbox" id="togglePast" title="Tutte le categorie"> Conclusi
-    </label>
+  <input type="checkbox" id="select-all-toggle" title="Tutte le Categorie" checked> Tutte
+  <input type="checkbox" id="togglePast" title="Eventi Conclusi"> Conclusi
   </div>
   <div id="menu-items" style="display:none; margin-top:4px;"></div>
 </div>
@@ -711,50 +709,6 @@ function updateMarkerVisibility() {
   });
 }  
 
-  /* DISABILITATA  VECCHIA Mostra o nasconde i Marker delle categorie  
-function updateMarkerVisibility(startHour = 0, endHour = 24) {
-  const selectedDate = new Date(currentDate);
-  selectedDate.setHours(0,0,0,0);
-  const checkboxes = document.querySelectorAll(
-    '#menu-items input[type="checkbox"]'
-  );
-  const activeCategories = [];
-  checkboxes.forEach(cb => {
-    const catId = parseInt(cb.id.replace('cat-', ''));
-    if (cb.checked) activeCategories.push(catId);
-  });
-  markers.forEach(obj => {
-    if (!obj.active) {
-      map.removeLayer(obj.marker);
-      return;
-    }
-    // categoria
-    const categoryVisible =
-      activeCategories.includes(obj.category);
-    // range date (UI)
-    const startDate = new Date(obj.start);
-    startDate.setHours(0,0,0,0);
-    const endDate = obj.end
-      ? new Date(obj.end)
-      : new Date(obj.start);
-    endDate.setHours(23,59,59,999);
-    const inSelectedDay =
-      selectedDate >= startDate &&
-      selectedDate <= endDate;
-    // orario della timeline
-    const timeline = getTimelineRange();
-    const inTimeRange =
-      obj.start >= timeline.start &&
-      obj.start <= timeline.end;
-    // SOLO VISIBILITÀ
-    if (categoryVisible && inSelectedDay && inTimeRange) {
-      obj.marker.addTo(map);
-    } else {
-      map.removeLayer(obj.marker);
-    }
-  });
-} */
-  
 // Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
 function buildCategoryMenu() {
    const menuItemsDiv = document.getElementById('menu-items');
