@@ -667,16 +667,16 @@ function renderEvents() {
 function createIcon(color, state, intensity) {
   const isFinished = state === 'finished';
   const size = isFinished
-    ? 10
-    : Math.max(8, Math.min(32, 10 * intensity));
- return L.divIcon({
-    className: '',
-    html: `
-      <div class="pulse ${state}"
-        style="--c:${color};width:${size}px;height:${size}px;">
-      </div>
-    `,
-    iconSize: [size, size]
+  ? 10
+  : Math.max(8, Math.min(32, 10 * intensity));
+  return L.divIcon({
+  className: '',
+  html: `
+  <div class="pulse ${state}"
+  style="--c:${color};width:${size}px;height:${size}px;">
+  </div>
+  `,
+  iconSize: [size, size]
   });
 }
 
@@ -687,36 +687,24 @@ function updateMarkerVisibility() {
     '#menu-items input[type="checkbox"]'
   );
   const activeCategories = [];
-  checkboxes.forEach(cb => {
-    const catId = parseInt(cb.id.replace('cat-', ''));
-    if (cb.checked) {
-      activeCategories.push(catId);
-    }
-  });
+  checkboxes.forEach(cb => { const catId = parseInt(cb.id.replace('cat-', ''));
+  if (cb.checked) { activeCategories.push(catId); }});
   // intervallo reale timeline
   const timeline = getTimelineRange();
   markers.forEach(obj => {
-    // marker disattivato
-    if (!obj.active) {
-      map.removeLayer(obj.marker);
-      return;
-    }
-    // filtro categoria
-    const categoryVisible =
-      activeCategories.includes(obj.category);
-    // data/ora reale evento
-    const eventStart = new Date(obj.start);
-    // dentro finestra timeline
-    const inTimelineRange =
-      eventStart >= timeline.start &&
-      eventStart <= timeline.end;
-    // visibilità finale
-    if (categoryVisible && inTimelineRange) {
-      obj.marker.addTo(map);
-    } else {
-      map.removeLayer(obj.marker);
-    }
-  });
+  // marker disattivato
+  if (!obj.active) { map.removeLayer(obj.marker); return; }
+  // filtro categoria
+  const categoryVisible = activeCategories.includes(obj.category);
+  // data/ora reale evento
+  const eventStart = new Date(obj.start);
+  // dentro finestra timeline
+  const inTimelineRange =
+  eventStart >= timeline.start &&
+  eventStart <= timeline.end;
+  // visibilità finale
+  if (categoryVisible && inTimelineRange) { obj.marker.addTo(map); }
+  else { map.removeLayer(obj.marker); }});
 }  
 
 // Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
@@ -745,10 +733,7 @@ function buildCategoryMenu() {
     toggleBtn.addEventListener('click', () => {
     if (menuItemsDiv.style.display === 'none' || menuItemsDiv.style.display === '') {
     menuItemsDiv.style.display = 'block';
-    } else {
-    menuItemsDiv.style.display = 'none';
-    }
-    });
+    } else { menuItemsDiv.style.display = 'none'; }});
     // Checkbox Singola Categoria
     menuItemsDiv.addEventListener('change', () => updateMarkerVisibility());
     const selectAllToggle = document.getElementById('select-all-toggle');
@@ -766,95 +751,77 @@ function buildCategoryMenu() {
     selectAllToggle.checked = allChecked;
     }
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
-    }
+  }
 
-/* OK non toccare. Compone la data corrente nel rettangolo inserendo il mese dalla const */  
-function updateDateUI() {
-  dayText.innerText = currentDate.getDate();
-  dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
-}
+    /* OK non toccare. Compone la data corrente nel rettangolo inserendo il mese dalla const */  
+    function updateDateUI() {
+      dayText.innerText = currentDate.getDate();
+      dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
+  }
 
-/* OK non toccare. Formatta la data in stile Italiano 00:00 */   
-function formatTime(dateString) {
-  const d = new Date(dateString);
-  return d.toLocaleTimeString('it-IT', {
-  hour: '2-digit',
-  minute: '2-digit'
-  });
-}  
+    /* OK non toccare. Formatta la data in stile Italiano 00:00 */   
+    function formatTime(dateString) {
+      const d = new Date(dateString);
+      return d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    }  
 
-function getEventState(startDate, endDate) {
-  const now = new Date();
-  const diffMinutes = (startDate - now) / 1000 / 60;
-  const minutesFromStart =  (now - startDate) / 1000 / 60;
-  // evento terminato 
-  if (endDate && now > endDate) { return { state: 'finished', intensity: 0 }; }
-  // evento già in corso da oltre 30'
-  if (minutesFromStart > 30) { return { state: 'running', intensity: 1 }; }
-  // evento appena iniziato (0 < 30 min)
-  if (minutesFromStart >= 0 && minutesFromStart <= 30) { return { state: 'started', intensity: 3 }; }
-  // Inizia tra 24h
-  if (diffMinutes > 1440) { return { state: 'future-deep', intensity: 0 }; }
-  // Inizia tra 12h
-  if (diffMinutes > 720) { return { state: 'future-far', intensity: 0.7 }; }
-  // Inizia tra 6h
-  if (diffMinutes > 360) { return { state: 'future-medium', intensity: 1.2 }; }
-  // Inizia tra 2h
-  if (diffMinutes > 120) { return { state: 'future-near', intensity: 2 }; }
-  // evento in corso
-  if (diffMinutes <= 0) { return { state: 'started', intensity: 3 }; }
+  function getEventState(startDate, endDate) {
+    const now = new Date();
+    const diffMinutes = (startDate - now) / 1000 / 60;
+    const minutesFromStart =  (now - startDate) / 1000 / 60;
+    // evento terminato 
+    if (endDate && now > endDate) { return { state: 'finished', intensity: 0 }; }
+    // evento già in corso da oltre 30'
+    if (minutesFromStart > 30) { return { state: 'running', intensity: 1 }; }
+    // evento appena iniziato (0 < 30 min)
+    if (minutesFromStart >= 0 && minutesFromStart <= 30) { return { state: 'started', intensity: 3 }; }
+    // Inizia tra 24h
+    if (diffMinutes > 1440) { return { state: 'future-deep', intensity: 0 }; }
+    // Inizia tra 12h
+    if (diffMinutes > 720) { return { state: 'future-far', intensity: 0.7 }; }
+    // Inizia tra 6h
+    if (diffMinutes > 360) { return { state: 'future-medium', intensity: 1.2 }; }
+    // Inizia tra 2h
+    if (diffMinutes > 120) { return { state: 'future-near', intensity: 2 }; }
+    // evento in corso
+    if (diffMinutes <= 0) { return { state: 'started', intensity: 3 }; }
     // 🔴 critico Inizia tra meno di 2h
-  return { state: 'imminent', intensity: 2.8 };}
+    return { state: 'imminent', intensity: 2.8 };}
 
-// Separe la modalità Live dalla modalità Calendario
-function setupTimeline() {
-  const now = new Date();
-  // MODALITÀ LIVE
-  if (isLiveMode) {
+  // Separe la modalità Live dalla modalità Calendario
+  function setupTimeline() {const now = new Date();
+    // MODALITÀ LIVE
+    if (isLiveMode) {
     const currentHour = now.getHours();
     slider.noUiSlider.updateOptions({
-      range: {
-        min: currentHour,
-        max: 48
-      }
-    });
-    slider.noUiSlider.set([
-      currentHour,
-      48
-    ]);
-  }
-  // MODALITÀ CALENDARIO
-  else {
-    slider.noUiSlider.updateOptions({
-      range: {
-        min: 0,
-        max: 24
-      }
-    });
+    range: { min: currentHour, max: 48 }});
+    slider.noUiSlider.set([ currentHour, 48 ]);}
+    // MODALITÀ CALENDARIO
+    else { slider.noUiSlider.updateOptions({ range: { min: 0, max: 24 }});
     slider.noUiSlider.set([0, 24]);
+    }
   }
-}
 
-// Restituisce gli eventi da (adesso) fino a (domani ore 23:59)
-function getTimelineRange() {
-  const now = new Date();
-  // LIVE MODE
-  if (isLiveMode) {
+  // Restituisce gli eventi da (adesso) fino a (domani ore 23:59)
+  function getTimelineRange() {
+    const now = new Date();
+    // LIVE MODE
+    if (isLiveMode) {
     const start = new Date(now);
     const end = new Date(now);
     end.setDate(end.getDate() + 1);
     end.setHours(23, 59, 59, 999);
     return { start, end };
-  }
-  // CALENDAR MODE
-  else {
+    }
+    // CALENDAR MODE
+    else {
     const start = new Date(currentDate);
     start.setHours(0,0,0,0);
     const end = new Date(currentDate);
     end.setHours(23,59,59,999);
     return { start, end };
+    }
   }
-}
   
 </script>
 </body>
