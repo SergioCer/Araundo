@@ -628,14 +628,6 @@ document.getElementById("reset-day").addEventListener("click", () => {
 
   setupTimeline();
 
-  slider.noUiSlider.on('update', function(values) {
-  const start = Math.round(values[0]);
-  const end = Math.round(values[1]);
-  label.innerText =
-  `${start.toString().padStart(2,'0')} - ${end.toString().padStart(2,'0')}`;
-  updateMarkerVisibility(start, end);
-});
-
 function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
