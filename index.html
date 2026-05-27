@@ -572,8 +572,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 6. inizializza checkbox select-all
   document.getElementById('select-all-toggle').checked = true;
   setupTimeline();
-  updateDateUI(); 
   renderEvents();
+  updateDateUI(); 
 });
       
   // Attiva eventi passati 
@@ -588,39 +588,39 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
   
 document.getElementById("prev-day").addEventListener("click", () => {
-  // ---isLiveMode = false;
-  setupTimeline();
+  isLiveMode = false;
   currentDate.setDate(currentDate.getDate() - 1);
   updateDateUI();
-  const values = slider.noUiSlider.get();
+  setupTimeline();
   updateMarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
   renderEvents();
-});
+  const values = slider.noUiSlider.get();
+  });
 
 document.getElementById("next-day").addEventListener("click", () => {
-  // --- isLiveMode = false;
-  setupTimeline();
+  isLiveMode = false;
   currentDate.setDate(currentDate.getDate() + 1);
   updateDateUI();
-  const values = slider.noUiSlider.get();
+  setupTimeline();
   updateMarkerVisibility(
   Math.round(values[0]),
   Math.round(values[1])
   );
+  const values = slider.noUiSlider.get();
   renderEvents();
-});
+  });
 
 document.getElementById("reset-day").addEventListener("click", () => {
   isLiveMode = true;
-  setupTimeline();
   currentDate = new Date(); // oggi
   updateDateUI();
+  setupTimeline();
   updateMarkerVisibility();
   renderEvents();
-});
+  });
 
   noUiSlider.create(slider, {
     start: [0, 24],
