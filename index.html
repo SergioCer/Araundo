@@ -101,7 +101,34 @@
       max-height: 45vh;
       overflow-y: auto;
     }
-          
+
+    /* Bordino intorno a checkbox e label */
+    .toggle-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(4px);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+      user-select: none;
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+    }
+
+      /* Passaggio del mouse */
+      .toggle-pill:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: rgba(255,255,255,0.28);
+    }
+    
     /* Checkbox Categorie */
     .category-checkbox {
       position: absolute;
@@ -125,9 +152,10 @@
       margin-right: 6px;
       font-size: 12px;
       position: relative;
-      transition: 0.2s ease;
-      transform 0.2s ease;
-      opacity 0.2s ease
+      transition:
+        background: 0.2s ease;
+        transform 0.2s ease;
+        opacity 0.2s ease
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
@@ -178,9 +206,10 @@
       border: 2px solid white;
       box-sizing: border-box;
       background: transparent;
-      transition: 0.2s ease;
-      transform 0.2s ease;
-      opacity 0.2s ease
+      transition:
+        background: 0.2s ease;
+        transform 0.2s ease;
+        opacity 0.2s ease
     }
     
     /* --- PULSAZIONI & SALTI MARKER --- */
@@ -227,9 +256,10 @@
       margin-right: 6px;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(59,130,246,0.25);
-      transition: 0.15s ease;
-      transform 0.15s ease;
-      opacity 0.15s ease
+      transition:
+        background: 0.15s ease;
+        transform 0.15s ease;
+        opacity 0.15s ease
     }  
 
     #menu-toggle:hover {
@@ -374,8 +404,10 @@
 
 <div class="map-overlay2" id="category-menu">
   <div class="menu-header">
-  <label> <input type="checkbox" id="select-all-toggle" class="toggle-checkbox" title="Tutte le Categorie" checked> Tutte </label>
-  <label> <input type="checkbox" id="togglePast" class="toggle-checkbox" title="Eventi Conclusi"> Conclusi </label>
+  <label class="toggle-pill" title="Visualizza tutte le categorie di eventi." >
+  <input type="checkbox" id="select-all-toggle" class="toggle-checkbox" checked> Tutte le Categorie </label>
+  <label class="toggle-pill" title="Visualizza gli eventi conclusi." >
+  <input type="checkbox" id="togglePast" class="toggle-checkbox" title="Eventi Conclusi"> Eventi conclusi </label>
   </div>
   <div class="menu-header">
   <button id="menu-toggle">Filtra categorie ▼</button>
