@@ -588,7 +588,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
   
 document.getElementById("prev-day").addEventListener("click", () => {
-  isLiveMode = false;
+  // ---isLiveMode = false;
   setupTimeline();
   currentDate.setDate(currentDate.getDate() - 1);
   updateDateUI();
@@ -601,7 +601,7 @@ document.getElementById("prev-day").addEventListener("click", () => {
 });
 
 document.getElementById("next-day").addEventListener("click", () => {
-  isLiveMode = false;
+  // --- isLiveMode = false;
   setupTimeline();
   currentDate.setDate(currentDate.getDate() + 1);
   updateDateUI();
