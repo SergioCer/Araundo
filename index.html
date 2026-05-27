@@ -102,6 +102,12 @@
       overflow-y: auto;
     }
 
+    /* elementi in verticale */
+    .vertical-toggles {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
     /* Bordino intorno a checkbox e label */
     .toggle-pill {
       display: inline-flex;
@@ -115,7 +121,7 @@
       cursor: pointer;
       font-size: 12px;
       font-weight: 500;
-      color: white;
+      color: black;
       user-select: none;
       transition:
         background 0.2s ease,
@@ -403,7 +409,7 @@
 </div>
 
 <div class="map-overlay2" id="category-menu">
-  <div class="menu-header">
+  <div class="menu-header vertical-toggles">
   <label class="toggle-pill" title="Visualizza tutte le categorie di eventi." >
   <input type="checkbox" id="select-all-toggle" class="toggle-checkbox" checked> Tutte le Categorie </label>
   <label class="toggle-pill" title="Visualizza gli eventi conclusi." >
