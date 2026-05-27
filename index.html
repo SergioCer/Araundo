@@ -899,16 +899,21 @@ function getMidnightPosition(totalHours) {
       const now = new Date();
       const currentHour = now.getHours();
       const remainingToday = 24 - currentHour;
-      const totalHours = remainingToday + 24;
+      totalHours = remainingToday + 24;
       startBase = now;
      }
-
-      // Day Mode
+    // Day
     else {
       startBase = new Date(currentDate);
       startBase.setHours(0,0,0,0);
       totalHours = 24;
       }
+
+    if (!totalHours || isNaN(totalHours)) {
+    console.error("Invalid timeline range", totalHours);
+    return;
+    }
+    
     // Crea lo slider con doppia maniglia
     noUiSlider.create(slider, {
     start: [0, totalHours],
