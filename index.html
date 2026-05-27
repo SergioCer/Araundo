@@ -840,11 +840,23 @@ function buildCategoryMenu() {
 
   // calcola il range della Timeline
   function getTimelineRange() {
-    const now = getTimelineBaseTime();
+    let start , end;
+    is (islivemode) {
+      const now = new Date();
+      start = new Date(now);
+      end = new Date(now);
+      end.setHours(now.getHours() +24,0,0,0);
+      return { start, end, now };
+      start = new Date(currentDate);
+      start.setHours(0,0,0,0);
+      end = new Date(currentDate);
+      end.setHours(24,0,0,0);
+      return { start, end, now:start };
+    /* const now = getTimelineBaseTime();
     const start = new Date(now);      // adesso
     const end = new Date(now);        // +24h
     end.setHours(now.getHours() + 24, 0, 0, 0);
-    return { start, end, now };
+    return { start, end, now }; */
   }
 
   // Trasforma il tempo in una percentuale Timeline
@@ -857,13 +869,25 @@ function buildCategoryMenu() {
 
   // Posiziona la mezzanotte Timeline
 function getMidnightPosition(totalHours) {
-  const now = getTimelineBaseTime();
+  let start;
+  if (isLiveMode) {
+    start = new Date();
+  } else {
+    start = new Date(currentDate);
+    start.setHours(0, 0, 0, 0);
+  }
+  const nextMidnight = new Date(start);
+  nextMidnight.setHours(24, 0, 0, 0);
+  const end = new Date(start.getTime() + totalHours * 3600000);
+  return (nextMidnight - start) / (end - start);
+}
+  /* const now = getTimelineBaseTime();
   const nextMidnight = new Date(now);
   nextMidnight.setHours(24, 0, 0, 0);
   const start = now;
   const end = new Date(now.getTime() + totalHours * 3600000);
-  return (nextMidnight - start) / (end - start);
-}
+  return (nextMidnight - start) / (end - start); */
+
 
   // Genera la timeline
   function setupTimeline() {
@@ -881,7 +905,7 @@ function getMidnightPosition(totalHours) {
     noUiSlider.create(slider, {
     start: [0, totalHours],
     connect: true,
-    step: 0.5,
+    step: 1,
     range: {
       min: 0,
       max: totalHours
