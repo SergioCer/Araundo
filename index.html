@@ -731,7 +731,7 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
     const eventStart = new Date(obj.start);
     const eventEnd = obj.end ? new Date(obj.end) : eventStart;
     // OVERLAP LOGICO
-    const inTimeRange =
+    let inTimeRange =
     eventStart <= endTime &&
     eventEnd >= startTime;
 
