@@ -406,8 +406,6 @@
 </style>
 </head>
 <body>
-  <!--input id="select-all-toggle" class="toggle-checkbox"-->
-  <!--input id="togglePast" class="toggle-checkbox"-->
 
 <div class="map-overlay">
   <div class="title">Aroundo</div>
@@ -499,7 +497,6 @@
       .from('eventi')
       .select('*')
       .eq('ev_attivo', true);
-      query = query.gte('ev_inizio', now);
     const { data, error } = await query;  //     
     if (error) {
       console.error("Errore caricamento eventi:", error);
@@ -555,16 +552,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   categories.forEach(cat => {
   icons[cat.id_macro_categoria] = createIcon(cat.mc_colore);
   });
-  // 3. eventi (DA DB)
+  // 3. eventi lad DB)
   events = await fetchEvents();
   // 4. menu UI
   buildCategoryMenu();
-  // 5. markers della mappa
-  // c'era render evnts
   // 6. inizializza checkbox select-all
   document.getElementById('select-all-toggle').checked = true;
   setupTimeline();
-  updateDateUI(); // aggiunto 
+  updateDateUI(); 
   renderEvents();
 });
       
@@ -677,10 +672,8 @@ function renderEvents() {
     </div>
     </div>
   `);      
-    
   marker.on('mouseover', function () {this.openPopup();});
   marker.on('mouseout', function () {this.closePopup();});
-
     // 📦 STORAGE DATI (NO LOGICA)
     markers.push({
       marker,
@@ -709,61 +702,37 @@ function createIcon(color, state, intensity) {
   });
 }
 
-
 /* NUOVA Mostra o nasconde i Marker delle categorie  */
 function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
   // checkbox categorie attive
-  const checkboxes = document.querySelectorAll(
-    '#menu-items input[type="checkbox"]'
-  );
+  const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
   const activeCategories = [];
-  checkboxes.forEach(cb => {
-    const catId = parseInt(cb.id.replace('cat-', ''));
-    if (cb.checked) {
-      activeCategories.push(catId);
-    }
-  });
+  checkboxes.forEach(cb => { const catId = parseInt(cb.id.replace('cat-', ''));
+    if (cb.checked) { activeCategories.push(catId); }});
   // base timeline reale
   const timeline = getTimelineRange();
   // finestra slider relativa alla timeline
-  const startTime = new Date(
-    timeline.start.getTime() + startOffset * 3600000
-  );
-  const endTime = new Date(
-    timeline.start.getTime() + endOffset * 3600000
-  );
-  // loop markers
+  const startTime = new Date( timeline.start.getTime() + startOffset * 3600000 );
+  const endTime = new Date( timeline.start.getTime() + endOffset * 3600000 );
+  // Markers
   markers.forEach(obj => {
     // marker disattivato
-    if (!obj.active) {
-      map.removeLayer(obj.marker);
-      return;
-    }
+    if (!obj.active) { map.removeLayer(obj.marker); return; }
     // filtro categoria
-    const categoryVisible =
-      activeCategories.includes(obj.category);
+    const categoryVisible = activeCategories.includes(obj.category);
     // data reale evento
     const eventStart = new Date(obj.start);
     // filtro timeline
     let inTimeRange =
       eventStart.getTime() >= startTime.getTime() &&
       eventStart.getTime() <= endTime.getTime();
-      // se visualizzo eventi conclusi,
-      // mostro anche quelli già terminati
-      if (showFinishedEvents) {
-      const now = new Date();
-      if (obj.end && obj.end < now) {
-      inTimeRange = true;
-      }
-      }
+      // se checkbox conclusi attiva, mostro anche quelli già terminati
+      if (showFinishedEvents) { const now = new Date();
+      if (obj.end && obj.end < now) { inTimeRange = true; }}
     // decisione finale
-    if (categoryVisible && inTimeRange) {
-      obj.marker.addTo(map);
-    } else {
-      map.removeLayer(obj.marker);
-    }
-  });
-}
+    if (categoryVisible && inTimeRange) { obj.marker.addTo(map); }
+    else { map.removeLayer(obj.marker); }});
+  }
 
 // Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
 function buildCategoryMenu() {
