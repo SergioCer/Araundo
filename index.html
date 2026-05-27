@@ -752,10 +752,7 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
     : inTimeRange;
     if (categoryVisible && timeVisible) {
     obj.marker.addTo(map);
-    } else {
-    map.removeLayer(obj.marker);
-    }
-    
+    } 
     else { map.removeLayer(obj.marker); }});
   }
 
