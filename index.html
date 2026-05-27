@@ -784,7 +784,7 @@ function buildCategoryMenu() {
     label.textContent = cat.mc_descrizione;
     // Applichiamo il colore dell’evento
     label.style.backgroundColor = cat.mc_colore;
-    label.style.color = '#fff';
+    label.style.color = getContrastColor(cat.mc_colore);
     label.style.setProperty('--cat-color', cat.mc_colore);
     menuItemsDiv.appendChild(cb);
     menuItemsDiv.appendChild(label);
@@ -957,6 +957,18 @@ function setupTimeline() {
 
   function getTimelineBaseTime() {
     return currentDate
+  }
+
+  function getContrastColor(hex) {
+    hex = hex.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    const brightness =
+    (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 150
+    ? '#111'
+    : '#fff';
   }
   
 </script>
