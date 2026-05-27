@@ -841,12 +841,13 @@ function buildCategoryMenu() {
   // calcola il range della Timeline
   function getTimelineRange() {
     let start , end;
-    is (islivemode) {
+    if (islivemode) {
       const now = new Date();
       start = new Date(now);
       end = new Date(now);
       end.setHours(now.getHours() +24,0,0,0);
       return { start, end, now };
+      }
       start = new Date(currentDate);
       start.setHours(0,0,0,0);
       end = new Date(currentDate);
