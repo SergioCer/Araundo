@@ -225,14 +225,14 @@
     /* Categoria disattiva */
     .category-checkbox:not(:checked) + .category-label {
       filter: grayscale(0.35);
-      background: transparent;
+      opacity: 0.3;
+      /* background: transparent; */
     }
 
-    /* Pallino categoria disattiva
+    /* Pallino categoria disattiva */
     .category-checkbox:not(:checked) + .category-label::before {
-    background: var(--cat-color);
-    background-color 
-    }*/
+      opacity: background: var(--cat-color);
+     }
       
     
     /* --- PULSAZIONI & SALTI MARKER --- */
@@ -785,7 +785,6 @@ function buildCategoryMenu() {
     label.textContent = cat.mc_descrizione;
     // Applichiamo il colore dell’evento
     label.style.backgroundColor = cat.mc_colore;
-    label.style.setProperty('--cat-color-rgb', hexToRgb(cat.mc_colore));
     label.style.color = getContrastColor(cat.mc_colore);
     label.style.setProperty('--cat-color', cat.mc_colore);
     menuItemsDiv.appendChild(cb);
@@ -971,14 +970,6 @@ function setupTimeline() {
     return brightness > 150
     ? '#111'
     : '#fff';
-  }
-
-  function hexToRgb(hex) {
-    hex = hex.replace('#', '');
-    const r = parseInt(hex.substring(0,2),16);
-    const g = parseInt(hex.substring(2,4),16);
-    const b = parseInt(hex.substring(4,6),16);
-    return `${r}, ${g}, ${b}`;
   }
   
 </script>
