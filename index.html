@@ -841,7 +841,7 @@ function buildCategoryMenu() {
   // calcola il range della Timeline
   function getTimelineRange() {
     let start , end;
-    if (islivemode) {
+    if (isLiveMode) {
       const now = new Date();
       start = new Date(now);
       end = new Date(now);
@@ -852,7 +852,7 @@ function buildCategoryMenu() {
       start.setHours(0,0,0,0);
       end = new Date(currentDate);
       end.setHours(24,0,0,0);
-      return { start, end, now:start };
+      return { start, end, now: start };
     /* const now = getTimelineBaseTime();
     const start = new Date(now);      // adesso
     const end = new Date(now);        // +24h
