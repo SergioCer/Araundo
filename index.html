@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Aroundo - Territory Map</title>
@@ -110,7 +110,46 @@
       width: 0;
       height: 0;
     }
+        
+    /* Checkbox specifiche grafiche */
+    .toggle-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.15);
+      cursor: pointer;
+      vertical-align: middle;
+      margin-right: 6px;
+      font-size: 12px;
+      position: relative;
+      transition: 0.2s ease;
+      transform 0.2s ease;
+      opacity 0.2s ease
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
 
+    /* Checkbox Attiva */
+    .toggle-checkbox:checked {
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      border-color: white;
+    }
+    
+    /* Checkbox Piccolo punto bianco interno */
+    .toggle-checkbox:checked::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
     /* Checkbox e Label testi leggermente opachi se non selezionato */
     .toggle-checkbox:not(:checked) + .category-label::before { background: currentColor; }
     .toggle-checkbox:not(:checked) + .category-label { background: transparent; opacity: 0.5; }
@@ -200,47 +239,6 @@
     #menu-toggle:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(59,130,246,0.35);
-    }
-    
-    /* Checkbox specifiche grafiche */
-    .toggle-checkbox {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.9);
-      background: rgba(255,255,255,0.15);
-      cursor: pointer;
-      vertical-align: middle;
-      margin-right: 6px;
-      font-size: 12px;
-      position: relative;
-      transition: 0.2s ease;
-      transform 0.2s ease;
-      opacity 0.2s ease
-
-      
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    /* Checkbox Attiva */
-    .toggle-checkbox:checked {
-      background: linear-gradient(90deg, #3b82f6, #60a5fa);
-      border-color: white;
-    }
-    
-    /* Checkbox Piccolo punto interno */
-    .toggle-checkbox:checked::after {
-      content: "";
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: white;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
     }
     
     .date-box {
@@ -380,8 +378,12 @@
 
 <div class="map-overlay2" id="category-menu">
   <div class="menu-header">
+  <label class="category-label">
   <input type="checkbox" id="select-all-toggle" class="toggle-checkbox" title="Tutte le Categorie" checked> Tutte
+  </label>
+  <label class="category-label">    
   <input type="checkbox" id="togglePast" class="toggle-checkbox "title="Eventi Conclusi"> Conclusi
+  </label>
   </div>
   <div class="menu-header">
   <button id="menu-toggle">Filtra categorie ▼</button>
