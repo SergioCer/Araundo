@@ -723,10 +723,15 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
     // data reale evento
 
     // NUOVA VERSIONE 
+    const now = new Date();
+    const isPast = obj.end
+    ? obj.end < now
+    : eventStart < now;
+    
     const eventStart = new Date(obj.start);
     const eventEnd = obj.end ? new Date(obj.end) : eventStart;
     // OVERLAP LOGICO
-    let inTimeRange =
+    const inTimeRange =
     eventStart <= endTime &&
     eventEnd >= startTime;
 
@@ -741,7 +746,16 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
       if (showFinishedEvents) { const now = new Date();
       if (obj.end && obj.end < now) { inTimeRange = true; }}
     // decisione finale
-    if (categoryVisible && inTimeRange) { obj.marker.addTo(map); }
+    // DISABILITATA if (categoryVisible && inTimeRange) { obj.marker.addTo(map); }
+    const timeVisible = isPast
+    ? showFinishedEvents
+    : inTimeRange;
+    if (categoryVisible && timeVisible) {
+    obj.marker.addTo(map);
+    } else {
+    map.removeLayer(obj.marker);
+    }
+    
     else { map.removeLayer(obj.marker); }});
   }
 
