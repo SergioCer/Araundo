@@ -724,8 +724,13 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
     const eventStart = new Date(obj.start);
     // filtro timeline
     let inTimeRange =
-      eventStart.getTime() >= startTime.getTime() &&
-      eventStart.getTime() <= endTime.getTime();
+      // NUOVO CODICE SOSTITUTIVO
+      eventStart >= startTime &&
+      eventStart <= endTime;
+      // DISABILITATO PER PROVA eventStart.getTime() >= startTime.getTime() &&
+      // DISABILITATO PER PROVA eventStart.getTime() <= endTime.getTime();
+
+      
       // se checkbox conclusi attiva, mostro anche quelli già terminati
       if (showFinishedEvents) { const now = new Date();
       if (obj.end && obj.end < now) { inTimeRange = true; }}
@@ -820,9 +825,13 @@ function buildCategoryMenu() {
     const now = new Date();
     const start = new Date(now);      // adesso
     const end = new Date(now);        // +24h
-    end.setHours(now.getHours() + 24, 0, 0, 0);
+    // DISABILITATA PER PROVA end.setHours(now.getHours() + 24, 0, 0, 0);
+    end.setHours(24, 0, 0, 0);
+    // QUELLA DI SOPRA è LA UOVA VERSIONE DI QUELLA DISABILITATA
     return { start, end, now };
   }
+
+  
 
   // Trasforma il tempo in una percentuale Timeline
   function getTimePosition(date) {
@@ -849,11 +858,18 @@ function setupTimeline() {
     slider.noUiSlider = null;
   }
   const now = new Date();
+  
+  /* --- DISABILITATO PER PROVA 
   const currentHour = now.getHours();
   const remainingToday = 24 - currentHour;
   // totale timeline:
   // restante oggi + domani completo
-  const totalHours = remainingToday + 24;
+  const totalHours = remainingToday + 24; DISABILITATO PER PROVA --- */ 
+  // nuova versione 
+  const timeline = getTimelineRange();
+  const totalHours = (timeline.end - timeline.start) / 3600000;
+  // fine nuova versione 
+  
   noUiSlider.create(slider, {
     // DA ADESSO → fino a domani notte
     start: [0, totalHours],
@@ -864,6 +880,7 @@ function setupTimeline() {
       max: totalHours
     }
   });
+  
   // posizione mezzanotte
   const midnightPercent = getMidnightPosition(totalHours);
   const midnight = document.getElementById('midnight');
