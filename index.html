@@ -238,6 +238,8 @@
     .pulse::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--c); z-index: 990; }
     .pulse::after { content: ""; position: absolute; inset: -40%; border-radius: 50%; background: var(--c); z-index: 990; opacity: 0.25; transform: scale(0.6); }
     /* Marker pulsazioni in funzione del tempo */
+    .pulse.distant { animation: none; }
+    .pulse.distant::after { animation: none; opacity: 0; }    
     .pulse.future-deep { animation: none; }
     .pulse.future-deep::after { animation: none; opacity: 0; }    
     .pulse.future-far { animation: hopSlow 3s infinite; }
@@ -245,11 +247,11 @@
     .pulse.future-near { animation: hopFast 1s infinite; }
     .pulse.imminent { animation: hopCrazy 0.5s infinite; }
     .pulse.imminent::after { animation: pulse 0.5s infinite ease-out; opacity: 0.45; }
-    .pulse.started { animation: hopCrazy 3s infinite; }    
+    .pulse.started { animation: hopLive 2s infinite; }    
     .pulse.started::after { animation: pulseLive 0.3s infinite; }
     .pulse.running { animation: none; }
     .pulse.running::after { animation: pulse 2.5s infinite ease-out; opacity: 0.2; }
-    .pulse.finished { animation: finished 1s ease forwards; }    
+    .pulse.finished { animation: finished 0.5s ease forwards; }    
     .pulse.finished::after { display: none; animation: none !important; opacity: 0 !important; }
     
     /* SALTI correlati alle pulsazioni */
@@ -260,6 +262,7 @@
     @keyframes hopCrazy { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); }}
     @keyframes pulseLive { 0% { transform: scale(1); opacity: 0.7; } 70% { transform: scale(2); opacity: 0; } 100% { transform: translateY(-10px); opacity: 0; }}
     @keyframes finished { 0%,100% { transform: translateY(0); } 50% { transform: translateY(0px); }}
+    @keyframes hopLive { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); }}
     
     #menu-toggle {
       display: inline-flex;
@@ -832,20 +835,20 @@ function buildCategoryMenu() {
     if (endDate && now > endDate) { return { state: 'finished', intensity: 0 }; }
     // evento già in corso da oltre 30'
     if (minutesFromStart > 30) { return { state: 'running', intensity: 1 }; }
-    // evento appena iniziato (0 < 30 min)
-    if (minutesFromStart >= 0 && minutesFromStart <= 30) { return { state: 'started', intensity: 3 }; }
-    // Inizia tra 24h
-    if (diffMinutes > 1440) { return { state: 'future-deep', intensity: 0 }; }
     // Inizia tra 12h
-    if (diffMinutes > 720) { return { state: 'future-far', intensity: 0.7 }; }
+    if (diffMinutes > 720) { return { state: 'distant', intensity: 0 }; }
+    // Inizia tra 8h
+    if (diffMinutes > 480) { return { state: 'future-deep', intensity: 0.3 }; }
     // Inizia tra 6h
-    if (diffMinutes > 360) { return { state: 'future-medium', intensity: 1.2 }; }
+    if (diffMinutes > 360) { return { state: 'future-far', intensity: 0.7 }; }
+    // Inizia tra 4h
+    if (diffMinutes > 240) { return { state: 'future-medium', intensity: 1.2 }; }
     // Inizia tra 2h
     if (diffMinutes > 120) { return { state: 'future-near', intensity: 2 }; }
     // evento in corso
     if (diffMinutes <= 0) { return { state: 'started', intensity: 3 }; }
     // 🔴 critico Inizia tra meno di 2h
-    return { state: 'imminent', intensity: 2.8 };}
+    return { state: 'imminent', intensity: 2.5 };}
 
   // calcola il range della Timeline
   function getTimelineRange() {
