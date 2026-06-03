@@ -111,7 +111,7 @@
       gap: 3px; /* Distanzia le singole categorie in verticale */
     }
     
-    /* Bordino intorno a checkbox e label */
+    /* Bordino intorno a checkbox e label di Seleziona Categorie */
     .toggle-pill {
       display: inline-flex;
       align-items: center;
@@ -138,7 +138,6 @@
       .toggle-pill:hover {
         background: rgba(255,255,255,0.20);
         border-color: rgba(255,255,255,0.4);
-        transform: translateX(2px);
     }
 
     /* Checkbox Categorie */
@@ -429,6 +428,21 @@
   border-radius: 50%;    /* cerchio perfetto */
   justify-content: center;
 }
+
+/* Su Categorie crea un effetto passando il mouse */    
+#menu-items label.category-label {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 50px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+#menu-items label.category-label:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateX(2px);
+}
+
     
    
 </style>
