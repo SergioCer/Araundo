@@ -1002,6 +1002,17 @@ function getMidnightPosition(totalHours) {
   const midnightPercent = getMidnightPosition(totalHours);
   const midnight = document.getElementById('midnight');
   midnight.style.left = `${midnightPercent * 100}%`;
+    //-- Posizionamento di #date-day
+    let dateDayPercent;
+    if (isLiveMode) {
+    // metà strada tra handle sinistro (0%) e mezzanotte
+    dateDayPercent = midnightPercent / 2;
+    } else {
+    // giorno selezionato → centro della timeline
+    dateDayPercent = 0.5;
+    }
+    const dateDay = document.getElementById('date-day');
+    dateDay.style.left = `${dateDayPercent * 100}%`;
     //-- Se slider si muove, aggiorna orari labels in base a posizione slider
   function updateHandles(values) {
     //-- Offset
