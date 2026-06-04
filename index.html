@@ -693,7 +693,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
   
 document.getElementById("prev-day").addEventListener("click", () => {prevDay();
-  /* currentDate.setDate(currentDate.getDate() - 1); */
   updateTimelineMode();
   updateDateUI();
   setupTimeline();
@@ -706,7 +705,6 @@ document.getElementById("prev-day").addEventListener("click", () => {prevDay();
   });
 
 document.getElementById("next-day").addEventListener("click", () => {nextDay();
-  /* currentDate.setDate(currentDate.getDate() + 1); */
   updateTimelineMode();
   updateDateUI();
   setupTimeline();
@@ -1142,12 +1140,9 @@ function getMidnightPosition(totalHours) {
   function prevDay() {
   if (timelineMode === 'live') {
     // Primo prev-day da live
-    currentDate.setDate(currentDate.getDate() );
+    currentDate.setDate(currentDate.getDate() - 1);
     timelineMode = 'past';
     updateTimelineMode();
-    updateDateUI();
-    setupTimeline();
-    renderEvents();
     return;
   }
   // Gli altri casi: spostamento effettivo indietro di un giorno
