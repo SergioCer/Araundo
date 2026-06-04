@@ -945,6 +945,9 @@ function getMidnightPosition(totalHours) {
     nextMidnight = new Date(currentDate);
     nextMidnight.setHours(0, 0, 0, 0);
   }
+  //
+console.log({start,end,nextMidnight,diffMidnight: (nextMidnight - start) / 3600000,diffTotal: (end - start) / 3600000});
+  //
   return (nextMidnight - start) / (end - start);
 }
 
