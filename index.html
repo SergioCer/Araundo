@@ -569,7 +569,7 @@
   else timelineMode = 'day';
 
   function isLiveModeActive() {return timelineMode === 'live';} // Restituisce la modalità attiva
-  function getTimelineMode(now, currentDate)
+  function getTimelineMode(now, currentDate) {return timelineMode;}
   
     // Preleva le Categorie da supabase
   async function fetchCategories() {
