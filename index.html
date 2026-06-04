@@ -1142,13 +1142,13 @@ function getMidnightPosition(totalHours) {
   if (timelineMode === 'live') {
     // Primo prev-day da live
     timelineMode = 'past';
-    updateTimeline();
+    updateTimelineMode();
     return;
   }
   // Gli altri casi: spostamento effettivo indietro di un giorno
   currentDate.setDate(currentDate.getDate() - 1);
   timelineMode = 'past';
-  updateTimeline();
+  updateTimelineMode();
 }
 
 function nextDay() {
@@ -1157,12 +1157,12 @@ function nextDay() {
   if (timelineMode === 'past' && currentDate.getTime() === today.getTime()) {
     // Torna in live se raggiunge la data odierna
     timelineMode = 'live';
-    updateTimeline();
+    updateTimelineMode();
     return;
   }
   currentDate.setDate(currentDate.getDate() + 1);
   timelineMode = 'day';
-  updateTimeline();
+  updateTimelineMode();
 }
   
 
