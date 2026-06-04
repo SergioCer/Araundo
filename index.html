@@ -550,6 +550,7 @@
   let showFinishedEvents = false; 
   let currentDate = new Date(); // Data odierna
   let isLiveMode = true; // Verifica se è attiva la nuova Time line
+  let midnightPercent = 0; // Barra della mezzanotte
   
   // costanti
   // Coordinate di default (Sicilia occidentale)
@@ -880,11 +881,8 @@ function buildCategoryMenu() {
     function updateDateUI() {
       dayText.innerText = currentDate.getDate();
       dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
-          //-- Iniziali Maiuscole
-    function capitalizeFirst(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
     // -- Posizionamento di -day
+     capitalizeFirst() 
     if (isLiveMode) {
       const currentDayPercent = midnightPercent / 2;
       const nextDayPercent = midnightPercent + (1 - midnightPercent) / 2;
@@ -972,6 +970,9 @@ function getMidnightPosition(totalHours) {
  
   // Genera la timeline
   function setupTimeline() {
+    midnightPercent = getMidnightPosition(totalHours);
+    const midnight = document.getElementById('midnight');
+    midnight.style.left = `${midnightPercent * 100}%`;
     //-- distrugge vecchio slider per ricrearlo da zero
     if (slider.noUiSlider) {
     slider.noUiSlider.destroy();
@@ -1080,6 +1081,11 @@ function getMidnightPosition(totalHours) {
     : '#fff';
   }
 
+    //-- Iniziali Maiuscole
+    function capitalizeFirst(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  
   
   
 </script>
