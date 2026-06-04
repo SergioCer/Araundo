@@ -970,9 +970,9 @@ function getMidnightPosition(totalHours) {
  
   // Genera la timeline
   function setupTimeline() {
-    midnightPercent = getMidnightPosition(totalHours);
+    /* midnightPercent = getMidnightPosition(totalHours);
     const midnight = document.getElementById('midnight');
-    midnight.style.left = `${midnightPercent * 100}%`;
+    midnight.style.left = `${midnightPercent * 100}%`; */
     //-- distrugge vecchio slider per ricrearlo da zero
     if (slider.noUiSlider) {
     slider.noUiSlider.destroy();
@@ -1011,7 +1011,7 @@ function getMidnightPosition(totalHours) {
       }
     });
     //-- Calcola posizione mezzanotte (0.0 Sinistra ; 0.5 Centro ; 1.0 Destra) e la trasforma in Percentuale (0%; 50%; 100%)
-  const midnightPercent = getMidnightPosition(totalHours);
+  midnightPercent = getMidnightPosition(totalHours);
   const midnight = document.getElementById('midnight');
   midnight.style.left = `${midnightPercent * 100}%`;
     
