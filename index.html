@@ -550,9 +550,11 @@
   let showFinishedEvents = false; 
   let currentDate = new Date(); // Data odierna
   let isLiveMode = true; // Verifica se è attiva la nuova Time line
+  let timelineMode = 'live'; // Questa sarà la nuova timeline per tutto
   let midnightPercent = 0; // Barra della mezzanotte
+  let timelineMode = 'live'; // 'past' | 'live' | 'day'
   
-  // costanti
+  // Costanti
   // Coordinate di default (Sicilia occidentale)
   const defaultLat = 37.55; /* 37.55 */
   const defaultLng = 14.1; /* 14.1 */
@@ -562,6 +564,13 @@
   const monthNames = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
   const slider = document.getElementById('time-range');
 
+  // Definisce la variabile timelineMode su cui lavorare: 'past' 'live' 'day'
+  if (isLiveMode) timelineMode = 'live';
+  else timelineMode = 'day';
+
+  function isLiveModeActive() {
+  return timelineMode === 'live';
+}
     // Preleva le Categorie da supabase
   async function fetchCategories() {
     const { data, error } = await supabase
@@ -890,7 +899,7 @@ function buildCategoryMenu() {
       const currentDayEl = document.getElementById('day-text');
       const nextDayEl = document.getElementById('day-next-text');
       
-    if (isLiveMode) {
+    if (isLiveModeActive()) {
       const currentDayPercent = midnightPercent / 2;
       const nextDayPercent = midnightPercent + (1 - midnightPercent) / 2;
       // Giorno attuale
@@ -957,7 +966,7 @@ function buildCategoryMenu() {
   // Calcola il range della Timeline
   function getTimelineRange() {
     let start , end;
-    if (isLiveMode) {
+    if (isLiveModeActive()) {
       const now = new Date();
       start = new Date(now);
       end = new Date(now.getTime() + 24 * 3600000);
@@ -982,7 +991,7 @@ function buildCategoryMenu() {
 
   // Posiziona la mezzanotte nella Timeline
 function getMidnightPosition(totalHours) {
-  if (isLiveMode) {
+  if (isLiveModeActive()) {
     const currentHour = new Date().getHours();
     const remainingToday = 24 - currentHour;
     return remainingToday / totalHours;
@@ -1001,7 +1010,7 @@ function getMidnightPosition(totalHours) {
     let startBase;
     let totalHours;
     //-- Modalità Live: calcola il numero di ore mancanti alle 24 di oggi
-    if (isLiveMode) {
+    if (isLiveModeActive()) {
       const now = new Date();
       const currentHour = now.getHours();
       const remainingToday = 24 - currentHour;
@@ -1031,7 +1040,7 @@ function getMidnightPosition(totalHours) {
     });
     //-- Calcola posizione mezzanotte (0.0 Sinistra ; 0.5 Centro ; 1.0 Destra) e la trasforma in Percentuale (0%; 50%; 100%)
     const midnight = document.getElementById('midnight');
-    if (isLiveMode) {
+    if (isLiveModeActive()) {
     midnightPercent = getMidnightPosition(totalHours);
     midnight.style.display = "block"; 
     midnight.style.left = `${midnightPercent * 100}%`;
