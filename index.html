@@ -693,7 +693,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
   
 document.getElementById("prev-day").addEventListener("click", () => {prevDay();
-  currentDate.setDate(currentDate.getDate() - 1);
+  /* currentDate.setDate(currentDate.getDate() - 1); */
   updateTimelineMode();
   updateDateUI();
   setupTimeline();
@@ -706,7 +706,7 @@ document.getElementById("prev-day").addEventListener("click", () => {prevDay();
   });
 
 document.getElementById("next-day").addEventListener("click", () => {nextDay();
-  currentDate.setDate(currentDate.getDate() + 1);
+  /* currentDate.setDate(currentDate.getDate() + 1); */
   updateTimelineMode();
   updateDateUI();
   setupTimeline();
@@ -722,6 +722,7 @@ document.getElementById("reset-day").addEventListener("click", () => {
   isLiveMode = true;
   currentDate = new Date(); // oggi
   timelineMode = 'live';
+  updateTimelineMode();
   updateDateUI();
   setupTimeline();
   updateMarkerVisibility();
