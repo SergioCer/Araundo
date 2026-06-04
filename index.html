@@ -563,12 +563,36 @@
   const dateText = document.getElementById("date-text");
   const monthNames = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
   const slider = document.getElementById('time-range');
+  const today = new Date();
+  today.setHours(0,0,0,0);
 
+  
   // Definisce la variabile timelineMode su cui lavorare: 'past' 'live' 'day'
   if (isLiveMode) timelineMode = 'live';
   else timelineMode = 'day';
 
   function isLiveModeActive() {return timelineMode === 'live';} // Restituisce la modalità attiva
+  function updateTimelineMode() {
+    const selectedDay = new Date(currentDate);
+    selectedDay.setHours(0,0,0,0);
+    const todayDay = new Date();
+    todayDay.setHours(0,0,0,0);
+    const diffDays =
+      Math.round(
+        (selectedDay - todayDay) /
+        (1000 * 60 * 60 * 24)
+      );
+    if (diffDays < 0) {
+      timelineMode = 'past';
+    }
+    else if (diffDays === 0) {
+      timelineMode = 'live';
+    }
+    else {
+      timelineMode = 'day';
+    }
+  }
+  
   function getTimelineMode(now, currentDate) {return timelineMode;}
   
     // Preleva le Categorie da supabase
@@ -673,6 +697,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.getElementById("prev-day").addEventListener("click", () => {
   isLiveMode = false;
   currentDate.setDate(currentDate.getDate() - 1);
+  updateTimelineMode();
   updateDateUI();
   setupTimeline();
   const values = slider.noUiSlider.get();
@@ -686,6 +711,7 @@ document.getElementById("prev-day").addEventListener("click", () => {
 document.getElementById("next-day").addEventListener("click", () => {
   isLiveMode = false;
   currentDate.setDate(currentDate.getDate() + 1);
+  updateTimelineMode();
   updateDateUI();
   setupTimeline();
   const values = slider.noUiSlider.get();
@@ -699,6 +725,7 @@ document.getElementById("next-day").addEventListener("click", () => {
 document.getElementById("reset-day").addEventListener("click", () => {
   isLiveMode = true;
   currentDate = new Date(); // oggi
+  timelineMode = 'live';
   updateDateUI();
   setupTimeline();
   updateMarkerVisibility();
