@@ -886,7 +886,10 @@ function buildCategoryMenu() {
     function capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
     }
-
+      // ---- dichiarazioni globali alla funzione ----
+      const currentDayEl = document.getElementById('day-text');
+      const nextDayEl = document.getElementById('day-next-text');
+      
     if (isLiveMode) {
       const currentDayPercent = midnightPercent / 2;
       const nextDayPercent = midnightPercent + (1 - midnightPercent) / 2;
@@ -897,6 +900,8 @@ function buildCategoryMenu() {
       currentDayName = capitalizeFirst(currentDayName); // "lun" → "Lun"
       currentDayEl.innerText = `${currentDayName} ${currentDate.getDate()}`;
       currentDayEl.style.left = `${currentDayPercent * 100}%`;
+      currentDayEl.style.display = "block";
+      currentDayEl.style.transform = "";
       // Giorno successivo
       const nextDate = new Date(currentDate);
       nextDate.setDate(currentDate.getDate() + 1);
@@ -904,9 +909,10 @@ function buildCategoryMenu() {
       nextDayName = capitalizeFirst(nextDayName); // "mar" → "Mar"
       nextDayEl.innerText = `${nextDayName} ${nextDate.getDate()}`;
       nextDayEl.style.left = `${nextDayPercent * 100}%`;
+      nextDayEl.style.display = "block";
+      nextDayEl.style.transform = "";
     } else { 
-      // Day mode
-          // nasconde next day
+    // DAY MODE
     nextDayEl.style.display = "none";
     // centra day-text
     currentDayEl.style.display = "block";
@@ -918,9 +924,8 @@ function buildCategoryMenu() {
       });
     currentDayName = capitalizeFirst(currentDayName);
     currentDayEl.innerText = `${currentDayName} ${currentDate.getDate()}`;
+    }
   }
-  }
-
     /* OK non toccare. Formatta la data in stile Italiano 00:00 */   
     function formatTime(dateString) {
       const d = new Date(dateString);
