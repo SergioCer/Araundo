@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>Aroundo - Territory Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/> 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css"> 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
   <style>
     body {
       margin: 0;
@@ -17,8 +17,6 @@
       width: 100%;
     }
 
-    /* --- OVERLAY PRINCIPALI --- */
-    /* -- Rettangolo Presentazione eredita stessa grafica .map-overlay */
     /* Titolo */
     .title {
       font-weight: 600;
@@ -91,7 +89,7 @@
     .menu-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-evenly;   /* cambiato da space-between a space-evenly */
       gap: 4px;
       margin-bottom: 6px;
       width: 180px; /* larghezza */
@@ -254,7 +252,7 @@
     .pulse.running { animation: none; }
     .pulse.running::after { animation: pulse 2.5s infinite ease-out; opacity: 0.2; }
     .pulse.finished { animation: finished 0.5s ease forwards; }    
-    .pulse.finished::after { display: none; animation: none !important; opacity: 0 !important; }
+    .pulse.finished::after { display: none; animation: none ; opacity: 0 ; }
     
     /* SALTI correlati alle pulsazioni */
     @keyframes pulse { 0% { transform: scale(0.6);opacity: 0.5; } 70% { transform: scale(1.6); opacity: 0; } 100% { opacity: 0; }}
@@ -396,10 +394,10 @@
     }
     
     .noUi-handle {
-      width: 18px !important;
-      height: 18px !important;
-      right: -8px !important;
-      top: -6px !important;  
+      width: 18px;
+      height: 18px;
+      right: -8px;
+      top: -6px;
       border-radius: 50%;
       background: #3b82f6;
       border: 2px solid white;
@@ -503,18 +501,16 @@
 </div>
 <div id="map"></div>
 <div class="top-timebar">
-  <!-- SINISTRA FRECCIA -->
+  /* Sinistra */
   <button class="nav-btn" id="prev-day">‹</button>
-  <!-- CENTRO DATA -->
-  <!-- <div class="date-box"> -->
+  /* Date */
     <div class="date-day" id="day-text"></div>
     <div class="date-day" id="day-next-text"></div>
     <div class="date-full" id="date-text"></div>
     <button class="nav-btn reset-btn" id="reset-day">•</button>
-  <!-- </div> -->
-  <!-- DESTRA FRECCIA -->
+  /* Destra */
   <button class="nav-btn" id="next-day">›</button>
-  <!-- SLIDER ORARIO -->
+  /* SLIDER ORARIO */
 <div class="time-slider">
 <div id="timeline-wrapper">
   <div id="midnight"></div>
@@ -727,11 +723,11 @@ function renderEvents() {
     // Visualizza i dettagli dell'evento selezionato //
     .bindPopup(`
     <div style="min-width:180px">
-    <div style="font-weight:700;font-size:14px;margin-bottom:4px;">
+    <div style="font-weight: 700;font-size: 14px;margin-bottom: 4px;">
     ${e.ev_titolo}
     </div>
     <div style="
-    font-size:12px;
+    font-size: 12px;
     color:#3b82f6;
     margin-bottom:6px;
     font-weight:600;
@@ -740,7 +736,7 @@ function renderEvents() {
     ${e.ev_fine ? ' - ' + formatTime(e.ev_fine) : ''}
     </div>
     <div style="
-    font-size:12px;
+    font-size: 12px;
     color:#555;
     line-height:1.35;
     ">
@@ -866,7 +862,7 @@ function buildCategoryMenu() {
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
   }
 
-    /* OK non toccare. Compone la data corrente nel rettangolo inserendo il mese dalla const */  
+    /* Compone il giorno ed il mese corrente nel rettangolo */  
     function updateDateUI() {
       dayText.innerText = currentDate.getDate();
       dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
@@ -986,7 +982,7 @@ function getMidnightPosition(totalHours) {
     function capitalizeFirst(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
-    // -- Posizionamento di #date-day
+    // -- Posizionamento di -day
     if (isLiveMode) {
       const currentDayPercent = midnightPercent / 2;
       const nextDayPercent = midnightPercent + (1 - midnightPercent) / 2;
@@ -1005,18 +1001,6 @@ function getMidnightPosition(totalHours) {
       nextDayEl.innerText = `${nextDayName} ${nextDate.getDate()}`;
       nextDayEl.style.left = `${nextDayPercent * 100}%`;
     }
-    
-    /*
-    let dateDayPercent;
-    if (isLiveMode) {
-    dateDayPercent = midnightPercent / 2;
-    } else {
-    // giorno selezionato → centro della timeline
-    dateDayPercent = 0.5;
-    }
-    const dateDay = document.getElementById('day-text');
-    dateDay.style.left = `${dateDayPercent * 100}%`;
-*/
     
     //-- Se slider si muove, aggiorna orari labels in base a posizione slider
   function updateHandles(values) {
