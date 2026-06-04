@@ -1003,9 +1003,6 @@ function buildCategoryMenu() {
     //-- Calcola posizione mezzanotte (0.0 Sinistra ; 0.5 Centro ; 1.0 Destra) e la trasforma in Percentuale (0%; 50%; 100%)
   const midnightPercent = getMidnightPosition(totalHours);
   const midnight = document.getElementById('midnight');
-//
-    console.log({totalHours,midnightPercent,percent: midnightPercent * 100});
-//  
   midnight.style.left = `${midnightPercent * 100}%`;
     //-- Se slider si muove, aggiorna orari labels in base a posizione slider
   function updateHandles(values) {
