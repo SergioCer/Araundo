@@ -304,7 +304,7 @@
     }
     
     .date-full {
-      font-size: 14px;
+      font-size: 16px;
       color: #666;
     }
 
@@ -354,10 +354,11 @@
 
     /* indicatore mezzanotte */
     #midnight {
+      content: "24"; /* PROVA Inserisce il numero 24 */
       position: absolute;
-      top: -20px;
+      top: -8px;
       width: 4px;
-      height: 22px;
+      height: 24px;
       background: #3b82f6;
       border-radius: 2px;
       /* CANCELLARE ??? transform: translateX(-50%); */ 
@@ -471,7 +472,7 @@
 
 #date-text {
   position: absolute;
-  top: -2px;        /* sotto lo slider */
+  top: -4px;        /* sotto lo slider */
   left: 50%;
   transform: translateX(-50%);
 }
