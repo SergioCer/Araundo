@@ -933,15 +933,13 @@ function buildCategoryMenu() {
   }
 
   // Posiziona la mezzanotte nella Timeline
-  function getMidnightPosition(totalHours) {
+function getMidnightPosition(totalHours) {
   if (isLiveMode) {
-    const now = new Date();
-    const hoursPassed = now.getHours() + now.getMinutes() / 60;
-    return hoursPassed / totalHours;
-  } else {
-    // Giorno selezionato: mezzanotte a sinistra o nascosta
-    return 0;
+    const currentHour = new Date().getHours();
+    const remainingToday = 24 - currentHour;
+    return remainingToday / totalHours;
   }
+  return 0;
 }
  
   /* VECCHIA DA CANCELLARE function getMidnightPosition(totalHours) {
