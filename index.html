@@ -505,7 +505,33 @@
   opacity: 0;
 }
     
-   
+  #eventTicker{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:32px;
+  background:#111;
+  color:white;
+  overflow:hidden;
+  z-index:9999;
+}
+
+#eventTickerContent{
+  white-space:nowrap;
+  display:inline-block;
+  animation:tickerScroll 60s linear infinite;
+}
+
+@keyframes tickerScroll{
+  from{
+    transform:translateX(100%);
+  }
+  to{
+    transform:translateX(-100%);
+  }
+}
+    
 </style>
 </head>
 <body>
@@ -539,6 +565,10 @@
 <div id="timeline-wrapper">
   <div id="midnight"></div>
   <div id="time-range"></div>
+  
+  <div id="eventTicker">
+  <div id="eventTickerContent"></div>
+</div>
 </div>
 </div>
 </div>  
@@ -814,7 +844,9 @@ function createIcon(color, state, intensity) {
   });
 }
 
+// Aggiorna ogni 1 minuto
 setInterval(updateMarkerVisibility, 60 * 1000);
+setInterval(updateMarkers, 60 * 1000);
   
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
@@ -1196,6 +1228,32 @@ function nextDay() {
 }
   
   function getNow(date = null) {const d = new Date(date); d.setHours(0,0,0,0); return d;}
+
+  function getUpcomingEvents(hours = 4) {
+  const now = new Date();
+  const limit = new Date(now.getTime() + hours * 3600000);
+  return events.filter(e => {
+    const start = new Date(e.ev_inizio);
+    return start > now && start <= limit;
+  }).sort((a,b)=>
+    new Date(a.ev_inizio) - new Date(b.ev_inizio)
+  );
+}
+
+  function updateTicker(){
+  const list = getUpcomingEvents(4);
+  const html = list.map(e => {
+    return `
+      <span style="margin-right:60px;">
+        ⏰ ${formatTime(e.ev_inizio)}
+        • ${e.ev_titolo}
+        • ${e.ev_luogo}
+      </span>
+    `;
+  }).join('');
+  document.getElementById('eventTickerContent').innerHTML = html;
+}
+  
   
 </script>
 </body>
