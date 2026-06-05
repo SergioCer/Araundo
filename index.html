@@ -840,7 +840,7 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 48) {
     let inTimeRange =
     eventStart <= endTime &&
     eventEnd >= startTime;
-    const now = new Date();
+    const now = getNow(currentDate);
     
     const isPast = obj.end
     ? obj.end < now
