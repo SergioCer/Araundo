@@ -819,15 +819,14 @@ setInterval(updateMarkerVisibility, 60 * 1000);
   
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
+  const midnight = new Date(now);
   if (timelineMode === 'live') {
     // mezzanotte di dopodomani? No: mezzanotte del giorno successivo
-  const midnight = new Date(now);
   midnight.setHours(24, 0, 0, 0);
   midnight.setDate(midnight.getDate() + 1);
   endOffset = (midnight - now) / 3600000;
 } else {
   // mezzanotte di oggi
-  const midnight = new Date(now);
   midnight.setHours(24, 0, 0, 0);
   endOffset = (midnight - now) / 3600000;
 }
