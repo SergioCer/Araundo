@@ -846,7 +846,7 @@ function createIcon(color, state, intensity) {
 
 // Aggiorna ogni 1 minuto
 setInterval(updateMarkerVisibility, 60 * 1000);
-setInterval(updateMarkers, 60 * 1000);
+setInterval(updateTicker, 60000);
   
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
