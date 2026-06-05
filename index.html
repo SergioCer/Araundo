@@ -839,12 +839,6 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
     const catId = parseInt(cb.id.replace('cat-', ''));
     if (cb.checked) { activeCategories.push(catId); }
   });
-
-  // checkbox categorie attive
-  const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
-  const activeCategories = [];
-  checkboxes.forEach(cb => { const catId = parseInt(cb.id.replace('cat-', ''));
-    if (cb.checked) { activeCategories.push(catId); }});
   // base timeline reale
   const timeline = getTimelineRange(currentDate);
   // finestra slider relativa alla timeline
