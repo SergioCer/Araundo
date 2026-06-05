@@ -499,10 +499,10 @@
   <div class="subtitle">Discover what’s around you</div>
 </div>
 <div class="map-overlay2" id="category-menu">
-  <div class="menu-header vertical-toggles">
+  <!-- CANCELLARE <div class="menu-header vertical-toggles">
   <label class="toggle-pill" title="Visualizza gli eventi conclusi." >
   <input type="checkbox" id="togglePast" class="toggle-checkbox"> Eventi conclusi </label>
-  </div>
+  </div> -->
 <div class="menu-header filter-all-container">
   <label class="toggle-pill" title="Seleziona tutte le categorie">
     <input type="checkbox" id="select-all-toggle" class="toggle-checkbox" checked>
@@ -664,7 +664,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateDateUI(); 
 });
       
-  // Attiva eventi passati 
+  /* CANCELLARE // Attiva eventi passati 
   document.getElementById('togglePast')
   .addEventListener('change', async (e) => {
   // stato checkbox
@@ -673,7 +673,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   events = await fetchEvents();
   // ridisegna marker
   renderEvents();
-});
+}); */
   
 document.getElementById("prev-day").addEventListener("click", () => {prevDay();
   updateDateUI();
