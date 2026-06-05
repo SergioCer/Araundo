@@ -819,17 +819,18 @@ setInterval(updateMarkerVisibility, 60 * 1000);
   
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
+  const now = new Date();
   if (timelineMode === 'live') {
-      const midnight = new Date(now);
-    // mezzanotte di dopodomani? No: mezzanotte del giorno successivo
+  const midnight = new Date();
   midnight.setHours(24, 0, 0, 0);
   midnight.setDate(midnight.getDate() + 1);
   endOffset = (midnight - now) / 3600000;
-} else {
-  // mezzanotte di oggi
+  } else {
+  const midnight = new Date();
   midnight.setHours(24, 0, 0, 0);
   endOffset = (midnight - now) / 3600000;
-}
+  }
+
   // checkbox categorie attive
   const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
   const activeCategories = [];
