@@ -74,7 +74,7 @@
       display: flex;
       align-items: center;
       gap: 2px;
-      padding: 34px 34px;
+      padding: 40px 34px;
       border-radius: 16px;
       background: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0.08));
       backdrop-filter: blur(8px);
@@ -304,7 +304,7 @@
     }
     
     .date-full {
-      font-size: 14px;
+      font-size: 16px;
       color: #666;
     }
 
@@ -473,20 +473,20 @@
 #day-text,
 #day-next-text {
   position: absolute;
-  top: 10px;       /* sopra lo slider */
+  top: 16px;       /* sopra lo slider */
 }
 
 #date-text {
   position: absolute;
-  top: -4px;        /* sotto lo slider */
+  top: -2px;        /* sotto lo slider */
   left: 50%;
   transform: translateX(-50%);
 }
 
 #reset-day {
   position: absolute;
-  top: -12px;
-  left: 12%;
+  top: 64px;
+  left: 50%;
   transform: translateX(-50%);
 }    
    
@@ -499,10 +499,6 @@
   <div class="subtitle">Discover what’s around you</div>
 </div>
 <div class="map-overlay2" id="category-menu">
-  <!-- CANCELLARE <div class="menu-header vertical-toggles">
-  <label class="toggle-pill" title="Visualizza gli eventi conclusi." >
-  <input type="checkbox" id="togglePast" class="toggle-checkbox"> Eventi conclusi </label>
-  </div> -->
 <div class="menu-header filter-all-container">
   <label class="toggle-pill" title="Seleziona tutte le categorie">
     <input type="checkbox" id="select-all-toggle" class="toggle-checkbox" checked>
@@ -664,17 +660,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateDateUI(); 
 });
       
-  /* CANCELLARE // Attiva eventi passati 
-  document.getElementById('togglePast')
-  .addEventListener('change', async (e) => {
-  // stato checkbox
-  showFinishedEvents = e.target.checked;
-  // ricarica eventi dal DB
-  events = await fetchEvents();
-  // ridisegna marker
-  renderEvents();
-}); */
-  
 document.getElementById("prev-day").addEventListener("click", () => {prevDay();
   updateDateUI();
   setupTimeline();
