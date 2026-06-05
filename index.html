@@ -931,7 +931,7 @@ function buildCategoryMenu() {
       let nextDayName = nextDate.toLocaleDateString(navigator.language, { weekday: 'short' });
       nextDayName = capitalizeFirst(nextDayName); // "mar" → "Mar"
       nextDayEl.innerText = `${nextDayName} ${nextDate.getDate()}`;
-      nextDayEl.style.left = `${nextDayPercent * 100}%`;
+      nextDayEl.style.left = `${(nextDayPercent - 0.10) * 100}%`; // tolgo il 10% per compensare in allineamento la dimensione dei caratteri
       nextDayEl.style.display = "block";
       nextDayEl.style.transform = "";
     } else { 
