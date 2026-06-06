@@ -652,7 +652,9 @@
     }
     return data;
   }
+console.log("EVENTI DA SUPABASE:", data.length);
 
+  
   const map = L.map('map', {
     zoomControl: true,
     minZoom: 3, // evita zoom troppo lontano, 0 = mappa mondiale, 9 = area di circa una regione.
@@ -862,7 +864,6 @@ function updateMarkerVisibility(startOffset = 0) {
   }
   const endOffset = (midnight - now) / 3600000;
   // Visualizza su console
-  console.log (now)
   console.log (currentDate)
 
   // checkbox categorie attive
