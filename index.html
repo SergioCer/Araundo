@@ -804,15 +804,29 @@ function renderEvents() {
         const isToday = startDate.toDateString() === now.toDateString();
         const isTomorrow = startDate.toDateString() === tomorrow.toDateString();
         const color = isToday ? '#3b82f6' : (isTomorrow ? '#dc3545' : '#666');
-        const align = isToday ? 'left' : (isTomorrow ? 'right' : 'left');
+        const align = isToday ? 'left' : (isTomorrow ? 'right' : 'center');
         return `
-          <div style="color:${color}; text-align:${align}">
-            ${formatDay(e.ev_inizio)} ${formatTime(e.ev_inizio)}
-            ${e.ev_fine ? ' - ' + formatTime(e.ev_fine) : ''}
-          </div>
+        <div style="
+        color:${color};
+        text-align:${align};
+        display:flex;
+        flex-direction:column;
+        gap:2px;
+        font-size:12px;
+        line-height:1.2;
+        ">
+        <!-- DATA -->
+        <div style="font-weight:600;">
+        ${formatDay(e.ev_inizio)}
+        </div>
+        <!-- ORARIO -->
+        <div style="font-weight:500;">
+        ${formatTime(e.ev_inizio)}
+        ${e.ev_fine ? ' - ' + formatTime(e.ev_fine) : ''}
+        </div>
+        </div>
         `;
-      })()}
-    
+        })()}
     </div>
     <div style="font-size: 12px; color:#555; line-height:1.35; ">
     ${e.ev_descrizione || ''}
