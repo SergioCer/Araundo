@@ -766,18 +766,6 @@ function renderEvents() {
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
   markers = [];
-
-  // CANCELLARE ***** verifica numero elementi deve corrispondere a prelievo da Supabase
-  console.log("TOTAL:", events.length);
-let rendered = 0;
-events.forEach(e => {
-  if (!e.ev_lat || !e.ev_lng) return;
-  rendered++;
-});
-// CANCELLARE ***** verifica numero markers 
-console.log("RENDERED MARKERS:", rendered);
- // Fine verifica
-  
   events.forEach(e => {
     //-- 🔵 STATO EVENTO (Data; inizio; fine; stato; intensità)
     const formatDay = (dateString) => {
@@ -870,10 +858,10 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
   const midnight = new Date(currentDate);
   if (timelineMode === 'live') {
     midnight.setHours(48, 0, 0, 0);
-  const startOffset = (midnight - now) / 3600000;
+  startOffset = (midnight - now) / 3600000;
   } else {
     midnight.setHours(24, 0, 0, 0);
-    const endOffset = 24;
+    endOffset = 24;
     // const endOffset = (now) / 3600000; // mezzanotte di oggi
   }
 
@@ -897,36 +885,35 @@ function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
   // finestra slider relativa alla timeline
   const startTime = new Date( timeline.start.getTime() + startOffset * 3600000 );
   const endTime = new Date( timeline.start.getTime() + endOffset * 3600000 );
-  // Markers
-  markers.forEach(obj => {
-    // marker disattivato
-    if (!obj.active) { map.removeLayer(obj.marker); return; }
-    // filtro categoria
-    const categoryVisible = activeCategories.includes(obj.category);
-    // data reale evento
-
-    // Prende la data 
+    // Seleziona solo i markers che hanno la categoria attiva
+  markers.forEach(obj => {  
+  const categoryVisible = activeCategories.includes(obj.category);
+    // Verifica se inizio e fine rientrano dentro startTime ed Time 
     const eventStart = new Date(obj.start);
     const eventEnd = obj.end ? new Date(obj.end) : eventStart;
     let inTimeRange =
     eventStart <= endTime &&
     eventEnd >= startTime;
-    const now = getNow(currentDate);
+    // const now = getNow(currentDate);
     
-    const isPast = obj.end
-    ? obj.end < now
-    : eventStart < now;
+    // Determina se l'evento è finito rispetto a now
+    // const isPast = obj.end
+    // ? obj.end < now
+    // : eventStart < now;
 
-    // decisione finale
-    const timeVisible = isPast
-    ? showFinishedEvents
-    : inTimeRange;
-    if (categoryVisible && timeVisible) {
+    // Se showfinishedevents = Vero visualizza
+    // const timeVisible = isPast
+    // ? showFinishedEvents
+    // : inTimeRange;
+    
+    // se soddisfa le due condizioni OK altrimenti rimuove il marker
+    if (categoryVisible && inTimeRange) {
     obj.marker.addTo(map);
     } 
     else { map.removeLayer(obj.marker); }});
   }
 
+  
 // Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
 function buildCategoryMenu() {
    const menuItemsDiv = document.getElementById('menu-items');
