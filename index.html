@@ -868,7 +868,7 @@ function createIcon(color, state, intensity) {
 
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
-  console.log("Aggiorno ticker");
+  console.log("Aggiorno updateMarkerVisibility", new Date().toLocaleTimeString());
   const now = new Date(currentDate); //****** la data di riferimento è errata, cambiata da () a (currentDate) ******
   const midnight = new Date(currentDate);
   if (timelineMode === 'live') {
@@ -1243,7 +1243,7 @@ function nextDay() {
 }
 
   function updateTicker(){
-  console.log("Aggiorno ticker");
+  console.log("Aggiorno updateTicker", new Date().toLocaleTimeString());
   const list = getUpcomingEvents(10);
   const html = list.map(e => {
   const color = categories.find(c => c.id_macro_categoria == e.ev_categoria)?.mc_colore || '#999999';
