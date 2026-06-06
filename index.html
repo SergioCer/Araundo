@@ -767,7 +767,7 @@ function renderEvents() {
   markers.forEach(m => map.removeLayer(m.marker));
   markers = [];
 
-  // verifica numero elementi 
+  // verifica numero elementi deve corrispondere a prelievo da Supabase
   console.log("TOTAL:", events.length);
 let rendered = 0;
 events.forEach(e => {
@@ -865,7 +865,7 @@ function createIcon(color, state, intensity) {
 
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0) {
-  const now = new Date(); //****** la data di riferimento è errata ******
+  const now = new Date(currentDate); //****** la data di riferimento è errata, cambiata da () a (currentDate) ******
   const midnight = new Date(now);
   if (timelineMode === 'live') {
     midnight.setHours(48, 0, 0, 0); // mezzanotte del giorno successivo
