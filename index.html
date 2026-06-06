@@ -764,6 +764,7 @@ document.getElementById("reset-day").addEventListener("click", () => {
 });
   
 function renderEvents() {
+  console.log("Aggiorno renderEvents", new Date().toLocaleTimeString());
   // pulizia markers precedenti
   markers.forEach(m => map.removeLayer(m.marker));
   markers = [];
@@ -1009,6 +1010,7 @@ function buildCategoryMenu() {
 
   /* Temporizzazione dei Marker */
   function getEventState(startDate, endDate) {
+    console.log("Aggiorno getEventState", new Date().toLocaleTimeString());
     const now = new Date();
     const diffMinutes = (startDate - now) / 1000 / 60;
     const minutesFromStart =  (now - startDate) / 1000 / 60;
@@ -1017,8 +1019,6 @@ function buildCategoryMenu() {
     // evento terminato 
     if (endDate && now > endDate) { return { state: 'finished', intensity: 0 }; }
     // evento già in corso da oltre 30'
-    /* SOSTITUITO CON VEDI SOTTO if (minutesFromStart > 30) { return { state: 'running', intensity: 0.6 }; } */ 
-    
     if (minutesFromStart > 0) { // evento iniziato
     let state = 'running-soft';
     let intensity = 0.4;
@@ -1037,7 +1037,7 @@ function buildCategoryMenu() {
     }
     return { state, intensity };
   }
-    
+   
     // Inizia tra 12h
     if (diffMinutes > 720) { return { state: 'distant', intensity: 0.2 }; }
     // Inizia tra 8h
