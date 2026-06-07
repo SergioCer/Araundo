@@ -1148,6 +1148,8 @@ function getMidnightPosition(totalHours) {
       max: totalHours
       }
     });
+  }
+    
     //-- Calcola posizione mezzanotte (0.0 Sinistra ; 0.5 Centro ; 1.0 Destra) e la trasforma in Percentuale (0%; 50%; 100%)
     const midnight = document.getElementById('midnight');
     if (timelineMode === 'live') {
@@ -1199,6 +1201,7 @@ function getMidnightPosition(totalHours) {
       endOffset
       );
     }
+    
     //-- Ad ogni movimento dello slider agiorna la mappa
     slider.noUiSlider.on(
     'update',
@@ -1397,7 +1400,6 @@ class Firework {
     }
     ctx.restore();
     ctx.globalAlpha = 1;
-
     // Razzo prima dell’esplosione
     if (!this.exploded) {
       ctx.fillStyle = this.color;
@@ -1405,13 +1407,12 @@ class Firework {
       ctx.arc(this.x, this.currentY, 3, 0, Math.PI * 2);
       ctx.fill();
     }
-
     // Stelline esplose
     this.particles.forEach(p => p.draw(ctx));
   }
-}
-
-// ====================================================
+  }
+  
+  // ====================================================
 // GESTIONE FIREWORKS SULLA MAPPA
 // ====================================================
 const fireworks = [];
@@ -1449,8 +1450,7 @@ if (state !== 'countdown' && marker.fireworkInterval) {
   marker.fireworkInterval = null;
 }
 }
-  
-  
+ 
 </script>
 </body>
 </html>
