@@ -979,6 +979,8 @@ function buildCategoryMenu() {
     const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
     const allChecked = Array.from(checkboxes).every(cb => cb.checked);
     selectAllToggle.checked = allChecked;
+    // ATTENZIONE MANCA
+    function renderEvents()      
     }
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
   }
