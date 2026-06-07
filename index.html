@@ -615,6 +615,7 @@
   const daysShort = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
   const daysLong  = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
   const slider = document.getElementById('time-range');
+  const fireworks = [];
   // Dimensione dei Markers
   const markerSizes = {
   'finished': 10,
@@ -1415,7 +1416,6 @@ class Firework {
   // ====================================================
 // GESTIONE FIREWORKS SULLA MAPPA
 // ====================================================
-const fireworks = [];
 
   function triggerFirework(latLng) {
   const { x, y } = latLngToCanvasXY(latLng.lat, latLng.lng);
