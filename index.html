@@ -604,12 +604,12 @@
   const slider = document.getElementById('time-range');
 
   // Aggiorna ogni minuto
-  setInterval(updateMarkerVisibility, 60000);
-  updateMarkerVisibility();
-  setInterval(updateTicker, 60000);
-  updateTicker();
-  setInterval(getEventState, 60000);
-  getEventState()
+  setInterval(renderevents, 60000);
+  renderevents();
+  // setInterval(updateTicker, 60000);
+  // updateTicker();
+  // setInterval(getEventState, 60000);
+  // getEventState()
     
   function updateTimelineMode() {
     const currentDay = new Date(currentDate);
@@ -719,10 +719,10 @@ document.getElementById("prev-day").addEventListener("click", () => {prevDay();
   updateDateUI();
   setupTimeline();
   const values = slider.noUiSlider.get();
-  updateMarkerVisibility(
-  Math.round(values[0]),
-  Math.round(values[1])
-  );
+  // CANCELLARE updateMarkerVisibility(
+  // Math.round(values[0]),
+  // Math.round(values[1])
+  // );
   renderEvents();
   });
 
@@ -731,10 +731,10 @@ document.getElementById("next-day").addEventListener("click", () => {nextDay();
   updateDateUI();
   setupTimeline();
   const values = slider.noUiSlider.get();
-  updateMarkerVisibility(
-  Math.round(values[0]),
-  Math.round(values[1])
-  );
+  // CANCELLARE updateMarkerVisibility(
+  // Math.round(values[0]),
+  // Math.round(values[1])
+  // );
   renderEvents();
   });
 
@@ -745,7 +745,6 @@ document.getElementById("reset-day").addEventListener("click", () => {
   updateTimelineMode();
   updateDateUI();
   setupTimeline();
-  updateMarkerVisibility();
   renderEvents();
   });
 
@@ -764,7 +763,9 @@ document.getElementById("reset-day").addEventListener("click", () => {
   const end = Math.round(values[1]);
   updateMarkerVisibility(start, end);
 });
-  
+
+// Aggiorna i markers (NOTA: Alla fine richiama updateMarkerVisibility(). 
+// Quindi evitare di richiamare updateMarkerVisibility() se si richiama renderEvente().
 function renderEvents() {
   console.log("Aggiorno renderEvents", new Date().toLocaleTimeString());
   // pulizia markers precedenti
