@@ -1061,6 +1061,7 @@ function buildCategoryMenu() {
     if (diffMinutes > 360) return { state: 'future-far' };
     if (diffMinutes > 240) return { state: 'future-medium' };
     if (diffMinutes > 120) return { state: 'future-near' };
+    if (diffMinutes > 30) return { state: 'countdown' };
     if (diffMinutes > 0) return { state: 'imminent' };
     return { state: 'started' };
 }
@@ -1282,16 +1283,107 @@ function latLngToCanvasXY(lat, lng) {
   const point = map.latLngToContainerPoint([lat, lng]);
   return { x: point.x, y: point.y };
 }
+// ====================================================
+// FIREWORKS SCENICI SUL CANVAS
+// ====================================================
+class Particle {
+  constructor(x, y, color, vx, vy, life) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.vx = vx;
+    this.vy = vy;
+    this.life = life;
+    this.alpha = 1;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.05; // gravità
+    this.life -= 1;
+    this.alpha = Math.max(0, this.life / 60);
+  }
+  draw(ctx) {
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+class Firework {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.particles = [];
+    this.exploded = false;
+    this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+    this.vy = -8 - Math.random() * 4; // getto verso l'alto
+    this.vx = (Math.random() - 0.5) * 2;
+    this.currentY = y;
+  }
+  update() {
+    if (!this.exploded) {
+      this.currentY += this.vy;
+      this.vy += 0.15; // gravità
+      if (this.vy >= 0) {
+        this.exploded = true;
+        this.createParticles();
+      }
+    }
+    this.particles.forEach(p => p.update());
+    this.particles = this.particles.filter(p => p.life > 0);
+  }
+  createParticles() {
+    const count = 30 + Math.floor(Math.random() * 20);
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * 2 * Math.PI;
+      const speed = Math.random() * 4 + 2;
+      const vx = Math.cos(angle) * speed;
+      const vy = Math.sin(angle) * speed;
+      const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      this.particles.push(new Particle(this.x, this.currentY, color, vx, vy, 60 + Math.random() * 30));
+    }
+  }
+  draw(ctx) {
+    if (!this.exploded) {
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.currentY, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    this.particles.forEach(p => p.draw(ctx));
+  }
+}
+
+// ====================================================
+// GESTIONE FIREWORKS SULLA MAPPA
+// ====================================================
+const fireworks = [];
+
+  function triggerFirework(latLng) {
+  const { x, y } = latLngToCanvasXY(latLng.lat, latLng.lng);
+  fireworks.push(new Firework(x, y));
+}
 
 function animateFX() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // qui dopo metteremo le particelle
-
+  fireworks.forEach(fw => {
+    fw.update();
+    fw.draw(ctx);
+  });
   requestAnimationFrame(animateFX);
 }
-
 animateFX();
+
+// se lo stato è countdown  
+function updateMarkerState(marker, state, latLng) {
+  marker.state = state;
+  if (state === 'countdown') { triggerFirework(latLng); 
+  }
+}
+  
   
 </script>
 </body>
