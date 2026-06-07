@@ -253,8 +253,6 @@
     .pulse.running::after { animation: pulse 2.5s infinite ease-out; opacity: 0.2; }
     .pulse.finished { animation: finished 0.5s ease forwards; }    
     .pulse.finished::after { display: none; animation: none ; opacity: 0 ; }
-    .pulse.countdown { animation: hopCrazy 0.5s infinite; }
-    .pulse.countdown::after { animation: fireworks 0.5s infinite; opacity: 0.6; }
     
     /* SALTI dei Marker correlati alle Pulsazioni */
     @keyframes pulse { 0% { transform: scale(0.6);opacity: 0.5; } 70% { transform: scale(1.6); opacity: 0; } 100% { opacity: 0; }}
@@ -265,8 +263,6 @@
     @keyframes pulseLive { 0% { transform: scale(1); opacity: 0.7; } 70% { transform: scale(2); opacity: 0; } 100% { transform: translateY(-10px); opacity: 0; }}
     @keyframes finished { 0%,100% { transform: translateY(0); } 50% { transform: translateY(0px); }}
     @keyframes hopLive { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); }}
-    @keyframes fireworks { 0% { transform: scale(0.5); opacity: 0.6; } 25% { transform: scale(1.5) rotate(10deg); opacity: 1; } 50%
-    { transform: scale(1.0) rotate(-10deg); opacity: 0.7; } 75% { transform: scale(1.8) rotate(20deg); opacity: 1; } 100% { transform: scale(0.5); opacity: 0.6; }}
     
     #menu-toggle {
       display: inline-flex;
@@ -615,7 +611,6 @@
   'future-medium': 20,
   'future-near': 25,
   'imminent': 30,
-  'countdown': 30,
   'started': 22,
   'running-soft': 18,
   'running-medium': 22,
@@ -1049,8 +1044,7 @@ function buildCategoryMenu() {
     if (diffMinutes > 360) return { state: 'future-far' };
     if (diffMinutes > 240) return { state: 'future-medium' };
     if (diffMinutes > 120) return { state: 'future-near' };
-    if (diffMinutes > 30) return { state: 'imminent' };
-    if (diffMinutes > 0) return { state: 'countdown' };
+    if (diffMinutes > 0) return { state: 'imminent' };
     return { state: 'started' };
 }
   
