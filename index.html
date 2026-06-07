@@ -1200,8 +1200,7 @@ function getMidnightPosition(totalHours) {
       startOffset,
       endOffset
       );
-    }
-    
+        
     //-- Ad ogni movimento dello slider agiorna la mappa
     slider.noUiSlider.on(
     'update',
@@ -1209,8 +1208,8 @@ function getMidnightPosition(totalHours) {
     );
     //-- forza primo update
     updateHandles([0, totalHours]);
-  }
-
+}
+  
   function getTimelineBaseTime() {
     return currentDate
   }
