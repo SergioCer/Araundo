@@ -1290,6 +1290,7 @@ function latLngToCanvasXY(lat, lng) {
   const point = map.latLngToContainerPoint([lat, lng]);
   return { x: point.x, y: point.y };
 }
+  
 // ====================================================
 // FIREWORKS SCENICI SUL CANVAS
 // ====================================================
@@ -1302,7 +1303,11 @@ class Particle {
     this.vy = vy;
     this.life = life;
     this.alpha = 1;
+    this.radiusOuter = 4; // dimensione stellina
+    this.radiusInner = 2;
+    this.spikes = 5; // punte della stella
   }
+
   update() {
     this.x += this.vx;
     this.y += this.vy;
@@ -1310,28 +1315,29 @@ class Particle {
     this.life -= 1;
     this.alpha = Math.max(0, this.life / 60);
   }
-draw(ctx) {
-  ctx.save();
-  ctx.globalAlpha = this.alpha;
-  ctx.fillStyle = this.color;
-  ctx.translate(this.x, this.y);
-  const spikes = 5;
-  const outer = 4;
-  const inner = 2;
-  ctx.beginPath();
-  for (let i = 0; i < spikes * 2; i++) {
-    const r = i % 2 === 0 ? outer : inner;
-    const angle = (Math.PI / spikes) * i;
-    const px = Math.cos(angle) * r;
-    const py = Math.sin(angle) * r;
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
+
+  draw(ctx) {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+    ctx.translate(this.x, this.y);
+
+    ctx.beginPath();
+    for (let i = 0; i < this.spikes * 2; i++) {
+      const r = i % 2 === 0 ? this.radiusOuter : this.radiusInner;
+      const angle = (Math.PI / this.spikes) * i;
+      const px = Math.cos(angle) * r;
+      const py = Math.sin(angle) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
   }
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
 }
-}
+
 class Firework {
   constructor(x, y) {
     this.x = x;
@@ -1342,19 +1348,28 @@ class Firework {
     this.vy = -8 - Math.random() * 4; // getto verso l'alto
     this.vx = (Math.random() - 0.5) * 2;
     this.currentY = y;
+    this.trail = []; // array per scia
   }
+
   update() {
     if (!this.exploded) {
+      // Salita del razzo
       this.currentY += this.vy;
       this.vy += 0.15; // gravità
+      this.trail.push({ x: this.x, y: this.currentY });
+      if (this.trail.length > 20) this.trail.shift(); // mantieni scia corta
+
       if (this.vy >= 0) {
         this.exploded = true;
         this.createParticles();
       }
     }
+
+    // Aggiorna particelle esplose
     this.particles.forEach(p => p.update());
     this.particles = this.particles.filter(p => p.life > 0);
   }
+
   createParticles() {
     const count = 30 + Math.floor(Math.random() * 30);
     for (let i = 0; i < count; i++) {
@@ -1363,16 +1378,35 @@ class Firework {
       const vx = Math.cos(angle) * speed;
       const vy = Math.sin(angle) * speed;
       const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-      this.particles.push(new Particle(this.x, this.currentY, color, vx, vy, 60 + Math.random() * 30));
+      this.particles.push(
+        new Particle(this.x, this.currentY, color, vx, vy, 60 + Math.random() * 30)
+      );
     }
   }
+
   draw(ctx) {
+    // Disegna la scia del razzo
+    ctx.save();
+    for (let i = 0; i < this.trail.length; i++) {
+      const p = this.trail[i];
+      ctx.globalAlpha = i / this.trail.length * 0.6;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+    ctx.globalAlpha = 1;
+
+    // Razzo prima dell’esplosione
     if (!this.exploded) {
       ctx.fillStyle = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.currentY, 3, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // Stelline esplose
     this.particles.forEach(p => p.draw(ctx));
   }
 }
