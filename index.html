@@ -814,6 +814,8 @@ function renderEvents() {
         intensity
       )
     })
+    updateMarkerState(marker, stateClass, { lat: e.ev_lat, lng: e.ev_lng }); // Fuochi d'artificio
+    
     //-- Visualizza i dettagli dell'evento selezionato con Popup //
         const startDate = new Date(e.ev_inizio);
         const now = new Date();
