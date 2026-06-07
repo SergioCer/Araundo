@@ -899,7 +899,7 @@ function createIcon(color, state, intensity) {
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
   console.log("Aggiorno updateMarkerVisibility", new Date().toLocaleTimeString());
-  const now = new Date(currentDate); //****** la data di riferimento è errata, cambiata da () a (currentDate) ******
+  const now = new Date(currentDate); 
   const midnight = new Date(currentDate);
   if (timelineMode === 'live') {
     midnight.setHours(48, 0, 0, 0);
@@ -975,6 +975,8 @@ function buildCategoryMenu() {
 // CANCELLARE
  console.log("Click su Checkbox dovrei aggiornare...");    
  // CANCELLARE SOPRA
+     function renderEvents()   
+ 
     });
     // aggiorna lo stato del checkbox
     function updateSelectAllToggle() {
