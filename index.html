@@ -605,7 +605,6 @@
 
   // Aggiorna ogni minuto
   setInterval(renderEvents, 60000);
-  renderEvents();
   // setInterval(updateTicker, 60000);
   // updateTicker();
   // setInterval(getEventState, 60000);
@@ -1011,7 +1010,6 @@ function buildCategoryMenu() {
 
   /* Temporizzazione dei Marker */
   function getEventState(startDate, endDate) {
-    console.log("Aggiorno getEventState", new Date().toLocaleTimeString());
     const now = new Date();
     const diffMinutes = (startDate - now) / 1000 / 60;
     const minutesFromStart =  (now - startDate) / 1000 / 60;
@@ -1037,6 +1035,7 @@ function buildCategoryMenu() {
     }
     }
     return { state, intensity };
+console.log("Aggiorno getEventState", new Date().toLocaleTimeString());
   }
    
     // Inizia tra 12h
