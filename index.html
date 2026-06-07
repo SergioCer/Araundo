@@ -257,6 +257,8 @@
     .pulse.future-near { animation: hopFast 1s infinite; }
     .pulse.imminent { animation: hopCrazy 0.5s infinite; }
     .pulse.imminent::after { animation: pulse 0.5s infinite ease-out; opacity: 0.45; }
+    .pulse.countdown { animation: hopCrazy 0.3s infinite; }
+    .pulse.countdown::after { animation: pulse 0.3s infinite ease-out; opacity: 0.6; }
     .pulse.started { animation: hopLive 2s infinite; }    
     .pulse.started::after { animation: pulseLive 0.3s infinite; }
     .pulse.running { animation: none; }
@@ -622,6 +624,7 @@
   'future-medium': 20,
   'future-near': 25,
   'imminent': 30,
+  'countdown': 30,
   'started': 22,
   'running-soft': 18,
   'running-medium': 22,
