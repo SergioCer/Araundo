@@ -1356,8 +1356,9 @@ class Firework {
     this.vx = (Math.random() - 0.5) * 2; // deriva laterale
     this.currentY = y; // quota corrente
     this.trail = []; // punti della scia
-    isDead() { return this.exploded && this.particles.length === 0;}
   }
+  
+  isDead() { return this.exploded && this.particles.length === 0;}
 
   update() {
     if (!this.exploded) {
