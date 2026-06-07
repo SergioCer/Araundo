@@ -1048,7 +1048,7 @@ console.log("Aggiorno getEventState", new Date().toLocaleTimeString());
   }
    
     // Inizia tra 12h
-    if (diffMinutes > 720) { return { state: 'distant', intensity: 0.2 }; }
+    if (diffMinutes > 720) return { state: 'distant'};
     // Inizia tra 8h
     if (diffMinutes > 480) { return { state: 'future-deep', intensity: 0.4 }; }
     // Inizia tra 6h
