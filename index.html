@@ -602,18 +602,19 @@
   const daysShort = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
   const daysLong  = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
   const slider = document.getElementById('time-range');
+  // Dimensione dei Markers
   const markerSizes = {
   'finished': 10,
   'distant': 10,
-  'future-deep': 11,
-  'future-far': 13,
-  'future-medium': 15,
-  'future-near': 18,
-  'imminent': 22,
-  'started': 26,
-  'running-soft': 14,
-  'running-medium': 20,
-  'running-strong': 28
+  'future-deep': 14,
+  'future-far': 16,
+  'future-medium': 20,
+  'future-near': 25,
+  'imminent': 30,
+  'started': 22,
+  'running-soft': 18,
+  'running-medium': 22,
+  'running-strong': 26
 };
 
   
@@ -859,13 +860,7 @@ marker.bindPopup(`
 
 // Dimensione dei Markers  
 function createIcon(color, state, intensity) {
-  // CANCELLARE 
-  // const isFinished = state === 'finished';
-  // const size = isFinished
-  // ? 10
-  // : Math.max(10, Math.min(30, 10 * intensity));
   const size = markerSizes[state] || 10;
-  // Sopra è la nuova cancellare // 
   return L.divIcon({
   className: '',
   html: `
@@ -1049,8 +1044,8 @@ function buildCategoryMenu() {
     if (diffMinutes > 360) return { state: 'future-far' };
     if (diffMinutes > 240) return { state: 'future-medium' };
     if (diffMinutes > 120) return { state: 'future-near' };
-    if (diffMinutes <= 0) return { state: 'started' };
-    return { state: 'imminent' };
+    if (diffMinutes > 0) return { state: 'imminent' };
+    return { state: 'started' };
 }
   
   // Calcola il range della Timeline
