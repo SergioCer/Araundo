@@ -984,10 +984,8 @@ function buildCategoryMenu() {
     }
     menuItemsDiv.addEventListener('change', updateSelectAllToggle);
   }
-    function renderEvents()   
-
-
-    /* Compone il giorno ed il mese corrente nel rettangolo */  
+    
+  /* Compone il giorno ed il mese corrente nel rettangolo */  
     function updateDateUI() {
       dayText.innerText = currentDate.getDate();
       dateText.innerText = monthNames[currentDate.getMonth()] + " " + currentDate.getFullYear();
