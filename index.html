@@ -944,7 +944,7 @@ function buildCategoryMenu() {
     selectAllToggle.addEventListener('change', () => {
     const checkboxes = menuItemsDiv.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = selectAllToggle.checked);
-    updateMarkerVisibility();
+    // CANCELLARE ***** updateMarkerVisibility();
     });
     // aggiorna lo stato del checkbox
     function updateSelectAllToggle() {
