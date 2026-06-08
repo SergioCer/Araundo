@@ -1072,7 +1072,7 @@ function buildCategoryMenu() {
     if (diffMinutes > 240) return { state: 'future-far' };
     if (diffMinutes > 120) return { state: 'future-medium' };
     if (diffMinutes > 60) return { state: 'future-near' };
-    if (diffMinutes > 15) return { state: 'imminent' };
+    if (diffMinutes > 30) return { state: 'imminent' };
     if (diffMinutes > 0) return { state: 'countdown' };
     return { state: 'started' };
 }
@@ -1265,7 +1265,7 @@ function nextDay() {
 
   function updateTicker(){
   console.log("Aggiorno updateTicker", new Date().toLocaleTimeString());
-  const list = getUpcomingEvents(10);
+  const list = getUpcomingEvents(10); // Numero di eventi da visualizzare
   const html = list.map(e => {
   const color = categories.find(c => c.id_macro_categoria == e.ev_categoria)?.mc_colore || '#999999';
   return `
