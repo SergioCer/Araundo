@@ -688,7 +688,8 @@
   // Aggiorna ogni minuto
   setInterval(renderEvents, 60000);
   setInterval(updateTicker, 60000);
-    
+  updateTicker()
+  
   function updateTimelineMode() {
     const currentDay = new Date(currentDate);
     currentDay.setHours(0,0,0,0);
