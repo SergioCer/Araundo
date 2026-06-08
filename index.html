@@ -888,7 +888,6 @@ marker.bindPopup(`
 
 // Dimensione dei Markers  
 function createIcon(color, state, intensity) {
-  console.log("Aggiorno Dimensione Markers", new Date().toLocaleTimeString());
   const size = markerSizes[state] || 10;
   return L.divIcon({
   className: '',
@@ -1048,7 +1047,6 @@ function buildCategoryMenu() {
 
   /* Temporizzazione dei Marker */
   function getEventState(startDate, endDate) {
-    console.log("Aggiorno Temporizzazione Markers", new Date().toLocaleTimeString());
     const now = new Date();
     const diffMinutes = (startDate - now) / 1000 / 60;
     const minutesFromStart =  (now - startDate) / 1000 / 60;
