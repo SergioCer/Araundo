@@ -1069,10 +1069,10 @@ function buildCategoryMenu() {
     // Inizia tra 12 - 8 - 6 - 4 - 2 h - in corso < 2 ore
     if (diffMinutes > 720) return { state: 'distant' };
     if (diffMinutes > 480) return { state: 'future-deep' };
-    if (diffMinutes > 360) return { state: 'future-far' };
-    if (diffMinutes > 240) return { state: 'future-medium' };
-    if (diffMinutes > 90) return { state: 'future-near' };
-    if (diffMinutes > 30) return { state: 'imminent' };
+    if (diffMinutes > 240) return { state: 'future-far' };
+    if (diffMinutes > 120) return { state: 'future-medium' };
+    if (diffMinutes > 60) return { state: 'future-near' };
+    if (diffMinutes > 15) return { state: 'imminent' };
     if (diffMinutes > 0) return { state: 'countdown' };
     return { state: 'started' };
 }
