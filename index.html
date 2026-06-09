@@ -840,7 +840,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution: '&cop
 
 // DOM  
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. prendi categorie con relative icone e colore
+  // 1. prende le categorie con relative icone e colori
   categories = await fetchCategories();
   icons = {};
   categories.forEach(cat => {
@@ -857,12 +857,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
       
   noUiSlider.create(slider, {
-    start: [0, 24],
+    start: [0, 48],
     connect: true,
     step: 1,
     range: {
     min: 0,
-    max: 24
+    max: 48
     }
   });
 
