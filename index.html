@@ -44,17 +44,49 @@
     }    
     
     /* -- Rettangolo Aroundo trasparente */
-    .map-overlay {
-      position: absolute;
-      top: 10px;
-      left: 50px;
-      z-index: 1000;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-      padding: 2px 2px;
-      border-radius: 12px;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
+.map-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  transition: all 0.4s ease;
+}
+
+/* stato “mini” in alto a destra */
+.map-overlay.minimized {
+  top: 10px;
+  right: 10px;
+  left: auto;
+  transform: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* icona toggle */
+#overlayToggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  display: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 
     /* -- Rettangolo filtro categorie */
     .map-overlay2 {
@@ -563,12 +595,28 @@
   }
 
   .map-overlay {
-    top: 60px;
-    left: 58%;
-    padding: 2px 2px;
-    /* transform: translateX(-50%); */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;          /* quasi tutta la larghezza dello schermo */
+    padding: 10px;       /* padding ridotto */
+    font-size: 14px;     /* testi più piccoli */
   }
 
+  .map-overlay.minimized {
+    top: 8px;
+    right: 8px;
+    width: 36px;
+    height: 36px;
+  }
+
+  #overlayToggle {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;      /* icona leggibile */
+  }
+}
+  
   .map-overlay2 {
     top: 76px;
     left: 2px;
@@ -651,6 +699,9 @@
   <div class="subtitle">Discover what’s around you</div>
   <div class="date-day">Login</div>
 </div>
+  
+<div id="overlayToggle">🔓</div>
+  
 <div class="map-overlay2" id="category-menu">
 <div class="menu-header filter-all-container">
   <label class="toggle-pill" title="Seleziona tutte le categorie">
@@ -1571,7 +1622,43 @@ if (state !== 'countdown' && marker.fireworkInterval) {
   marker.fireworkInterval = null;
 }
 }
- 
+
+const overlay = document.getElementById('mapOverlay');
+const toggle = document.getElementById('overlayToggle');
+let timeout30min = 30 * 60 * 1000; // 30 minuti
+
+// chiusura overlay
+function minimizeOverlay() {
+  overlay.classList.add('minimized');
+  toggle.style.display = 'flex';
+}
+
+// apertura overlay
+function openOverlay() {
+  overlay.classList.remove('minimized');
+  toggle.style.display = 'none';
+}
+
+// click fuori → chiude
+document.addEventListener('click', (e) => {
+  if (!overlay.contains(e.target) && overlay.classList.contains('minimized') === false) {
+    minimizeOverlay();
+  }
+});
+
+// evita chiusura cliccando dentro
+overlay.addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+
+// click icona → riapre
+toggle.addEventListener('click', openOverlay);
+
+// timer 30 minuti
+setTimeout(() => {
+  minimizeOverlay();
+}, timeout30min);
+  
 </script>
 </body>
 </html>
