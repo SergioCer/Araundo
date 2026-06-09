@@ -844,6 +844,7 @@ L.tileLayer(
 
     // Aggiorna ogni minuto
     setInterval(renderEvents, 60000);
+    updateMarkerVisibility()
     // Preleva nuovamente eventi ogni 5 minuti
     setInterval(async () => { const data = await fetchEvents(); if (data) events = data; }, 5 * 60 * 1000);
   
@@ -953,8 +954,7 @@ document.getElementById("reset-day").addEventListener("click", () => {
   updateMarkerVisibility(start, end);
 });
 
-// Ricrea i markers (NOTA: Alla fine richiama updateMarkerVisibility(). 
-// Quindi evitare di richiamare updateMarkerVisibility() se si richiama renderEvents().
+// Ricrea i markers 
 function renderEvents() {
   console.log("Aggiorno Markers", new Date().toLocaleTimeString());
   // console.trace(); // mostra da dove è stata chiamata
