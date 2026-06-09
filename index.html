@@ -55,7 +55,7 @@
   background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
   backdrop-filter: blur(8px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  transition: all 0.4s ease;
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); /* Velocità */ 
 }
 
 /* stato “mini” in alto a destra */
@@ -1625,7 +1625,7 @@ if (state !== 'countdown' && marker.fireworkInterval) {
 
 const overlay = document.getElementById('mapOverlay');
 const toggle = document.getElementById('overlayToggle');
-let timeout30min = 30 * 60 * 1000; // 30 minuti
+let timeout30min = 20 * 1000; // 20 secondi
 
 // chiusura overlay
 function minimizeOverlay() {
