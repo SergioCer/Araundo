@@ -870,7 +870,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   slider.noUiSlider.on('update', function(values) {
   const start = Math.round(values[0]);
   const end = Math.round(values[1]);
-  updateMarkerVisibility(start, end);
+  // updateMarkerVisibility(start, end); DISABILITATA VEDIAMO SE FUNZIONA 
 });
   
   document.getElementById("prev-day").addEventListener("click", () => {prevDay();
@@ -1400,7 +1400,7 @@ function nextDay() {
   function getNow(date = null) {const d = new Date(date); d.setHours(0,0,0,0); return d;}
 
   function getUpcomingEvents(hours = 12) {
-  console.log("Aggiorno gli eventi delle News", new Date().toLocaleTimeString());
+  console.log("Aggiorno eventi News", new Date().toLocaleTimeString());
   // console.trace(); // mostra da dove è stata chiamata
   const now = new Date();
   const limit = new Date(now.getTime() + hours * 3600000);
@@ -1413,7 +1413,7 @@ function nextDay() {
 }
 
   function updateTicker(){
-  console.log("Aggiorno News", new Date().toLocaleTimeString());
+  console.log("Aggiorno Striscia News", new Date().toLocaleTimeString());
   // console.trace(); // mostra da dove è stata chiamata
   const list = getUpcomingEvents(20); // Numero di News da visualizzare
   const html = list.map(e => {
