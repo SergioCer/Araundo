@@ -694,7 +694,7 @@
 </head>
 <body>
 
-<div class="map-overlay">
+<div class="map-overlay" id="mapOverlay">
   <div class="title">Aroundo</div>
   <div class="subtitle">Discover what’s around you</div>
   <div class="date-day">Login</div>
@@ -1623,7 +1623,7 @@ if (state !== 'countdown' && marker.fireworkInterval) {
 }
 }
 
-const overlay = document.getElementById('map-overlay');
+const overlay = document.getElementById('mapOverlay');
 const toggle = document.getElementById('overlayToggle');
 let timeout30min = 30 * 60 * 1000; // 30 minuti
 
