@@ -1232,6 +1232,7 @@ function buildCategoryMenu() {
       start = getNow(date);
       end = new Date(date);
       end.setHours(24,0,0,0);
+    console.log("DAY/PAST mode → start:", start.toLocaleString(), "end:", end.toLocaleString());
       return { start, end, now: start };
   }
 
