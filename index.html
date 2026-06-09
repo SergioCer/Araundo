@@ -1063,46 +1063,27 @@ function createIcon(color, state, intensity) {
 /* Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
   console.log("Aggiorno Visibilità Markers", new Date().toLocaleTimeString());
-  console.log("ENTRATA", startOffset, endOffset);
-  // console.trace(); // mostra da dove è stata chiamata
-//  const now = new Date(currentDate); 
-//  const midnight = new Date(currentDate);
-//  if (timelineMode === 'live') {
-//    midnight.setHours(48, 0, 0, 0);
-//    endOffset = (midnight - now) / 3600000;
-//  } else {
-//    midnight.setHours(24, 0, 0, 0);
-//    endOffset = 24;
-    // const endOffset = (now) / 3600000; // mezzanotte di oggi
-//  }
   // checkbox categorie attive
   const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
   const activeCategories = [];
-  checkboxes.forEach(cb => {
-    const catId = parseInt(cb.id.replace('cat-', ''));
-    if (cb.checked) { activeCategories.push(catId); }
-  });
+  checkboxes.forEach(cb => {const catId = parseInt(cb.id.replace('cat-', ''));
+  if (cb.checked) { activeCategories.push(catId); }});
   // base timeline reale
   const timeline = getTimelineRange(currentDate);
   // finestra slider relativa alla timeline
   const startTime = new Date( timeline.start.getTime() + startOffset * 3600000 );
   const endTime = new Date( timeline.start.getTime() + endOffset * 3600000 );
-    // Seleziona solo i markers che hanno la categoria attiva
-  markers.forEach(obj => {  
-  const categoryVisible = activeCategories.includes(obj.category);
-    // Verifica se inizio e fine rientrano dentro startTime ed Time 
+  // Seleziona solo i markers che hanno la categoria attiva
+    markers.forEach(obj => {const categoryVisible = activeCategories.includes(obj.category);
+    // Preleva eventStart ed eventEnd dai markers
     const eventStart = new Date(obj.start);
     const eventEnd = obj.end ? new Date(obj.end) : eventStart;
-    let inTimeRange =
-    eventStart <= endTime &&
-    eventEnd >= startTime;
+    // Seleziona il range dei markers da visualizzare tra eventStart ed eventEnd
+    let inTimeRange = eventStart >= startTime && eventStart <= endTime; // PRECEDENTE eventStart <= endTime &&  eventEnd >= startTime;
     // se soddisfa le due condizioni OK altrimenti rimuove il marker
-    if (categoryVisible && inTimeRange) {
-    obj.marker.addTo(map);
-    } 
+    if (categoryVisible && inTimeRange) {obj.marker.addTo(map);} 
     else { map.removeLayer(obj.marker); }});
-  updateTicker();
-  console.log("DOPO LIVE", startOffset, endOffset);
+  updateTicker(); // Aggiorna le News
 }
 
 // Costruisce Checkbox Categorie, Pulsante toggle del menù, select all, listeners  
