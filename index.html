@@ -1063,6 +1063,7 @@ function createIcon(color, state, intensity) {
 /* NUOVA Mostra o nasconde i Marker delle categorie */
 function updateMarkerVisibility(startOffset = 0, endOffset = 24) {
   console.log("Aggiorno Visibilità Markers", new Date().toLocaleTimeString());
+  console.log("Marker range:",startOffset,endOffset);
   // console.trace(); // mostra da dove è stata chiamata
   const now = new Date(currentDate); 
   const midnight = new Date(currentDate);
@@ -1371,7 +1372,8 @@ function getMidnightPosition(totalHours) {
       startOffset,
       endOffset
       );
-}        
+console.log("START:", startOffset,"END:", endOffset);
+  }        
     //-- Ad ogni movimento dello slider agiorna la mappa
     slider.noUiSlider.on('update', updateHandles); //-- forza primo update
     updateHandles([0, totalHours]);
