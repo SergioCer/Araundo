@@ -598,7 +598,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;          /* quasi tutta la larghezza dello schermo */
+    width: 50%;          /* quasi tutta la larghezza dello schermo */
     padding: 10px;       /* padding ridotto */
     font-size: 14px;     /* testi più piccoli */
   }
@@ -1641,7 +1641,7 @@ function openOverlay() {
 
 // click fuori → chiude
 document.addEventListener('click', (e) => {
-  if (!overlay.contains(e.target) && overlay.classList.contains('minimized') === false) {
+  if (!overlay.contains(e.target) && !toggle.contains(e.target) && !overlay.classList.contains('minimized')) {
     minimizeOverlay();
   }
 });
@@ -1655,9 +1655,7 @@ overlay.addEventListener('click', (e) => {
 toggle.addEventListener('click', openOverlay);
 
 // timer 30 minuti
-setTimeout(() => {
-  minimizeOverlay();
-}, timeout30min);
+setTimeout(minimizeOverlay, timeout);
   
 </script>
 </body>
