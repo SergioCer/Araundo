@@ -1655,7 +1655,7 @@ overlay.addEventListener('click', (e) => {
 toggle.addEventListener('click', openOverlay);
 
 // timer 30 minuti
-setTimeout(minimizeOverlay, timeout);
+setTimeout(() => { minimizeOverlay(); }, timeout30min);
   
 </script>
 </body>
