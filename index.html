@@ -1355,7 +1355,8 @@ console.log("START:", startOffset,"END:", endOffset);
   }        
     //-- Ad ogni movimento dello slider agiorna la mappa
     slider.noUiSlider.on('update', updateHandles); //-- forza primo update
-    updateHandles([0, totalHours]);
+    slider.noUiSlider.set([0, totalHours]);
+    // CANCELLARE ??? updateHandles([0, totalHours]);
   
   function getTimelineBaseTime() {
     return currentDate
