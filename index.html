@@ -756,6 +756,7 @@
   let timelineMode = 'live'; // Modalità della timeline 'past' | 'live' | 'day'
   let currentDate = new Date(); // Data odierna di riferimento
   let midnightPercent = 0; // Posizione barra della Mezzanotte
+  let totalHours; // Ore totali della Slidebar
   
   // Coordinate di default (Centro provincia Trapani / Sicilia occidentale)
   const defaultLat = 37.87; /* 37.55 */
@@ -1297,7 +1298,7 @@ function getMidnightPosition(totalHours) {
     }
     const { start, end } = getTimelineRange();
     // ore totali reali del range
-    const totalHours = Math.ceil((end - start) / 3600000);
+    totalHours = Math.ceil((end - start) / 3600000);
     //-- Controllo di sicurezza per evitare errori.
     if (!totalHours || isNaN(totalHours)) {
     console.error("Invalid timeline range", totalHours);
