@@ -1339,9 +1339,7 @@ function getMidnightPosition(totalHours) {
     // const endHour = endDate.getHours().toString().padStart(2,'0');
     //-- Crea le etichette delle maniglie
     const formatTime = (date) =>
-    date.getHours().toString().padStart(2,'0') +
-    ':' +
-    date.getMinutes().toString().padStart(2,'0');
+    date.getHours().toString().padStart(2,'0'); // + ':' + date.getMinutes().toString().padStart(2,'0');
     const startLabel = formatTime(startDate);
     const endLabel   = formatTime(endDate);
     const handles = slider.querySelectorAll('.noUi-handle');
