@@ -1079,31 +1079,22 @@ function createIcon(color, state, intensity) {
   });
 }
 
-/* Mostra o nasconde i Marker delle categorie */
-function updateMarkerVisibility() {
-  const { start, end } = getTimelineRange();
-  markers.forEach(marker => {
-  const evtTime = new Date(marker.time);
-  marker.visible = evtTime >= start && evtTime <= end;
-  });
-  console.log("Aggiorno Visibilità Markers", new Date().toLocaleTimeString());
-  // checkbox categorie attive
-  const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
-  const activeCategories = [];
-  checkboxes.forEach(cb => {const catId = parseInt(cb.id.replace('cat-', ''));
-  if (cb.checked) { activeCategories.push(catId); }});
-  // Seleziona solo i markers che hanno la categoria attiva
-  markers.forEach(obj => {const categoryVisible = activeCategories.includes(obj.category);
-  // Preleva eventStart ed eventEnd dai markers
-  const eventStart = obj.start;
-  const eventEnd = obj.end || obj.start;
-  // Seleziona il range dei markers da visualizzare tra eventStart ed eventEnd
-  const inTimeRange = eventStart <= end &&  eventEnd >= start;
-  // se soddisfa le due condizioni OK altrimenti rimuove il marker
-  if (categoryVisible && inTimeRange) {obj.marker.addTo(map);} 
-  else { map.removeLayer(obj.marker); }});
-  updateTicker(); // Aggiorna le News
-}
+    /* Mostra o nasconde i Marker delle categorie */
+    function updateMarkerVisibility(startTime, endTime) {
+      const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
+      const activeCategories = [];
+      checkboxes.forEach(cb => {const catId = parseInt(cb.id.replace('cat-', ''));
+      if (cb.checked) { activeCategories.push(catId); }});
+      // Preleva eventStart ed eventEnd dai markers      
+      const eventStart = obj.start;
+      const eventEnd = obj.end || obj.start;
+      // Seleziona il range dei markers da visualizzare tra eventStart ed eventEnd
+      const inTimeRange = eventStart <= endTime &&  eventEnd >= startTime;
+      // se soddisfa le due condizioni OK altrimenti rimuove il marker
+      if (categoryVisible && inTimeRange) {obj.marker.addTo(map);} 
+      else { map.removeLayer(obj.marker); }});
+      updateTicker(); // Aggiorna le News
+    }
 
   function getVisibleEvents() {
     const { start, end } = getTimelineRange();
