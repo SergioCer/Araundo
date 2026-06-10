@@ -1226,11 +1226,12 @@ function buildCategoryMenu() {
     let start , end;
     if (timelineMode === 'live') {
       const now = new Date();
-      now.setMinutes(0,0,0); // Allinea i forati orari diversi ( FUNZIONA ??? ) 
+      now.setSecondss(0,0); // Allinea i forati orari diversi ( FUNZIONA ??? ) 
       start = new Date(now);
-      end = new Date(now.getTime() + 24 * 3600000);
-      end.setHours(0, 0, 0, 0);
-    console.log("Mode: LIVE → start:", start.toLocaleString(), "end:", end.toLocaleString());
+      end = new Date(now);
+      end.setDate(end.getDate() + 1) ; // fino a Domani
+      end.setHours(23, 59, 59, 999);  // fine giornata domani
+    console.log("Mode: LIVE → start:", start, "end:", end);
       return { start, end, now: start };
       }
       start = getNow(date);
