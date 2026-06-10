@@ -1093,8 +1093,8 @@ function createIcon(color, state, intensity) {
       // Seleziona il range dei markers da visualizzare tra eventStart ed eventEnd
       const inTimeRange = eventStart <= endTime &&  eventEnd >= startTime;
       // se soddisfa le due condizioni OK altrimenti rimuove il marker
-      if (categoryVisible && inTimeRange) {obj.marker.addTo(map);} 
-      else { map.removeLayer(obj.marker); }});
+      if (categoryVisible && inTimeRange) {marker.marker.addTo(map);} 
+      else { map.removeLayer(marker.marker); }});
       updateTicker(); // Aggiorna le News
     }
 
