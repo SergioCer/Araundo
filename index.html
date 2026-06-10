@@ -1295,23 +1295,9 @@ function getMidnightPosition(totalHours) {
     slider.noUiSlider.destroy();
     slider.noUiSlider = null;
     }
-    //-- Definisce intervallo temporale
-    let startBase;
-    let totalHours;
-    //-- Modalità Live: calcola il numero di ore mancanti alle 24 di oggi
-    if (timelineMode === 'live') {
-      const now = new Date();
-      now.setSeconds(0,0);
-      const currentHour = now.getHours();
-      const remainingToday = 24 - currentHour;
-      totalHours = remainingToday + 24;
-      startBase = now;
-     }
-    //-- Modalità Day: calcola le sole 24 ore del giorno
-    else {
-      startBase = getNow(currentDate);
-      totalHours = 24;
-      }
+    const { start, end } = getTimelineRange();
+    // ore totali reali del range
+    const totalHours = Math.ceil((end - start) / 3600000);
     //-- Controllo di sicurezza per evitare errori.
     if (!totalHours || isNaN(totalHours)) {
     console.error("Invalid timeline range", totalHours);
