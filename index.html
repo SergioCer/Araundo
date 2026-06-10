@@ -753,21 +753,20 @@
   let icons = {};
   let events = [];
   let markers = [];
-  let showFinishedEvents = false; 
-  let currentDate = new Date(); // Data odierna di riferimento per tutte le date
-  let timelineMode = 'live'; // Nuova timeline per tutto 'past' | 'live' | 'day'
-  let midnightPercent = 0; // Barra della mezzanotte
+  let timelineMode = 'live'; // Modalità della timeline 'past' | 'live' | 'day'
+  let currentDate = new Date(); // Data odierna di riferimento
+  let midnightPercent = 0; // Posizione barra della Mezzanotte
   
-  // Coordinate di default (Sicilia occidentale)
+  // Coordinate di default (Centro provincia Trapani / Sicilia occidentale)
   const defaultLat = 37.87; /* 37.55 */
   const defaultLng = 12.69; /* 14.1 */
   const defaultZoom = 10; /* 9 */
   const dayText = document.getElementById("day-text");
   const dateText = document.getElementById("date-text");
+  const slider = document.getElementById('time-range');
   const monthNames = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
   const daysShort = ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
   const daysLong  = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-  const slider = document.getElementById('time-range');
   const fireworks = [];
   // Dimensione dei Markers
   const markerSizes = {
@@ -783,8 +782,7 @@
   'running-soft': 18,
   'running-medium': 22,
   'running-strong': 26
-};
-
+  };
   const map = L.map('map', {
     zoomControl: true,
     minZoom: 3, // evita zoom troppo lontano, 0 = mappa mondiale, 9 = area di circa una regione.
@@ -808,10 +806,10 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution: '&cop
       const distance = map.distance([userLat, userLng], [e.ev_lat, e.ev_lng]);
       return distance <= 10000; // 10 km
       });
-      let zoomLevel = 12;
-      if (nearbyEvents.length > 100) zoomLevel = 13;
-      else if (nearbyEvents.length > 50) zoomLevel = 12;
-      else zoomLevel = 11;
+      let zoomLevel = 9; // Provincia
+      if (nearbyEvents.length > 100) zoomLevel = 8; // Comune
+      else if (nearbyEvents.length > 50) zoomLevel = 9; // Provincia
+      else zoomLevel = 10; // Regione
       map.setView([userLat, userLng], zoomLevel);
       },
       (err) => {
