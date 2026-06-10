@@ -1354,7 +1354,7 @@ function getMidnightPosition(totalHours) {
         h.appendChild(label);
       }
       //-- Inserisce ora di inizio e di fine
-      label.innerText = i === 0 ? startHour : endHour;
+      label.innerText = i === 0 ? startLabel : endLabel;
     });
     //-- Aggiorna i marker della mappa in base ad orari inizio-fine
     updateMarkerVisibility(startDate,endDate);
