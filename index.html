@@ -822,9 +822,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   icons[cat.id_macro_categoria] = createIcon(cat.mc_colore);
   });
   events = await fetchEvents();
-  // 2. Crea il menu Categorie
+  // 2. Prova a ottenere la posizione dell'utente
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+      (pos) => {
+      const userLat = pos.coords.latitude;
+      const userLng = pos.coords.longitude;
+      // Calcolo approssimativo dello zoom in base agli eventi vicini
+      const nearbyEvents = events.filter(e => {
+      const distance = map.distance([userLat, userLng], [e.ev_lat, e.ev_lng]);
+    // console.log(e.id,(distance / 1000).toFixed(2) + " km");
+      return distance <= 100000; // 100 km
+      });
+      let zoomLevel = 10; // Provincia
+      if (nearbyEvents.length > 100) zoomLevel = 11; // Comune
+      else if (nearbyEvents.length > 50) zoomLevel = 10; // Provincia
+      else zoomLevel = 9; // Regione
+      console.warn("Posizione ottenuta, Eventi presenti in zona <100Km:", nearbyEvents.length);
+      map.setView([userLat, userLng], zoomLevel);
+      },
+      (err) => {
+      console.warn("Per una migliore fruizione di Aroundo, si suggerisce di attivare la Geolocalizzazione, in mancanza di tale autorizzazione si utilizzano le coordinate di default");
+      map.setView([defaultLat, defaultLng], defaultZoom);
+      }
+      );
+    } else {
+      console.warn("Browser non supporta geolocalizzazione");
+      map.setView([defaultLat, defaultLng], defaultZoom);
+      }
+  // 3. Crea il menu Categorie
   buildCategoryMenu();
-  // 3. inizializza checkbox con tutti selezionati
+  // 4. inizializza checkbox con tutti selezionati
   document.getElementById('select-all-toggle').checked = true;
   setupTimeline();
   renderEvents();
@@ -871,36 +899,7 @@ document.getElementById("reset-day").addEventListener("click", () => {
   renderEvents();
   });
 
-  // Prova a ottenere la posizione dell'utente
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-      (pos) => {
-      const userLat = pos.coords.latitude;
-      const userLng = pos.coords.longitude;
-      // Calcolo approssimativo dello zoom in base agli eventi vicini
-      const nearbyEvents = events.filter(e => {
-      const distance = map.distance([userLat, userLng], [e.ev_lat, e.ev_lng]);
-    // console.log(e.id,(distance / 1000).toFixed(2) + " km");
-      return distance <= 100000; // 100 km
-      });
-      let zoomLevel = 10; // Provincia
-      if (nearbyEvents.length > 100) zoomLevel = 11; // Comune
-      else if (nearbyEvents.length > 50) zoomLevel = 10; // Provincia
-      else zoomLevel = 9; // Regione
-      console.warn("Posizione ottenuta, Eventi presenti in zona <100Km:", nearbyEvents.length);
-      map.setView([userLat, userLng], zoomLevel);
-      },
-      (err) => {
-      console.warn("Per una migliore fruizione di Aroundo, si suggerisce di attivare la Geolocalizzazione, in mancanza di tale autorizzazione si utilizzano le coordinate di default");
-      map.setView([defaultLat, defaultLng], defaultZoom);
-      }
-      );
-    } else {
-      console.warn("Browser non supporta geolocalizzazione");
-      map.setView([defaultLat, defaultLng], defaultZoom);
-      }
-  
-  function updateTimelineMode() {
+    function updateTimelineMode() {
     const currentDay = new Date(currentDate);
     currentDay.setHours(0,0,0,0);
     const today = new Date();
