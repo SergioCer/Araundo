@@ -1080,7 +1080,7 @@ function createIcon(color, state, intensity) {
 }
 
     /* Mostra o nasconde i Marker delle categorie */
-    function updateMarkerVisibility(startTime, endTime) {
+    function updateMarkerVisibility(start, end) {
       const checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]');
       const activeCategories = [];
       checkboxes.forEach(cb => {const catId = parseInt(cb.id.replace('cat-', ''));
@@ -1091,7 +1091,7 @@ function createIcon(color, state, intensity) {
       const eventStart = new Date(marker.start);
       const eventEnd = marker.end ? new Date(marker.end) : eventStart;
       // Seleziona il range dei markers da visualizzare tra eventStart ed eventEnd
-      const inTimeRange = eventStart <= endTime &&  eventEnd >= startTime;
+      const inTimeRange = eventStart <= end &&  eventEnd >= start;
       // se soddisfa le due condizioni OK altrimenti rimuove il marker
       if (categoryVisible && inTimeRange) {marker.marker.addTo(map);} 
       else { map.removeLayer(marker.marker); }});
