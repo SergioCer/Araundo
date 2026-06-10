@@ -1327,31 +1327,34 @@ function getMidnightPosition(totalHours) {
     //-- Offset
     const startOffset = Math.round(values[0]);
     const endOffset = Math.round(values[1]);
-    
-    const { start: baseTime } = getTimelineRange();
+
+     // baseTime coerente con la modalità timeline
+    const baseTime = getAppTime(timelineMode === 'live' ? 'live' : 'startOfDay');
+    // const { start: baseTime } = getTimelineRange(); // VECCHIA VERSIONE CANCELLARE
     const startDate = new Date(baseTime.getTime() + startOffset * 3600000);
     const endDate = new Date(baseTime.getTime() + endOffset * 3600000);
     //-- Estrae le ore
     
-    const startHour = startDate.getHours().toString().padStart(2,'0');
-    const endHour = endDate.getHours().toString().padStart(2,'0');
+    // const startHour = startDate.getHours().toString().padStart(2,'0');
+    // const endHour = endDate.getHours().toString().padStart(2,'0');
     //-- Crea le etichette delle maniglie
+    const formatTime = (date) =>
+    date.getHours().toString().padStart(2,'0') +
+    ':' +
+    date.getMinutes().toString().padStart(2,'0');
+    const startLabel = formatTime(startDate);
+    const endLabel   = formatTime(endDate);
     const handles = slider.querySelectorAll('.noUi-handle');
     handles.forEach((h, i) => {
       let label =
         h.querySelector('.handle-label');
       if (!label) {
-        label =
-          document.createElement('div');
-        label.className =
-          'handle-label';
+        label = document.createElement('div');
+        label.className = 'handle-label';
         h.appendChild(label);
       }
       //-- Inserisce ora di inizio e di fine
-      label.innerText =
-        i === 0
-          ? startHour
-          : endHour;
+      label.innerText = i === 0 ? startHour : endHour;
     });
     //-- Aggiorna i marker della mappa in base ad orari inizio-fine
     updateMarkerVisibility(startDate,endDate);
