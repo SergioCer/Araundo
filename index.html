@@ -1028,6 +1028,7 @@ function renderEvents() {
     })
     updateMarkerState(marker, stateClass, { lat: e.ev_lat, lng: e.ev_lng }); // Fuochi d'artificio
     
+    let popupOpen = false; // Imposta stato Falso su apertura popup
     //-- Visualizza i dettagli dell'evento selezionato con Popup //
         const startDate = new Date(e.ev_inizio);
         const now = new Date();
@@ -1075,8 +1076,29 @@ marker.bindPopup(`
       </div>
       </div>
     `);      
-  marker.on('mouseover', function () {this.openPopup();});
-  marker.on('mouseout', function () {this.closePopup();});
+  // marker.on('mouseover', function () {this.openPopup();});
+  // marker.on('mouseout', function () {this.closePopup();});
+    marker.on('click', function () { 
+      if (!popupOpen) { this.openPopup();
+    popupOpen = true;
+  } else {
+    L.popup()
+      .setLatLng(this.getLatLng())
+      .setContent(`
+        <div style="min-width:220px;font-size:12px;">
+          <b>Dettagli avanzati</b><br><br>
+          ID evento: ${e.id || 'n/d'}<br>
+          Categoria: ${e.ev_categoria}<br>
+          Stato: ${stateClass}<br>
+          Intensità: ${intensity}<br>
+          <hr>
+          ${e.ev_descrizione || ''}
+        </div>
+      `)
+      .openOn(map);
+  }
+});
+    
     //-- 📦 STORAGE DATI (NO LOGICA)
     markers.push({
       marker,
