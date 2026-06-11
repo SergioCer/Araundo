@@ -1098,6 +1098,8 @@ marker.bindPopup(`
       .openOn(map);
   }
 });
+
+    marker.on('popupclose', function () {popupOpen = false;});
     
     //-- 📦 STORAGE DATI (NO LOGICA)
     markers.push({
