@@ -302,9 +302,10 @@
     .pulse.countdown::after { animation: pulse 0.3s infinite ease-out; opacity: 0.8; }
     .pulse.started { animation: hopLive 2s infinite; }    
     .pulse.started::after { animation: pulseLive 0.3s infinite; }
-    .pulse.running::before { background: var(--c); opacity: 0.25; border: 1px solid white; /* facoltativo, per contrasto */ } /* questo è nuovo */ 
+.pulse.running::before { background: var(--c); opacity: 0.25; border: 1px solid white; /* facoltativo, per contrasto NUOVO */}
     .pulse.running { animation: none; }
-    .pulse.running::after { animation: pulse 2.5s infinite ease-out; opacity: 0.2; }
+.pulse.running::after { content: ""; position: absolute; inset: 35%; /* piccolo cerchio centrale */ border-radius: 50%; background: var(--c); opacity: 0.6; /* più visibile */ animation: pulse 2.5s infinite ease-out;}    
+    /* .pulse.running::after { animation: pulse 2.5s infinite ease-out; opacity: 0.2; } */
     .pulse.finished { animation: finished 0.5s ease forwards; }    
     .pulse.finished::after { display: none; animation: none ; opacity: 0 ; }
     
