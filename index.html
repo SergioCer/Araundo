@@ -588,6 +588,30 @@
   }
 }
 
+    // ICONE SVG prelevate da Supabase con tutti i parametri HTML
+    .mc-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;    /* dimensione icona */
+      height: 20px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .mc-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor; /* eredità colore dal testo */
+    }
+
+    .category-label svg {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 6px; /* distanza tra icona e testo */
+    }    
+
 /* MOBILE */
 @media (max-width: 380px) {
   
@@ -692,23 +716,6 @@
   }
 }
 
-    // ICONE SVG prelevate da Supabase con tutti i parametri HTML
-    .mc-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 20px;    /* dimensione icona */
-      height: 20px;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
-
-    .mc-icon svg {
-      width: 100%;
-      height: 100%;
-      fill: currentColor; /* eredità colore dal testo */
-    }
-    
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">  
 </head>
@@ -1139,10 +1146,10 @@ function buildCategoryMenu() {
     cb.checked = true;
     cb.className = 'category-checkbox';
     const label = document.createElement('label');
-    label.innerHTML = `${cat.mc_icona} ${cat.mc_descrizione}`;
     label.htmlFor = `cat-${cat.id_macro_categoria}`;
     label.className = 'category-label';
-    label.textContent = cat.mc_descrizione;
+    label.innerHTML = `${cat.mc_icona} ${cat.mc_descrizione}`; // icona + testo
+    // label.textContent = cat.mc_descrizione; // questa è solo descrizione 
     // Applichiamo il colore dell’evento
     label.style.backgroundColor = cat.mc_colore;
     label.style.color = getContrastColor(cat.mc_colore);
