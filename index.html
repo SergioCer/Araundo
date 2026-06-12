@@ -1092,10 +1092,10 @@ marker.bindPopup(`
       .setContent(`
         <div style="min-width:220px;font-size:12px;">
           <b>Dettagli</b><br><br>
-          Latitudine: ${ev.lat || 'n/d'}<br>
-          Longitudine: ${ev_lng}<br>
-          Luogo: ${ev_luogo}<br>
-          Costo: ${ev_costo || '0'}<br>
+          Latitudine: ${e.ev.lat || 'n/d'}<br>
+          Longitudine: ${e.ev_lng}<br>
+          Luogo: ${e.ev_luogo}<br>
+          Costo: ${e.ev_costo || '0'}<br>
           <img src="${e.ev_copertina}" style="
           width:100%;
           max-width:180px;
