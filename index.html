@@ -139,9 +139,31 @@
 }
 
     /* Pallino torna alla data di oggi */
-    .reset-btn { font-size: 32px; font-weight: bold; color: #3b82f6; background: transparent; border: none; padding: 2px 2px; cursor: pointer; transition: transform 0.15s ease; display: inline-block; position: rlative;}
-    .reset-btn:hover { transform: translate(-50%, -50px) scale(1.08); }    
-        
+    /* .reset-btn { font-size: 32px; font-weight: bold; color: #3b82f6; background: transparent; border: none; padding: 2px 2px; cursor: pointer; transition: transform 0.15s ease; display: inline-block; position: rlative;}
+    /* .reset-btn:hover { transform: translate(-50%, -50px) scale(1.08); }    */
+.reset-btn {
+  border: none;
+  background: transparent;
+  font-size: 32px;
+  cursor: pointer;
+  color: #3b82f6;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.reset-btn:hover {
+  background: rgba(59, 130, 246, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.reset-btn:active {
+  transform: translateY(0px) scale(0.96);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
     /* --- MENU & FILTRI --- */
     /* -- Menù a discesa */
     .menu-header {
