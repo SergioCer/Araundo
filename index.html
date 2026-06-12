@@ -1082,9 +1082,8 @@ marker.bindPopup(`
   //  marker.on('popupclose', function () {popupOpen = false;}); // Reset 
   //  marker.on('click', function () { this.openPopup();
   // Associa il click al btn 'More...'
-  const localE = e;
   marker.on('popupopen', function() {
-  const btn = document.getElementById(`details-${localE.id}`);
+  const btn = document.getElementById(`details-${e.id}`);
   const m = this; // <-- salva il marker in una variabile locale
   if (btn) {
     btn.onclick = function() {
@@ -1093,13 +1092,13 @@ marker.bindPopup(`
       .setContent(`
         <div style="min-width:220px;font-size:12px;">
           <b>Dettagli</b><br><br>
-          Latitudine: ${localE.ev.lat}<br>
-          Longitudine: ${localE.ev_lng}<br>
-          Luogo: ${localE.ev_luogo}<br>
-          /* Costo: ${localE.ev_costo}<br> */
-          /* <img src="${localE.ev_copertina}" style=" width:100%; max-width:180px; height:auto; border-radius:6px; margin-bottom:8px; "> */
+          Latitudine: ${e.ev_lat}<br>
+          Longitudine: ${e.ev_lng}<br>
+          Luogo: ${e.ev_luogo}<br>
+          /* Costo: ${e.ev_costo}<br> */
+          /* <img src="${e.ev_copertina}" style=" width:100%; max-width:180px; height:auto; border-radius:6px; margin-bottom:8px; "> */
           <hr>
-          ${localE.ev_descrizione || ''}
+          ${e.ev_descrizione || ''}
         </div>
       `)
       .openOn(map);
