@@ -1088,10 +1088,11 @@ marker.bindPopup(`
     }); 
   marker.on('popupopen', function() {
   const btn = document.getElementById(`details-${e.id}`);
+  const m = this; // <-- salva il marker in una variabile locale
   if (btn) {
     btn.onclick = function() {
     L.popup()
-      .setLatLng(this.getLatLng())
+      .setLatLng(m.getLatLng()) // usa la variabile locale del marker
       .setContent(`
         <div style="min-width:220px;font-size:12px;">
           <b>Dettagli avanzati</b><br><br>
