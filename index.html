@@ -805,7 +805,7 @@
   'running-strong': 26
   };
   const map = L.map('map', {
-    zoomControl: true,
+    zoomControl: false, // Visualizza o nasconde i controlli dello ZOOM integrati
     minZoom: 3, // evita zoom troppo lontano, 0 = mappa mondiale, 9 = area di circa una regione.
     maxZoom: 19 // evita zoom troppo vicino, il massimo zoom è 18 - 19
     }).setView([defaultLat, defaultLng], defaultZoom);
@@ -1107,9 +1107,11 @@ marker.bindPopup(`
         <a href="${e.ev_link_acquisto || '#'}" target="_blank"
            style="background:#28a745; color:white; padding:4px 8px; border-radius:4px; font-size:11px; text-decoration:none; font-weight:600;"> Acquista </a>
         </div><hr>
-      <img src="${e.ev_copertina}" style=" width:100%; max-width:180px; height:auto; border-radius:6px; margin-bottom:8px; ">
-          <hr>
-          ${e.ev_descrizione || ''}
+        <div style="text-align:center;">
+        <img src="${e.ev_copertina}" style=" width:100%; max-width:180px; height:auto; border-radius:6px; margin-bottom:8px; ">
+        </div>
+        <hr>
+        ${e.ev_descrizione || ''}
         </div>
       `)
       .openOn(map);
