@@ -1081,7 +1081,6 @@ marker.bindPopup(`
   // marker.on('mouseover', function () {this.openPopup();});
   // marker.on('mouseout', function () {this.closePopup();});
     marker.on('popupclose', function () {popupOpen = false;}); // Reset 
-    <button onclick="openAdvancedDetails(id)">Dettagli</button>
     marker.on('click', function () { 
       if (!popupOpen) { this.openPopup();
     popupOpen = true;
