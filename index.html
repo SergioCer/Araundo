@@ -1154,7 +1154,7 @@ marker.bindPopup(`
         style="background:#007bff; color:white; padding:4px 8px; border-radius:4px; font-size:11px; text-decoration:none; font-weight:600;"> Map </a>
       </div>
     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-         ${e.ev_costo > 0 ? `
+         ${Number(e.ev_costo) > 0 ? `
         <div style="font-weight:bold;">
           Ingresso €: ${e.ev_costo || '0'}
         </div>
