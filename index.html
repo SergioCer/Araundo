@@ -1091,16 +1091,21 @@ marker.bindPopup(`
       .setLatLng(m.getLatLng()) // usa la variabile locale del marker
       .setContent(`
         <div style="min-width:220px;font-size:12px;">
-          <b>Dettagli</b><br><hr>
-          Latitudine: ${e.ev_lat}<br>
-          Longitudine: ${e.ev_lng}<br>
-          Luogo: ${e.ev_luogo}<br>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+        <b>Dettagli</b><br><hr>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+        <div>
+        Luogo: ${e.ev_luogo || ''}
+        </div>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${e.ev_lat},${e.ev_lng}"
+        target="_blank"
+        style="background:#007bff; color:white; padding:4px 8px; border-radius:4px; font-size:11px; text-decoration:none; font-weight:600;"> Naviga </a>
+      </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
         <div>
           Ingresso €: ${e.ev_costo || '0'}
         </div>
         <a href="${e.ev_link_acquisto || '#'}" target="_blank"
-           style="background:#28a745; color:white; padding:4px 8px; border-radius:4px; font-size:11px; text-decoration:none; font-weight:600;"> Acquista </a>
+           style="background:#28a745; color:white; padding:4px 8px; border-radius:4px; font-size:11px; text-decoration:none; font-weight:600;"> Acquista </a><hr>
         </div>
       <img src="${e.ev_copertina}" style=" width:100%; max-width:180px; height:auto; border-radius:6px; margin-bottom:8px; ">
           <hr>
