@@ -760,7 +760,8 @@
 <div class="map-overlay" id="mapOverlay">
   <div class="title">Aroundo</div>
   <div class="subtitle">Discover what’s around you</div>
-  <div class="date-day">Login</div>
+  <div class="date-day" id="loginBtn" style="cursor:pointer; color:#3b82f6; text-decoration:underline;">
+    Login</div>
 </div>
   
 <div id="overlayToggle">🔓</div>
@@ -859,7 +860,16 @@
   // 🌿 Base Mappa NEUTRA BUONA
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{ attribution: '&copy; OpenStreetMap & CARTO', subdomains: 'abcd', maxZoom: 19 }).addTo(map);
 
-   const canvas = document.getElementById('fx-canvas');
+    // Seleziona il div "Login"
+    const loginBtn = document.getElementById('loginBtn');
+    // Aggiungi un click listener
+    loginBtn.addEventListener('click', function() {
+      alert('In costruzione!');
+    // In futuro, per andare a una pagina:
+    // window.location.href = 'pagina-login.html';
+  });
+
+  const canvas = document.getElementById('fx-canvas');
    const ctx = canvas.getContext('2d');
    function resizeCanvas() {
      const rect = map.getContainer().getBoundingClientRect();
