@@ -12,26 +12,16 @@
     <aside class="sidebar">
       <h2>Admin Panel</h2>
 
-    // Seleziona il div "Login"
-    const loginBtn = document.getElementById('loginBtn');
-    // Aggiungi un click listener
-    loginBtn.addEventListener('click', function() {
-    //alert('In Progress!');
-    // Per andare a una pagina:
-    window.location.href = 'tabelle.html';
-  });
-
-      
       <nav>
-        <a href="pages/comuni.html">Comuni</a>
-        <a href="pages/eventi.html">Eventi</a>
+        <a href="pages/comuni.html" class="in-progress">Comuni</a>
+        <a href="pages/eventi.html" class="in-progress">Eventi</a>
         <a href="pages/luoghi.html">Luoghi</a>
-        <a href="pages/macrocategorie.html">Macrocategorie</a>
-        <a href="pages/subcategorie.html">Subcategorie</a>
-        <a href="pages/organizzatori.html">Organizzatori</a>
-        <a href="pages/titolari.html">Titolari</a>
-        <a href="pages/risorse.html">Risorse</a>
-        <a href="pages/ruoli.html">Ruoli</a>
+        <a href="pages/macrocategorie.html" class="in-progress">Macrocategorie</a>
+        <a href="pages/subcategorie.html"> class="in-progress"Subcategorie</a>
+        <a href="pages/organizzatori.html" class="in-progress">Organizzatori</a>
+        <a href="pages/titolari.html" class="in-progress">Titolari</a>
+        <a href="pages/risorse.html" class="in-progress">Risorse</a>
+        <a href="pages/ruoli.html" class="in-progress">Ruoli</a>
       </nav>
 
     </aside>
@@ -48,5 +38,12 @@
 
 <script type="module">
   import { supabase } from './supabase.js';
+
+  document.querySelectorAll('.in-progress').forEach(link => {
+  link.addEventListener('click', function(event) {
+    event.preventDefault();
+    alert('In Progress!');
+  });
+});
 </script>
 
