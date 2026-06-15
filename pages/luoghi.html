@@ -1,69 +1,127 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Luoghi - Admin</title>
-  <link rel="stylesheet" href="../css/styletabelle.css">
+<meta charset="UTF-8">
+<title>Luoghi Admin</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f4f6f8;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+  background: #eef6ff;
+  cursor: pointer;
+}
+
+#modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#modalContent {
+  background: white;
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+}
+
+input, select, textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 6px;
+}
+</style>
+
 </head>
+
 <body>
 
-<h1>Gestione Luoghi</h1>
+<h2>Luoghi</h2>
 
-<button onclick="showForm()">+ Nuovo Luogo</button>
-
-<table border="1" width="100%">
+<table>
   <thead>
     <tr>
       <th>ID</th>
       <th>Comune</th>
       <th>Location</th>
-      <th>Latitudine</th>
-      <th>Longitudine</th>
-      <th>Azioni</th>
+      <th>Lat</th>
+      <th>Lng</th>
+      <th>Capacità</th>
     </tr>
   </thead>
   <tbody id="tbody"></tbody>
 </table>
 
-<!-- FORM -->
-<div id="formBox" style="display:none; margin-top:20px;">
-  <h3>Luogo</h3>
+<!-- MODAL -->
+<div id="modal">
+  <div id="modalContent">
 
-  <input type="hidden" id="id_luogo">
+    <input type="hidden" id="id_luogo">
 
-  <select id="lu_comune"></select><br><br>
-  <input id="lu_location" placeholder="Location"></textarea><br><br>
-  <input id="lu_lat" placeholder="Lat"><br><br>
-  <input id="lu_lng" placeholder="Lng"><br><br>
-  <textarea id="lu_descrizione" placeholder="Descrizione"></textarea><br><br>
-  <textarea id="lu_note" placeholder="Note"></textarea><br><br>
+    <label>Comune</label>
+    <select id="lu_comune"></select>
 
-  <input id="lu_capacita_massima" placeholder="Capacità"><br><br>
+    <label>Location</label>
+    <input id="lu_location">
 
-  <button onclick="save()">Salva</button>
+    <label>Lat</label>
+    <input id="lu_lat">
+
+    <label>Lng</label>
+    <input id="lu_lng">
+
+    <label>Descrizione</label>
+    <textarea id="lu_descrizione"></textarea>
+
+    <label>Note</label>
+    <textarea id="lu_note"></textarea>
+
+    <label>Capacità</label>
+    <input id="lu_capacita_massima">
+
+    <button onclick="save()">Salva</button>
+    <button onclick="closeModal()">Chiudi</button>
+
+  </div>
 </div>
 
 <script type="module">
 import { supabase } from '../supabase.js';
 
-let comuniMap = [];
+let comuni = [];
+let luoghi = [];
 
 async function loadComuni() {
   const { data } = await supabase
     .from('comuni')
-    .select('id_comune, co_descrizione')
-    .order('co_descrizione');
+    .select('id_comune, co_descrizione');
 
-  comuniMap = data;
+  comuni = data;
 
   const sel = document.getElementById("lu_comune");
-  sel.innerHTML = `<option value="">-- seleziona --</option>`;
+  sel.innerHTML = `<option value="">--</option>`;
 
-  data.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c.id_comune;
-    opt.textContent = c.co_descrizione;
-    sel.appendChild(opt);
+  comuni.forEach(c => {
+    sel.innerHTML += `<option value="${c.id_comune}">${c.co_descrizione}</option>`;
   });
 }
 
@@ -73,36 +131,34 @@ async function load() {
     .select('*')
     .order('id_luogo', { ascending: false });
 
+  luoghi = data;
+
   const tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
 
-  data.forEach(row => {
+  data.forEach(r => {
 
-    const comune = comuniMap.find(c => c.id_comune === row.lu_comune);
+    const c = comuni.find(x => x.id_comune === r.lu_comune);
 
     const tr = document.createElement("tr");
 
+    tr.onclick = () => openModal(r);
+
     tr.innerHTML = `
-      <td>${row.id_luogo}</td>
-      <td>${comune ? comune.co_descrizione : ''}</td>
-      <td>${row.lu_location ?? ''}</td>
-      <td>${row.lu_lat}</td>
-      <td>${row.lu_lng}</td>
-      <td>
-        <button onclick='edit(${JSON.stringify(row)})'>Modifica</button>
-      </td>
+      <td>${r.id_luogo}</td>
+      <td>${c ? c.co_descrizione : ''}</td>
+      <td>${r.lu_location ?? ''}</td>
+      <td>${r.lu_lat}</td>
+      <td>${r.lu_lng}</td>
+      <td>${r.lu_capacita_massima ?? ''}</td>
     `;
 
     tbody.appendChild(tr);
   });
 }
 
-window.showForm = function() {
-  document.getElementById("formBox").style.display = "block";
-}
-
-window.edit = function(row) {
-  showForm();
+window.openModal = function(row) {
+  document.getElementById("modal").style.display = "flex";
 
   document.getElementById("id_luogo").value = row.id_luogo;
   document.getElementById("lu_comune").value = row.lu_comune || "";
@@ -112,6 +168,10 @@ window.edit = function(row) {
   document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
   document.getElementById("lu_note").value = row.lu_note || "";
   document.getElementById("lu_capacita_massima").value = row.lu_capacita_massima || "";
+}
+
+window.closeModal = function() {
+  document.getElementById("modal").style.display = "none";
 }
 
 window.save = async function() {
@@ -128,19 +188,15 @@ window.save = async function() {
     lu_capacita_massima: parseInt(document.getElementById("lu_capacita_massima").value)
   };
 
-  if (id) {
-    await supabase.from('luoghi')
-      .update(payload)
-      .eq('id_luogo', id);
-  } else {
-    await supabase.from('luoghi')
-      .insert(payload);
-  }
+  await supabase
+    .from('luoghi')
+    .update(payload)
+    .eq('id_luogo', id);
 
-  location.reload();
+  closeModal();
+  load();
 }
 
-// init
 await loadComuni();
 await load();
 
