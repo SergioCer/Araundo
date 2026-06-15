@@ -7,7 +7,28 @@
 <style>
 body {
   font-family: Arial;
-  background: #f4f6f8;
+  background: #f6f8fb;
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.title {
+  font-size: 20px;
+}
+
+.add-btn {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 table {
@@ -18,12 +39,25 @@ table {
 
 th, td {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
 }
 
 tr:hover {
   background: #eef6ff;
   cursor: pointer;
+}
+
+.filter {
+  width: 100%;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.sort {
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 5px;
 }
 
 #modal {
@@ -40,8 +74,17 @@ tr:hover {
 #modalContent {
   background: white;
   padding: 20px;
-  width: 400px;
+  width: 420px;
   border-radius: 10px;
+  position: relative;
+}
+
+.closeX {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 input, select, textarea {
@@ -55,19 +98,51 @@ input, select, textarea {
 
 <body>
 
-<h2>Luoghi</h2>
+<!-- HEADER -->
+<div class="header">
+  <div class="title">
+    Luoghi
+    <button class="add-btn" onclick="openModal()">+ Nuovo</button>
+  </div>
+</div>
 
 <table>
   <thead>
     <tr>
       <th>ID</th>
-      <th>Comune</th>
-      <th>Location</th>
-      <th>Lat</th>
-      <th>Lng</th>
-      <th>Capacità</th>
+
+      <th>
+        Comune
+        <input class="filter" oninput="setFilter('comune', this.value)">
+        <span class="sort" onclick="sort('comune')">⇅</span>
+      </th>
+
+      <th>
+        Location
+        <input class="filter" oninput="setFilter('location', this.value)">
+        <span class="sort" onclick="sort('location')">⇅</span>
+      </th>
+
+      <th>
+        Lat
+        <input class="filter" oninput="setFilter('lat', this.value)">
+        <span class="sort" onclick="sort('lat')">⇅</span>
+      </th>
+
+      <th>
+        Lng
+        <input class="filter" oninput="setFilter('lng', this.value)">
+        <span class="sort" onclick="sort('lng')">⇅</span>
+      </th>
+
+      <th>
+        Capacità
+        <span class="sort" onclick="sort('cap')">⇅</span>
+      </th>
+
     </tr>
   </thead>
+
   <tbody id="tbody"></tbody>
 </table>
 
@@ -75,31 +150,30 @@ input, select, textarea {
 <div id="modal">
   <div id="modalContent">
 
+    <div class="closeX" onclick="closeModal()">✕</div>
+
     <input type="hidden" id="id_luogo">
 
     <label>Comune</label>
     <select id="lu_comune"></select>
 
     <label>Location</label>
-    <input id="lu_location">
+    <input id="lu_location" oninput="markDirty()">
 
     <label>Lat</label>
-    <input id="lu_lat">
+    <input id="lu_lat" oninput="markDirty()">
 
     <label>Lng</label>
-    <input id="lu_lng">
+    <input id="lu_lng" oninput="markDirty()">
 
     <label>Descrizione</label>
-    <textarea id="lu_descrizione"></textarea>
+    <textarea id="lu_descrizione" oninput="markDirty()"></textarea>
 
     <label>Note</label>
-    <textarea id="lu_note"></textarea>
+    <textarea id="lu_note" oninput="markDirty()"></textarea>
 
     <label>Capacità</label>
-    <input id="lu_capacita_massima">
-
-    <button onclick="save()">Salva</button>
-    <button onclick="closeModal()">Chiudi</button>
+    <input id="lu_capacita_massima" oninput="markDirty()">
 
   </div>
 </div>
@@ -107,15 +181,21 @@ input, select, textarea {
 <script type="module">
 import { supabase } from '../supabase.js';
 
+let data = [];
 let comuni = [];
-let luoghi = [];
 
+let state = {
+  sortField: null,
+  sortDir: 'asc',
+  filters: {},
+  dirty: false,
+  editing: null
+};
+
+// -------------------- COMUNI --------------------
 async function loadComuni() {
-  const { data } = await supabase
-    .from('comuni')
-    .select('id_comune, co_descrizione');
-
-  comuni = data;
+  const res = await supabase.from('comuni').select('*');
+  comuni = res.data;
 
   const sel = document.getElementById("lu_comune");
   sel.innerHTML = `<option value="">--</option>`;
@@ -125,18 +205,71 @@ async function loadComuni() {
   });
 }
 
+// -------------------- LOAD --------------------
 async function load() {
-  const { data } = await supabase
-    .from('luoghi')
-    .select('*')
-    .order('id_luogo', { ascending: false });
+  const res = await supabase.from('luoghi').select('*');
+  data = res.data;
 
-  luoghi = data;
+  render();
+}
 
+// -------------------- RENDER --------------------
+function render() {
+
+  let filtered = [...data];
+
+  // FILTERS
+  Object.keys(state.filters).forEach(k => {
+    const v = state.filters[k];
+
+    if (!v) return;
+
+    filtered = filtered.filter(r => {
+
+      if (k === 'location')
+        return (r.lu_location || '').toLowerCase().includes(v);
+
+      if (k === 'comune') {
+        const c = comuni.find(x => x.id_comune === r.lu_comune);
+        return (c?.co_descrizione || '').toLowerCase().startsWith(v);
+      }
+
+      if (k === 'lat')
+        return (r.lu_lat || '').toString().startsWith(v);
+
+      if (k === 'lng')
+        return (r.lu_lng || '').toString().startsWith(v);
+
+      return true;
+    });
+  });
+
+  // SORT
+  if (state.sortField) {
+    filtered.sort((a,b) => {
+
+      let va, vb;
+
+      switch(state.sortField) {
+        case 'location': va = a.lu_location; vb = b.lu_location; break;
+        case 'lat': va = a.lu_lat; vb = b.lu_lat; break;
+        case 'lng': va = a.lu_lng; vb = b.lu_lng; break;
+        case 'cap': va = a.lu_capacita_massima; vb = b.lu_capacita_massima; break;
+        default: return 0;
+      }
+
+      if (state.sortDir === 'asc')
+        return (va > vb ? 1 : -1);
+      else
+        return (va < vb ? 1 : -1);
+    });
+  }
+
+  // TABLE
   const tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
 
-  data.forEach(r => {
+  filtered.forEach(r => {
 
     const c = comuni.find(x => x.id_comune === r.lu_comune);
 
@@ -147,34 +280,73 @@ async function load() {
     tr.innerHTML = `
       <td>${r.id_luogo}</td>
       <td>${c ? c.co_descrizione : ''}</td>
-      <td>${r.lu_location ?? ''}</td>
+      <td>${r.lu_location || ''}</td>
       <td>${r.lu_lat}</td>
       <td>${r.lu_lng}</td>
-      <td>${r.lu_capacita_massima ?? ''}</td>
+      <td>${r.lu_capacita_massima || ''}</td>
     `;
 
     tbody.appendChild(tr);
   });
 }
 
-window.openModal = function(row) {
+// -------------------- FILTER --------------------
+window.setFilter = (k,v) => {
+  state.filters[k] = v.toLowerCase();
+  render();
+};
+
+// -------------------- SORT --------------------
+window.sort = (field) => {
+
+  if (state.sortField !== field) {
+    state.sortField = field;
+    state.sortDir = 'asc';
+  } else {
+    state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+  }
+
+  render();
+};
+
+// -------------------- MODAL --------------------
+window.openModal = (row=null) => {
+
+  state.dirty = false;
+  state.editing = row;
+
   document.getElementById("modal").style.display = "flex";
 
-  document.getElementById("id_luogo").value = row.id_luogo;
-  document.getElementById("lu_comune").value = row.lu_comune || "";
-  document.getElementById("lu_location").value = row.lu_location || "";
-  document.getElementById("lu_lat").value = row.lu_lat || "";
-  document.getElementById("lu_lng").value = row.lu_lng || "";
-  document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
-  document.getElementById("lu_note").value = row.lu_note || "";
-  document.getElementById("lu_capacita_massima").value = row.lu_capacita_massima || "";
-}
+  if (row) {
+    document.getElementById("id_luogo").value = row.id_luogo;
+    document.getElementById("lu_comune").value = row.lu_comune || "";
+    document.getElementById("lu_location").value = row.lu_location || "";
+    document.getElementById("lu_lat").value = row.lu_lat || "";
+    document.getElementById("lu_lng").value = row.lu_lng || "";
+    document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
+    document.getElementById("lu_note").value = row.lu_note || "";
+    document.getElementById("lu_capacita_massima").value = row.lu_capacita_massima || "";
+  } else {
+    document.getElementById("id_luogo").value = "";
+  }
+};
 
-window.closeModal = function() {
+window.closeModal = () => {
+  if (state.dirty) {
+    if (!confirm("Salvare le modifiche?")) {
+      state.dirty = false;
+    } else {
+      save();
+      return;
+    }
+  }
   document.getElementById("modal").style.display = "none";
-}
+};
 
-window.save = async function() {
+window.markDirty = () => state.dirty = true;
+
+// -------------------- SAVE --------------------
+window.save = async () => {
 
   const id = document.getElementById("id_luogo").value;
 
@@ -188,15 +360,25 @@ window.save = async function() {
     lu_capacita_massima: parseInt(document.getElementById("lu_capacita_massima").value)
   };
 
-  await supabase
-    .from('luoghi')
-    .update(payload)
-    .eq('id_luogo', id);
+  if (id) {
+    await supabase.from('luoghi')
+      .update(payload)
+      .eq('id_luogo', id);
+  } else {
+    await supabase.from('luoghi')
+      .insert(payload);
+  }
 
   closeModal();
   load();
-}
+};
 
+// ESC CLOSE
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeModal();
+});
+
+// INIT
 await loadComuni();
 await load();
 
