@@ -147,7 +147,12 @@ input, select, textarea {
   <thead>
 
     <tr>
-      <th>ID</th>
+      <th>
+        <div class="col-header">
+          <div class="col-title">ID</div>
+          <div class="col-tools"></div>
+        </div>
+      </th>
 
       <th>
         <div class="col-header">
@@ -189,6 +194,16 @@ input, select, textarea {
         </div>
       </th>
 
+      <th>
+        <div class="col-header">
+          <div class="col-title">Note</div>
+          <div class="col-tools">
+            <input class="filter" oninput="setFilter('note', this.value)">
+            <button class="sort-btn">-</button>
+          </div>
+        </div>
+      </th>
+      
       <th>
         <div class="col-header">
           <div class="col-title">Capacità</div>
@@ -296,8 +311,11 @@ function render() {
       if (k === 'lng')
         return (r.lu_lng || '').toString().startsWith(v);
 
-      if (k === 'cap')
-        return (r.lu_capacita_massima || '').toString().startsWith(v);
+      if (k === 'note')
+        return (r.lu_note || '').toLowerCase().includes(v);
+      
+      // if (k === 'cap')
+        // return (r.lu_capacita_massima || '').toString().startsWith(v);
 
       return true;
     });
