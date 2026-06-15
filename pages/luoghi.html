@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Luoghi</title>
+<title>Luoghi Admin</title>
 
 <style>
 body {
@@ -14,20 +14,19 @@ body {
 /* HEADER */
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 14px;
+  align-items: center;
+  padding: 12px;
 }
 
 .title {
   font-size: 20px;
   font-weight: bold;
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
 }
 
-/* BIG + BUTTON */
 .add-btn {
   width: 34px;
   height: 34px;
@@ -48,45 +47,63 @@ table {
 }
 
 th, td {
-  padding: 10px;
+  padding: 8px;
   border-bottom: 1px solid #e5e7eb;
   text-align: left;
-  vertical-align: middle;
 }
 
+/* FILTER + SORT ROW */
+.col-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.col-title {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* input + sort inline */
+.col-tools {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.filter {
+  flex: 1;
+  font-size: 12px;
+  padding: 4px;
+}
+
+/* SORT BUTTON */
+.sort-btn {
+  width: 26px;
+  height: 22px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.sort-btn:hover {
+  background: #bfdbfe;
+}
+
+/* TABLE ROW */
 tr:hover {
   background: #eef6ff;
   cursor: pointer;
 }
 
-/* FILTER ROW */
-.filter {
-  width: 100%;
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-/* SORT BUTTON */
-.sort-btn {
-  float: right;
-  font-size: 14px;
-  cursor: pointer;
-  opacity: 0.6;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.sort-btn:hover {
-  background: #e5e7eb;
-  opacity: 1;
-}
-
 /* MODAL */
 #modal {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0,0,0,0.4);
   display: none;
   align-items: center;
@@ -95,8 +112,8 @@ tr:hover {
 
 #modalContent {
   background: white;
-  padding: 18px;
   width: 420px;
+  padding: 18px;
   border-radius: 10px;
   position: relative;
 }
@@ -114,22 +131,11 @@ input, select, textarea {
   margin-bottom: 10px;
   padding: 6px;
 }
-
-/* colonne strette */
-.col-lat, .col-lng {
-  width: 90px;
-}
-
-.col-note {
-  width: 140px;
-}
 </style>
-
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="title">
     Luoghi
@@ -139,42 +145,58 @@ input, select, textarea {
 
 <table>
   <thead>
+
     <tr>
       <th>ID</th>
 
       <th>
-        Comune
-        <input class="filter" oninput="setFilter('comune', this.value)">
-        <span class="sort-btn" onclick="sort('comune')">-</span>
+        <div class="col-header">
+          <div class="col-title">Comune</div>
+          <div class="col-tools">
+            <input class="filter" oninput="setFilter('comune', this.value)">
+            <button class="sort-btn" onclick="sort('comune')">-</button>
+          </div>
+        </div>
       </th>
 
       <th>
-        Location
-        <input class="filter" oninput="setFilter('location', this.value)">
-        <span class="sort-btn" onclick="sort('location')">-</span>
-      </th>
-
-      <th class="col-lat">
-        Lat
-        <input class="filter" oninput="setFilter('lat', this.value)">
-        <span class="sort-btn" onclick="sort('lat')">-</span>
-      </th>
-
-      <th class="col-lng">
-        Lng
-        <input class="filter" oninput="setFilter('lng', this.value)">
-        <span class="sort-btn" onclick="sort('lng')">-</span>
+        <div class="col-header">
+          <div class="col-title">Location</div>
+          <div class="col-tools">
+            <input class="filter" oninput="setFilter('location', this.value)">
+            <button class="sort-btn" onclick="sort('location')">-</button>
+          </div>
+        </div>
       </th>
 
       <th>
-        Note
-        <input class="filter" oninput="setFilter('note', this.value)">
-        <span class="sort-btn">-</span>
+        <div class="col-header">
+          <div class="col-title">Lat</div>
+          <div class="col-tools">
+            <input class="filter" oninput="setFilter('lat', this.value)">
+            <button class="sort-btn" onclick="sort('lat')">-</button>
+          </div>
+        </div>
       </th>
 
       <th>
-        Capacità
-        <span class="sort-btn" onclick="sort('cap')">-</span>
+        <div class="col-header">
+          <div class="col-title">Lng</div>
+          <div class="col-tools">
+            <input class="filter" oninput="setFilter('lng', this.value)">
+            <button class="sort-btn" onclick="sort('lng')">-</button>
+          </div>
+        </div>
+      </th>
+
+      <th>
+        <div class="col-header">
+          <div class="col-title">Capacità</div>
+          <div class="col-tools">
+            <input class="filter" oninput="setFilter('cap', this.value)">
+            <button class="sort-btn" onclick="sort('cap')">-</button>
+          </div>
+        </div>
       </th>
 
     </tr>
@@ -187,7 +209,7 @@ input, select, textarea {
 <div id="modal">
   <div id="modalContent">
 
-    <div class="closeX" onclick="closeModal()">✕</div>
+    <div class="closeX" onclick="closeModal(true)">✕</div>
 
     <input type="hidden" id="id_luogo">
 
@@ -195,22 +217,22 @@ input, select, textarea {
     <select id="lu_comune"></select>
 
     <label>Location</label>
-    <input id="lu_location">
+    <input id="lu_location" oninput="markDirty()">
 
     <label>Lat</label>
-    <input id="lu_lat">
+    <input id="lu_lat" oninput="markDirty()">
 
     <label>Lng</label>
-    <input id="lu_lng">
+    <input id="lu_lng" oninput="markDirty()">
 
     <label>Descrizione</label>
-    <textarea id="lu_descrizione"></textarea>
+    <textarea id="lu_descrizione" oninput="markDirty()"></textarea>
 
     <label>Note</label>
-    <textarea id="lu_note"></textarea>
+    <textarea id="lu_note" oninput="markDirty()"></textarea>
 
     <label>Capacità</label>
-    <input id="lu_capacita_massima">
+    <input id="lu_capacita_massima" oninput="markDirty()">
 
   </div>
 </div>
@@ -222,9 +244,9 @@ let data = [];
 let comuni = [];
 
 let state = {
-  sort: null,
-  dir: 'asc',
   filters: {},
+  sortField: null,
+  sortDir: 'asc',
   dirty: false,
   editing: null
 };
@@ -256,7 +278,6 @@ function render() {
 
   Object.keys(state.filters).forEach(k => {
     const v = state.filters[k]?.toLowerCase();
-
     if (!v) return;
 
     filtered = filtered.filter(r => {
@@ -269,26 +290,26 @@ function render() {
       if (k === 'location')
         return (r.lu_location || '').toLowerCase().includes(v);
 
-      if (k === 'note')
-        return (r.lu_note || '').toLowerCase().includes(v);
-
       if (k === 'lat')
         return (r.lu_lat || '').toString().startsWith(v);
 
       if (k === 'lng')
         return (r.lu_lng || '').toString().startsWith(v);
 
+      if (k === 'cap')
+        return (r.lu_capacita_massima || '').toString().startsWith(v);
+
       return true;
     });
   });
 
-  if (state.sort) {
+  if (state.sortField) {
     filtered.sort((a,b) => {
 
-      let va = a['lu_' + state.sort];
-      let vb = b['lu_' + state.sort];
+      let va = a['lu_' + state.sortField];
+      let vb = b['lu_' + state.sortField];
 
-      if (state.dir === 'asc') return va > vb ? 1 : -1;
+      if (state.sortDir === 'asc') return va > vb ? 1 : -1;
       return va < vb ? 1 : -1;
     });
   }
@@ -307,9 +328,8 @@ function render() {
       <td>${r.id_luogo}</td>
       <td>${c ? c.co_descrizione : ''}</td>
       <td>${r.lu_location || ''}</td>
-      <td class="col-lat">${r.lu_lat}</td>
-      <td class="col-lng">${r.lu_lng}</td>
-      <td>${r.lu_note || ''}</td>
+      <td>${r.lu_lat}</td>
+      <td>${r.lu_lng}</td>
       <td>${r.lu_capacita_massima || ''}</td>
     `;
 
@@ -326,11 +346,11 @@ window.setFilter = (k,v) => {
 // ---------------- SORT ----------------
 window.sort = (field) => {
 
-  if (state.sort !== field) {
-    state.sort = field;
-    state.dir = 'asc';
+  if (state.sortField !== field) {
+    state.sortField = field;
+    state.sortDir = 'asc';
   } else {
-    state.dir = state.dir === 'asc' ? 'desc' : 'asc';
+    state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
   }
 
   render();
@@ -340,6 +360,8 @@ window.sort = (field) => {
 window.openModal = (row=null) => {
 
   state.dirty = false;
+  state.editing = row;
+
   document.getElementById("modal").style.display = "flex";
 
   if (!row) {
@@ -351,27 +373,71 @@ window.openModal = (row=null) => {
     document.getElementById("lu_note").value = "";
     document.getElementById("lu_capacita_massima").value = "";
     document.getElementById("lu_comune").value = "";
+  } else {
+    document.getElementById("id_luogo").value = row.id_luogo;
+    document.getElementById("lu_comune").value = row.lu_comune || "";
+    document.getElementById("lu_location").value = row.lu_location || "";
+    document.getElementById("lu_lat").value = row.lu_lat || "";
+    document.getElementById("lu_lng").value = row.lu_lng || "";
+    document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
+    document.getElementById("lu_note").value = row.lu_note || "";
+    document.getElementById("lu_capacita_massima").value = row.lu_capacita_massima || "";
+  }
+};
+
+// ---------------- CLOSE ----------------
+window.closeModal = (force=false) => {
+
+  if (!force && state.dirty) {
+    const ok = confirm("Salvare le modifiche?");
+    if (ok) save();
+    else state.dirty = false;
     return;
   }
 
-  document.getElementById("id_luogo").value = row.id_luogo;
-  document.getElementById("lu_comune").value = row.lu_comune || "";
-  document.getElementById("lu_location").value = row.lu_location || "";
-  document.getElementById("lu_lat").value = row.lu_lat || "";
-  document.getElementById("lu_lng").value = row.lu_lng || "";
-  document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
-  document.getElementById("lu_note").value = row.lu_note || "";
-  document.getElementById("lu_capacita_massima").value = row.lu_capacita_massima || "";
-};
-
-window.closeModal = (e) => {
-  if (e && e.target.id !== 'modal') return;
   document.getElementById("modal").style.display = "none";
 };
 
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeModal();
+// click outside
+document.getElementById("modal").addEventListener("click", (e) => {
+  if (e.target.id === "modal") closeModal(false);
 });
+
+// ESC
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeModal(false);
+});
+
+// ---------------- DIRTY ----------------
+window.markDirty = () => state.dirty = true;
+
+// ---------------- SAVE ----------------
+window.save = async () => {
+
+  const id = document.getElementById("id_luogo").value;
+
+  const payload = {
+    lu_comune: document.getElementById("lu_comune").value || null,
+    lu_location: document.getElementById("lu_location").value,
+    lu_lat: parseFloat(document.getElementById("lu_lat").value),
+    lu_lng: parseFloat(document.getElementById("lu_lng").value),
+    lu_descrizione: document.getElementById("lu_descrizione").value,
+    lu_note: document.getElementById("lu_note").value,
+    lu_capacita_massima: parseInt(document.getElementById("lu_capacita_massima").value)
+  };
+
+  if (id) {
+    await supabase.from('luoghi')
+      .update(payload)
+      .eq('id_luogo', id);
+  } else {
+    await supabase.from('luoghi')
+      .insert(payload);
+  }
+
+  closeModal(true);
+  load();
+};
 
 await loadComuni();
 await load();
