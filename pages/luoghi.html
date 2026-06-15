@@ -106,7 +106,7 @@ window.edit = function(row) {
 
   document.getElementById("id_luogo").value = row.id_luogo;
   document.getElementById("lu_comune").value = row.lu_comune || "";
-  document.getElementById("lu_nome").value = row.lu_location || "";
+  document.getElementById("lu_location").value = row.lu_location || "";
   document.getElementById("lu_lat").value = row.lu_lat || "";
   document.getElementById("lu_lng").value = row.lu_lng || "";
   document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
@@ -120,7 +120,7 @@ window.save = async function() {
 
   const payload = {
     lu_comune: document.getElementById("lu_comune").value || null,
-    lu_nome: document.getElementById("lu_location").value,
+    lu_location: document.getElementById("lu_location").value,
     lu_lat: parseFloat(document.getElementById("lu_lat").value),
     lu_lng: parseFloat(document.getElementById("lu_lng").value),
     lu_descrizione: document.getElementById("lu_descrizione").value,
