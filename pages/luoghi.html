@@ -84,7 +84,7 @@ async function load() {
 
     tr.innerHTML = `
       <td>${row.id_luogo}</td>
-      <td>${row.lu_nome ?? ''}</td>
+      <td>${row.lu_location ?? ''}</td>
       <td>${row.lu_lat}</td>
       <td>${row.lu_lng}</td>
       <td>${comune ? comune.co_descrizione : ''}</td>
@@ -105,7 +105,7 @@ window.edit = function(row) {
   showForm();
 
   document.getElementById("id_luogo").value = row.id_luogo;
-  document.getElementById("lu_nome").value = row.lu_nome || "";
+  document.getElementById("lu_nome").value = row.lu_location || "";
   document.getElementById("lu_lat").value = row.lu_lat || "";
   document.getElementById("lu_lng").value = row.lu_lng || "";
   document.getElementById("lu_comune").value = row.lu_comune || "";
@@ -119,7 +119,7 @@ window.save = async function() {
   const id = document.getElementById("id_luogo").value;
 
   const payload = {
-    lu_nome: document.getElementById("lu_nome").value,
+    lu_nome: document.getElementById("lu_location").value,
     lu_lat: parseFloat(document.getElementById("lu_lat").value),
     lu_lng: parseFloat(document.getElementById("lu_lng").value),
     lu_comune: document.getElementById("lu_comune").value || null,
