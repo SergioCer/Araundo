@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Luoghi Admin</title>
+<title>Luoghi</title>
 
 <style>
 body {
@@ -11,26 +11,36 @@ body {
   margin: 0;
 }
 
+/* HEADER */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px;
+  padding: 14px;
 }
 
 .title {
   font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
+/* BIG + BUTTON */
 .add-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
   background: #22c55e;
   color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
+  font-size: 22px;
+  font-weight: bold;
   cursor: pointer;
 }
 
+/* TABLE */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -41,6 +51,7 @@ th, td {
   padding: 10px;
   border-bottom: 1px solid #e5e7eb;
   text-align: left;
+  vertical-align: middle;
 }
 
 tr:hover {
@@ -48,18 +59,29 @@ tr:hover {
   cursor: pointer;
 }
 
+/* FILTER ROW */
 .filter {
   width: 100%;
   font-size: 12px;
   margin-top: 4px;
 }
 
-.sort {
+/* SORT BUTTON */
+.sort-btn {
+  float: right;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 12px;
-  margin-left: 5px;
+  opacity: 0.6;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
+.sort-btn:hover {
+  background: #e5e7eb;
+  opacity: 1;
+}
+
+/* MODAL */
 #modal {
   position: fixed;
   top: 0; left: 0;
@@ -73,7 +95,7 @@ tr:hover {
 
 #modalContent {
   background: white;
-  padding: 20px;
+  padding: 18px;
   width: 420px;
   border-radius: 10px;
   position: relative;
@@ -82,7 +104,7 @@ tr:hover {
 .closeX {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 8px;
   cursor: pointer;
   font-weight: bold;
 }
@@ -91,6 +113,15 @@ input, select, textarea {
   width: 100%;
   margin-bottom: 10px;
   padding: 6px;
+}
+
+/* colonne strette */
+.col-lat, .col-lng {
+  width: 90px;
+}
+
+.col-note {
+  width: 140px;
 }
 </style>
 
@@ -102,7 +133,7 @@ input, select, textarea {
 <div class="header">
   <div class="title">
     Luoghi
-    <button class="add-btn" onclick="openModal()">+ Nuovo</button>
+    <button class="add-btn" onclick="openModal()">+</button>
   </div>
 </div>
 
@@ -114,30 +145,36 @@ input, select, textarea {
       <th>
         Comune
         <input class="filter" oninput="setFilter('comune', this.value)">
-        <span class="sort" onclick="sort('comune')">⇅</span>
+        <span class="sort-btn" onclick="sort('comune')">-</span>
       </th>
 
       <th>
         Location
         <input class="filter" oninput="setFilter('location', this.value)">
-        <span class="sort" onclick="sort('location')">⇅</span>
+        <span class="sort-btn" onclick="sort('location')">-</span>
       </th>
 
-      <th>
+      <th class="col-lat">
         Lat
         <input class="filter" oninput="setFilter('lat', this.value)">
-        <span class="sort" onclick="sort('lat')">⇅</span>
+        <span class="sort-btn" onclick="sort('lat')">-</span>
+      </th>
+
+      <th class="col-lng">
+        Lng
+        <input class="filter" oninput="setFilter('lng', this.value)">
+        <span class="sort-btn" onclick="sort('lng')">-</span>
       </th>
 
       <th>
-        Lng
-        <input class="filter" oninput="setFilter('lng', this.value)">
-        <span class="sort" onclick="sort('lng')">⇅</span>
+        Note
+        <input class="filter" oninput="setFilter('note', this.value)">
+        <span class="sort-btn">-</span>
       </th>
 
       <th>
         Capacità
-        <span class="sort" onclick="sort('cap')">⇅</span>
+        <span class="sort-btn" onclick="sort('cap')">-</span>
       </th>
 
     </tr>
@@ -158,22 +195,22 @@ input, select, textarea {
     <select id="lu_comune"></select>
 
     <label>Location</label>
-    <input id="lu_location" oninput="markDirty()">
+    <input id="lu_location">
 
     <label>Lat</label>
-    <input id="lu_lat" oninput="markDirty()">
+    <input id="lu_lat">
 
     <label>Lng</label>
-    <input id="lu_lng" oninput="markDirty()">
+    <input id="lu_lng">
 
     <label>Descrizione</label>
-    <textarea id="lu_descrizione" oninput="markDirty()"></textarea>
+    <textarea id="lu_descrizione"></textarea>
 
     <label>Note</label>
-    <textarea id="lu_note" oninput="markDirty()"></textarea>
+    <textarea id="lu_note"></textarea>
 
     <label>Capacità</label>
-    <input id="lu_capacita_massima" oninput="markDirty()">
+    <input id="lu_capacita_massima">
 
   </div>
 </div>
@@ -185,14 +222,14 @@ let data = [];
 let comuni = [];
 
 let state = {
-  sortField: null,
-  sortDir: 'asc',
+  sort: null,
+  dir: 'asc',
   filters: {},
   dirty: false,
   editing: null
 };
 
-// -------------------- COMUNI --------------------
+// ---------------- COMUNI ----------------
 async function loadComuni() {
   const res = await supabase.from('comuni').select('*');
   comuni = res.data;
@@ -205,34 +242,35 @@ async function loadComuni() {
   });
 }
 
-// -------------------- LOAD --------------------
+// ---------------- LOAD ----------------
 async function load() {
   const res = await supabase.from('luoghi').select('*');
   data = res.data;
-
   render();
 }
 
-// -------------------- RENDER --------------------
+// ---------------- RENDER ----------------
 function render() {
 
   let filtered = [...data];
 
-  // FILTERS
   Object.keys(state.filters).forEach(k => {
-    const v = state.filters[k];
+    const v = state.filters[k]?.toLowerCase();
 
     if (!v) return;
 
     filtered = filtered.filter(r => {
 
+      if (k === 'comune') {
+        const c = comuni.find(x => x.id_comune === r.lu_comune);
+        return (c?.co_descrizione || '').toLowerCase().includes(v);
+      }
+
       if (k === 'location')
         return (r.lu_location || '').toLowerCase().includes(v);
 
-      if (k === 'comune') {
-        const c = comuni.find(x => x.id_comune === r.lu_comune);
-        return (c?.co_descrizione || '').toLowerCase().startsWith(v);
-      }
+      if (k === 'note')
+        return (r.lu_note || '').toLowerCase().includes(v);
 
       if (k === 'lat')
         return (r.lu_lat || '').toString().startsWith(v);
@@ -244,28 +282,17 @@ function render() {
     });
   });
 
-  // SORT
-  if (state.sortField) {
+  if (state.sort) {
     filtered.sort((a,b) => {
 
-      let va, vb;
+      let va = a['lu_' + state.sort];
+      let vb = b['lu_' + state.sort];
 
-      switch(state.sortField) {
-        case 'location': va = a.lu_location; vb = b.lu_location; break;
-        case 'lat': va = a.lu_lat; vb = b.lu_lat; break;
-        case 'lng': va = a.lu_lng; vb = b.lu_lng; break;
-        case 'cap': va = a.lu_capacita_massima; vb = b.lu_capacita_massima; break;
-        default: return 0;
-      }
-
-      if (state.sortDir === 'asc')
-        return (va > vb ? 1 : -1);
-      else
-        return (va < vb ? 1 : -1);
+      if (state.dir === 'asc') return va > vb ? 1 : -1;
+      return va < vb ? 1 : -1;
     });
   }
 
-  // TABLE
   const tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
 
@@ -274,15 +301,15 @@ function render() {
     const c = comuni.find(x => x.id_comune === r.lu_comune);
 
     const tr = document.createElement("tr");
-
     tr.onclick = () => openModal(r);
 
     tr.innerHTML = `
       <td>${r.id_luogo}</td>
       <td>${c ? c.co_descrizione : ''}</td>
       <td>${r.lu_location || ''}</td>
-      <td>${r.lu_lat}</td>
-      <td>${r.lu_lng}</td>
+      <td class="col-lat">${r.lu_lat}</td>
+      <td class="col-lng">${r.lu_lng}</td>
+      <td>${r.lu_note || ''}</td>
       <td>${r.lu_capacita_massima || ''}</td>
     `;
 
@@ -290,95 +317,62 @@ function render() {
   });
 }
 
-// -------------------- FILTER --------------------
+// ---------------- FILTER ----------------
 window.setFilter = (k,v) => {
-  state.filters[k] = v.toLowerCase();
+  state.filters[k] = v;
   render();
 };
 
-// -------------------- SORT --------------------
+// ---------------- SORT ----------------
 window.sort = (field) => {
 
-  if (state.sortField !== field) {
-    state.sortField = field;
-    state.sortDir = 'asc';
+  if (state.sort !== field) {
+    state.sort = field;
+    state.dir = 'asc';
   } else {
-    state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+    state.dir = state.dir === 'asc' ? 'desc' : 'asc';
   }
 
   render();
 };
 
-// -------------------- MODAL --------------------
+// ---------------- MODAL ----------------
 window.openModal = (row=null) => {
 
   state.dirty = false;
-  state.editing = row;
-
   document.getElementById("modal").style.display = "flex";
 
-  if (row) {
-    document.getElementById("id_luogo").value = row.id_luogo;
-    document.getElementById("lu_comune").value = row.lu_comune || "";
-    document.getElementById("lu_location").value = row.lu_location || "";
-    document.getElementById("lu_lat").value = row.lu_lat || "";
-    document.getElementById("lu_lng").value = row.lu_lng || "";
-    document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
-    document.getElementById("lu_note").value = row.lu_note || "";
-    document.getElementById("lu_capacita_massima").value = row.lu_capacita_massima || "";
-  } else {
+  if (!row) {
     document.getElementById("id_luogo").value = "";
+    document.getElementById("lu_location").value = "";
+    document.getElementById("lu_lat").value = "";
+    document.getElementById("lu_lng").value = "";
+    document.getElementById("lu_descrizione").value = "";
+    document.getElementById("lu_note").value = "";
+    document.getElementById("lu_capacita_massima").value = "";
+    document.getElementById("lu_comune").value = "";
+    return;
   }
+
+  document.getElementById("id_luogo").value = row.id_luogo;
+  document.getElementById("lu_comune").value = row.lu_comune || "";
+  document.getElementById("lu_location").value = row.lu_location || "";
+  document.getElementById("lu_lat").value = row.lu_lat || "";
+  document.getElementById("lu_lng").value = row.lu_lng || "";
+  document.getElementById("lu_descrizione").value = row.lu_descrizione || "";
+  document.getElementById("lu_note").value = row.lu_note || "";
+  document.getElementById("lu_capacita_massima").value = row.lu_capacita_massima || "";
 };
 
-window.closeModal = () => {
-  if (state.dirty) {
-    if (!confirm("Salvare le modifiche?")) {
-      state.dirty = false;
-    } else {
-      save();
-      return;
-    }
-  }
+window.closeModal = (e) => {
+  if (e && e.target.id !== 'modal') return;
   document.getElementById("modal").style.display = "none";
 };
 
-window.markDirty = () => state.dirty = true;
-
-// -------------------- SAVE --------------------
-window.save = async () => {
-
-  const id = document.getElementById("id_luogo").value;
-
-  const payload = {
-    lu_comune: document.getElementById("lu_comune").value || null,
-    lu_location: document.getElementById("lu_location").value,
-    lu_lat: parseFloat(document.getElementById("lu_lat").value),
-    lu_lng: parseFloat(document.getElementById("lu_lng").value),
-    lu_descrizione: document.getElementById("lu_descrizione").value,
-    lu_note: document.getElementById("lu_note").value,
-    lu_capacita_massima: parseInt(document.getElementById("lu_capacita_massima").value)
-  };
-
-  if (id) {
-    await supabase.from('luoghi')
-      .update(payload)
-      .eq('id_luogo', id);
-  } else {
-    await supabase.from('luoghi')
-      .insert(payload);
-  }
-
-  closeModal();
-  load();
-};
-
-// ESC CLOSE
-document.addEventListener("keydown", (e) => {
+document.addEventListener("keydown", e => {
   if (e.key === "Escape") closeModal();
 });
 
-// INIT
 await loadComuni();
 await load();
 
